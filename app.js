@@ -287,6 +287,26 @@
       keepalive: true
     }).catch(function () {}));
 
+    var items = function (idxs) { return idxs.map(function (i) { return { name: cap(Q.PILLARS[i]), pct: s.pct[i] }; }); };
+    var emailData = {
+      firstName: g.first_name, overall: s.overall, tier: s.tier,
+      blocks: items(s.blocks), pillars: items(Q.PILLARS.map(function (p, i) { return i; })),
+      strong: s.pct[s.blocks[0]] >= 75, resultUrl: resultUrl(code)
+    };
+    var sendEmail = function (templateName, recipientEmail, data) {
+      return fetch(Q.EMAIL_FUNCTION_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + Q.EMAIL_PUBLIC_KEY, "apikey": Q.EMAIL_PUBLIC_KEY },
+        body: JSON.stringify({ templateName: templateName, recipientEmail: recipientEmail, templateData: data }),
+        keepalive: true
+      }).catch(function () {});
+    };
+    jobs.push(sendEmail("quiz-results", g.email, emailData));
+    jobs.push(sendEmail("quiz-lead-notification", null, Object.assign({}, emailData, {
+      email: g.email, phone: g.phone, role: state.profile.role || "", challenge: g.challenge,
+      utmSource: utm.utm_source, utmMedium: utm.utm_medium, utmCampaign: utm.utm_campaign
+    })));
+
     if (Q.GHL_WEBHOOK_URL) {
       var payload = {
         first_name: g.first_name, email: g.email, phone: g.phone,

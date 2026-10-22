@@ -4,6 +4,10 @@ window.QUIZ = {
   // Paste the GHL inbound webhook URL here once the workflow exists. Empty = skip.
   GHL_WEBHOOK_URL: "",
   ADHARA_FORM_URL: "https://api.adharaweb.com/api/v1/public/forms/rola/quiz-gate",
+  // Results email + new-lead alert, sent through the convictioncode.com email system
+  // (Lovable Cloud, sender notify.alorsolutions.com). The key below is the public browser key.
+  EMAIL_FUNCTION_URL: "https://zyonpiskcpoiwhkgxdjp.supabase.co/functions/v1/send-transactional-email",
+  EMAIL_PUBLIC_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5b25waXNrY3BvaXdoa2d4ZGpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NTM0MDgsImV4cCI6MjA4NDIyOTQwOH0.2AdGgTflahS0Y_jO66BmH4b8n5PwDp-0wtQPtFPh_BI",
   BOOKING_URL: "https://api.leadconnectorhq.com/widget/booking/T5FW8VnbAbvoi3C1zAuA",
 
   PILLARS: ["intention", "identity", "meaning", "practice", "alignment", "communication", "trust"],
