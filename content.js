@@ -8,67 +8,49 @@ window.QUIZ = {
 
   PILLARS: ["intention", "identity", "meaning", "practice", "alignment", "communication", "trust"],
 
-  // Five items per pillar, in pillar order. "R:" marks a reverse-scored item.
+  // Three items per pillar, in pillar order. "R:" marks a reverse-scored item.
   ITEMS: {
     intention: [
       "I have a clear sense of what success means to me.",
       "When I make an important decision, I know it's aligned with my bigger goal.",
-      "The goals I'm pursuing genuinely feel like my own.",
-      "I rarely feel pulled in conflicting directions when making important decisions.",
       "R:I sometimes feel unclear about what I'm really working toward."
     ],
     identity: [
       "I have a clear vision of the person I want to become.",
       "My daily actions are consistent with that future version of myself.",
-      "R:When I fall short, I start doubting whether I can succeed.",
-      "I recognize when I'm accepting standards that are lower than what I deserve.",
-      "I consistently make choices that move me toward the person I want to become."
+      "R:When I fall short, I start doubting whether I can succeed."
     ],
     meaning: [
       "I can articulate exactly why my work matters beyond the paycheck or the title.",
-      "The goals I'm pursuing feel personally meaningful to me.",
       "Even during difficult seasons, I can reconnect with my purpose.",
-      "R:Lately, my work feels empty or pointless.",
-      "I would describe my current path as intentional, not accidental."
+      "R:Lately, my work feels empty or pointless."
     ],
     practice: [
       "My daily habits support the future I'm working to create.",
       "My consistency runs on systems, not on whether I feel motivated.",
-      "I take action even when I don't feel motivated.",
-      "When I get off track, I quickly regain momentum.",
       "R:My follow-through falls apart when motivation dips."
     ],
     alignment: [
       "When I walk into a high pressure conversation, my body feels calm and not braced for impact.",
-      "R:I often feel torn between what I want and what I should actually do.",
-      "I notice when something feels \"off\" before moving forward.",
       "I can disagree with someone in authority without my heart rate spiking or my chest tightening.",
       "R:After a difficult meeting, I replay it for hours and have trouble moving on."
     ],
     communication: [
       "The way I speak to myself supports the person I'm becoming.",
-      "My words, actions, and body language consistently communicate the same message.",
-      "The conversations I have with myself and others build trust rather than create doubt.",
-      "R:I avoid hard conversations to keep the peace and avoid hurting feelings.",
-      "I feel comfortable sharing my ideas and intentions."
+      "My words, tone, and body language send the same message.",
+      "R:I avoid hard conversations to keep the peace."
     ],
     trust: [
       "When a decision needs to be made, I make it without needing three more opinions first.",
       "I trust myself to make important decisions.",
-      "Others can rely on me to follow through.",
-      "R:I struggle to let go and rely on others.",
-      "Even when I feel fear or uncertainty, I continue moving forward."
+      "Even when I feel fear or uncertainty, I keep moving forward."
     ]
   },
 
   OPTIONS: ["Strongly Agree", "Agree", "Neither Agree nor Disagree", "Disagree", "Strongly Disagree"],
 
   PROFILE: [
-    { key: "role", text: "What best describes you?", options: ["Founder / CEO", "Executive / C-Suite", "Consultant or Coach", "Employee at a company", "Other"] },
-    { key: "location", text: "Where are you located?", placeholder: "City, Country", optional: true },
-    { key: "industry", text: "What is your primary industry?", options: ["Technology", "Finance / Investment", "Real Estate", "Coaching / Consulting", "Healthcare", "Marketing / Media", "Other"] },
-    { key: "challenge", text: "What is the biggest challenge you're facing in the next 90 days?", placeholder: "Your biggest challenge", optional: true, multiline: true },
-    { key: "source", text: "How did you find this assessment?", options: ["Instagram", "YouTube", "TikTok", "LinkedIn", "Referral from a friend", "Other"] }
+    { key: "role", text: "Last one. What best describes you?", options: ["Founder / CEO", "Executive / C-Suite", "Consultant or Coach", "Employee at a company", "Other"] }
   ],
 
   TIERS: [
@@ -82,33 +64,18 @@ window.QUIZ = {
     "The Survivor": [
       { p: [
         "Your Conviction Index™ indicates you're currently operating in Survivor Mode.",
-        "Your results suggest that your Performance Operating System is not yet consistently producing the outcomes you're capable of achieving. Rather than creating predictable success, you're likely relying on effort, resilience, and determination to push through challenges.",
-        "You may experience brief moments of momentum, only to find yourself losing confidence, second-guessing your decisions, or feeling like you're constantly starting over.",
-        "This is not a reflection of your intelligence, ambition, or potential. It's a reflection of the internal system currently driving your decisions, behaviors, and performance."
+        "Your Performance Operating System isn't yet producing the outcomes you're capable of. Instead of predictable success, you're likely running on effort, resilience, and determination to push through.",
+        "You may get brief bursts of momentum, then find yourself second-guessing decisions or feeling like you're constantly starting over.",
+        "This is not a reflection of your intelligence, ambition, or potential. It's a reflection of the internal system currently driving your decisions."
       ] },
       { h: "Why This Happens", p: [
-        "For decades, research in neuroscience, behavioral psychology, and performance science has shown that our external results are shaped long before we take action. The way we think, interpret experiences, regulate emotions, and respond to uncertainty influences the decisions we make every day.",
-        "Those decisions become our habits. Those habits shape our performance. And over time, that performance creates the results we experience in our lives.",
-        "In other words, success isn't simply created by working harder or knowing more. It's produced by the internal operating system driving your thoughts, decisions, and behaviors.",
-        "That's why two people with similar intelligence, education, opportunities, and resources can produce dramatically different outcomes. The difference is often the system they're running."
-      ] },
-      { h: "What Your Results Reveal", p: [
-        "Your Performance Profile suggests that several key parts of your Performance Operating System are not yet working together as an integrated whole.",
-        "When even one foundational pillar is underdeveloped, the entire system compensates. This often shows up as inconsistent confidence, difficulty maintaining momentum, overthinking, hesitation, self-doubt, or feeling like success requires far more effort than it should.",
-        "From the outside, it can look like inconsistency. From the inside, it often feels exhausting.",
-        "The encouraging news is that these patterns are not permanent. They're measurable. They're trainable. And they can be strengthened."
-      ] },
-      { h: "How We Measure It", p: [
-        "The IMPACT Model is a Performance Operating System built on seven foundational pillars that consistently influence human performance and predictable success.",
-        "These pillars do not operate independently. They function as one integrated system. When one pillar weakens, the others compensate. When all seven become stronger and more aligned, performance becomes more consistent, decisions become clearer, confidence becomes steadier, and success becomes increasingly predictable.",
-        "Your Performance Profile measures each of these seven pillars to identify where your greatest opportunity for growth exists today."
+        "The way you think, interpret experiences, and respond to uncertainty shapes the decisions you make every day. Those decisions become habits. Those habits become performance. And performance becomes results.",
+        "That's why two people with the same talent and opportunities can produce very different outcomes. The difference is often the system they're running."
       ] },
       { h: "Your Greatest Opportunity", p: [
-        "Your greatest opportunity right now is awareness.",
-        "Most people spend years trying to change their habits, motivation, or circumstances without ever understanding the system producing those results. You've done something different. You've chosen to look beneath the surface. That awareness is where predictable success begins.",
-        "As you strengthen your Performance Operating System one pillar at a time, you'll begin to notice something remarkable. You won't simply work harder. You'll think more clearly. Decide with greater conviction. Act more consistently. And create results that no longer feel random.",
-        "Because predictable success doesn't begin by changing your circumstances. It begins by strengthening the system that's creating them.",
-        "Predictable success isn't reserved for a select few. It's the natural outcome of a well-developed Performance Operating System. Wherever you're starting today, your results don't define your future. They simply reveal where your greatest opportunity for growth begins."
+        "These patterns are not permanent. They're measurable, and they're trainable.",
+        "Most people spend years trying to change their habits or circumstances without ever seeing the system producing them. You just looked beneath the surface. That awareness is where predictable success begins.",
+        "Strengthen the system one pillar at a time and something shifts. You think more clearly. You decide with more conviction. And your results stop feeling random."
       ] }
     ],
     "The Builder": [

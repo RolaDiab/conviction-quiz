@@ -6,8 +6,9 @@
 
   // ---------- Questions ----------
   // Interleave pillars: item 1 of every pillar, then item 2 of every pillar, etc.
+  var PER_PILLAR = Q.ITEMS[Q.PILLARS[0]].length;
   var QUESTIONS = [];
-  for (var round = 0; round < 5; round++) {
+  for (var round = 0; round < PER_PILLAR; round++) {
     Q.PILLARS.forEach(function (pillar) {
       var raw = Q.ITEMS[pillar][round];
       var reverse = raw.indexOf("R:") === 0;
@@ -30,10 +31,14 @@
     return Q.PILLARS.map(function (p) { return pts[p]; });
   }
 
+  // Percentages run 0 to 100: every answer at the low end = 0%, every answer at the high end = 100%.
+  var P_MIN = PER_PILLAR, P_MAX = PER_PILLAR * 5;
+  function toPct(points, min, max) { return Math.round((points - min) / (max - min) * 100); }
+
   function summarize(points) {
     var total = points.reduce(function (a, b) { return a + b; }, 0);
-    var overall = Math.round(total / 175 * 100);
-    var pct = points.map(function (p) { return Math.round(p / 25 * 100); });
+    var overall = toPct(total, P_MIN * 7, P_MAX * 7);
+    var pct = points.map(function (p) { return toPct(p, P_MIN, P_MAX); });
     var tier = Q.TIERS.filter(function (t) { return overall <= t.max; })[0].name;
     var order = Q.PILLARS.map(function (p, i) { return i; })
       .sort(function (a, b) { return points[a] - points[b] || a - b; });
@@ -75,7 +80,7 @@
       var b64 = code.replace(/-/g, "+").replace(/_/g, "/");
       var data = JSON.parse(decodeURIComponent(escape(atob(b64))));
       var ok = Array.isArray(data.p) && data.p.length === 7 &&
-        data.p.every(function (x) { return Number.isInteger(x) && x >= 5 && x <= 25; });
+        data.p.every(function (x) { return Number.isInteger(x) && x >= P_MIN && x <= P_MAX; });
       return ok ? { name: String(data.n || "").slice(0, 60), points: data.p } : null;
     } catch (e) { return null; }
   }
@@ -92,7 +97,7 @@
         '<div class="hero-copy">' +
           '<p class="eyebrow">Backed by Performance Science</p>' +
           '<h1>Find the hidden <span class="gold">brake</span> on your performance.</h1>' +
-          '<p class="lead">35 questions. About 10 minutes. Get your Conviction Index™, a score on all 7 IMPACT pillars, and see which Performance Blocks™ are holding you back.</p>' +
+          '<p class="lead">21 questions. About 4 minutes. Get your Conviction Index™, a score on all 7 IMPACT pillars, and the Performance Blocks™ holding you back.</p>' +
           '<div class="cta-row"><button class="btn btn-gold" data-act="start">' + (resume ? "Continue My Assessment" : "Reveal My Performance Profile") + '</button>' +
           (resume ? '<button class="btn btn-ghost" data-act="restart">Start over</button>' : "") + '</div>' +
           '<p class="fine">Free. Instant results. No fluff.</p>' +
@@ -130,7 +135,7 @@
 
       '<section class="final"><div class="wrap narrow center">' +
         '<h2>Discover your Performance Profile.</h2>' +
-        '<p>About 10 minutes. Free. Results the moment you finish.</p>' +
+        '<p>About 4 minutes. Free. Results the moment you finish.</p>' +
         '<button class="btn btn-gold" data-act="start">Reveal My Performance Profile</button>' +
       '</div></section>' +
       footer();
@@ -196,6 +201,7 @@
           '<label>First name<input name="first_name" autocomplete="given-name" maxlength="60" required value="' + esc(g.first_name || "") + '"></label>' +
           '<label>Email<input name="email" type="email" autocomplete="email" maxlength="255" required value="' + esc(g.email || "") + '"></label>' +
           '<label>Phone <span class="opt-label">(optional)</span><input name="phone" type="tel" autocomplete="tel" maxlength="40" value="' + esc(g.phone || "") + '"></label>' +
+          '<label>Your biggest challenge in the next 90 days <span class="opt-label">(optional)</span><textarea name="challenge" rows="3" maxlength="1000">' + esc(g.challenge || "") + '</textarea></label>' +
           '<label class="consent"><input name="consent" type="checkbox"' + (g.consent ? " checked" : "") + '> Send me my results and occasional insights from Rola. Unsubscribe anytime.</label>' +
           (error ? '<p class="err">' + esc(error) + '</p>' : "") +
           '<button class="btn btn-gold wide" type="submit">Show My Results</button>' +
@@ -212,37 +218,55 @@
       return (b.h ? "<h3>" + esc(b.h) + "</h3>" : "") + paras(b.p);
     }).join("");
 
+    // A 90% pillar isn't a "block". When even the lowest pillar is strong, call them growth edges.
+    var strong = s.pct[s.blocks[0]] >= 75;
+    var blocksTitle = strong ? "Your Top 3 Growth Edges" : "Your Top 3 Performance Blocks™";
+    var blocksSub = strong
+      ? "Your three lowest pillars. Even here you're strong. This is where mastery deepens next."
+      : "Your three lowest pillars. This is where effort is leaking. Start with number one.";
+
     var blocks = s.blocks.map(function (idx, n) {
-      var p = Q.PILLARS[idx];
-      return '<div class="block"><span class="block-n">' + (n + 1) + '</span><div><h4>' + cap(p) + ' <span class="pct">' + s.pct[idx] + '%</span></h4><p>' + esc(Q.PILLAR_COPY[p].lo) + '</p></div></div>';
+      var p = Q.PILLARS[idx], c = Q.PILLAR_COPY[p];
+      return '<div class="block"><span class="block-n">' + (n + 1) + '</span><div>' +
+        '<h4>' + cap(p) + ' <span class="pct">' + s.pct[idx] + '%</span></h4>' +
+        '<p>' + esc(c.d) + '</p>' +
+        '<p class="lo"><strong>' + (strong ? "Watch for:" : "How it shows up:") + '</strong> ' + esc(c.lo) + '</p></div></div>';
     }).join("");
 
     var pillars = Q.PILLARS.map(function (p, idx) {
       var c = Q.PILLAR_COPY[p];
-      return '<article class="pillar"><div class="pillar-head"><h4>' + p.toUpperCase() + '</h4><span class="pct">' + s.pct[idx] + '%</span></div>' +
-        '<div class="bar"><div class="fill" style="width:' + s.pct[idx] + '%"></div></div>' +
-        '<p>' + esc(c.d) + '</p>' +
-        '<p><strong>What high ' + p + ' looks like:</strong> ' + esc(c.hi) + '</p>' +
-        '<p><strong>What low ' + p + ' looks like:</strong> ' + esc(c.lo) + '</p>' +
-        '<p class="why"><strong>Why it matters:</strong> ' + esc(c.why) + '</p></article>';
+      return '<details class="pillar"><summary><div class="pillar-head"><h4>' + cap(p) + '</h4><span class="pct">' + s.pct[idx] + '%</span></div>' +
+        '<div class="bar"><div class="fill" style="width:' + s.pct[idx] + '%"></div></div></summary>' +
+        '<div class="pillar-body"><p>' + esc(c.d) + '</p>' +
+        '<p><strong>High ' + p + ':</strong> ' + esc(c.hi) + '</p>' +
+        '<p><strong>Low ' + p + ':</strong> ' + esc(c.lo) + '</p>' +
+        '<p class="why"><strong>Why it matters:</strong> ' + esc(c.why) + '</p></div></details>';
     }).join("");
+
+    var cta = function (headline) {
+      return '<div class="cta-box"><h3>' + headline + '</h3>' +
+        '<p>A 45-minute Performance Diagnostic with Rola. We pinpoint the block costing you the most and map what to strengthen first.</p>' +
+        '<a class="btn btn-gold" href="' + Q.BOOKING_URL + '" target="_blank" rel="noopener">Book Your Performance Diagnostic</a></div>';
+    };
 
     app.innerHTML =
       '<section class="result-hero"><div class="wrap result-grid">' +
-        '<div><p class="eyebrow">' + (name ? esc(name) + ", your" : "Your") + ' Performance Profile</p><h1>Your Conviction Index™</h1></div>' +
+        '<div><p class="eyebrow">' + (name ? esc(name) + "'s" : "Your") + ' Performance Profile</p><h1>Your Conviction Index™</h1>' +
+        '<p class="hero-note">Scored across the 7 IMPACT pillars. 0% is the floor, 100% is the ceiling.</p></div>' +
         '<div class="score-card"><div class="score">' + s.overall + '%</div><div class="bar"><div class="fill" style="width:' + s.overall + '%"></div></div><div class="tier">' + esc(s.tier) + '</div></div>' +
       '</div></section>' +
       '<section class="band"><div class="wrap narrow prose">' + tierBlocks + '</div></section>' +
-      '<section class="band alt"><div class="wrap narrow"><h2>Your Top 3 Performance Blocks™</h2><p class="sub">Your three lowest pillars. Start with number one.</p>' + blocks + '</div></section>' +
-      '<section class="band"><div class="wrap narrow"><h2>Your 7 IMPACT Pillars</h2><p class="sub">' + esc(Q.PILLARS_INTRO) + '</p>' + pillars + '</div></section>' +
-      '<section class="band alt"><div class="wrap narrow prose"><h2>What High Conviction Actually Looks Like</h2>' + paras(Q.HIGH_CONVICTION) + '</div></section>' +
-      '<section class="band"><div class="wrap narrow prose"><h2>The Science Behind the Code</h2>' + paras(Q.SCIENCE) + '</div></section>' +
+      '<section class="band alt"><div class="wrap narrow"><h2>' + blocksTitle + '</h2><p class="sub">' + blocksSub + '</p>' + blocks +
+        cta(strong ? "Ready to raise the ceiling?" : "Ready to release the brake?") + '</div></section>' +
+      '<section class="band"><div class="wrap narrow"><h2>Your 7 IMPACT Pillars</h2><p class="sub">' + esc(Q.PILLARS_INTRO) + ' Tap any pillar to read more.</p>' + pillars + '</div></section>' +
+      '<section class="band alt"><div class="wrap narrow prose"><h2>What High Conviction Actually Looks Like</h2>' + paras(Q.HIGH_CONVICTION) +
+        '<details class="science"><summary>The science behind the code</summary>' + paras(Q.SCIENCE) + '</details></div></section>' +
       '<section class="final"><div class="wrap narrow center">' +
-        '<h2>Ready to release the brake?</h2>' +
-        '<p>In a Performance Diagnostic we find the Performance Blocks™ scattering your effort and map what to strengthen first.</p>' +
+        '<h2>Your results won\'t change themselves.</h2>' +
+        '<p>Book a Performance Diagnostic and leave with a clear first move.</p>' +
         '<a class="btn btn-gold" href="' + Q.BOOKING_URL + '" target="_blank" rel="noopener">Book Your Performance Diagnostic</a>' +
         '<div class="share"><button class="btn btn-ghost" data-act="copy" data-url="' + esc(resultUrl(code)) + '">Copy link to my results</button></div>' +
-        '<p class="contact">Questions, or want to work together? <a href="mailto:rola@alorsolutions.com">rola@alorsolutions.com</a> · <a href="https://www.instagram.com/rolaspeaks/" target="_blank" rel="noopener">@rolaspeaks</a> · <a href="https://www.youtube.com/@Rolaspeaks" target="_blank" rel="noopener">YouTube</a></p>' +
+        '<p class="contact">Questions? <a href="mailto:rola@alorsolutions.com">rola@alorsolutions.com</a> · <a href="https://www.instagram.com/rolaspeaks/" target="_blank" rel="noopener">@rolaspeaks</a> · <a href="https://www.youtube.com/@Rolaspeaks" target="_blank" rel="noopener">YouTube</a></p>' +
       '</div></section>' + footer();
   }
 
@@ -266,8 +290,7 @@
         first_name: g.first_name, email: g.email, phone: g.phone,
         overall_score: s.overall, tier: s.tier,
         top_block_1: cap(Q.PILLARS[s.blocks[0]]), top_block_2: cap(Q.PILLARS[s.blocks[1]]), top_block_3: cap(Q.PILLARS[s.blocks[2]]),
-        role: state.profile.role || "", location: state.profile.location || "", industry: state.profile.industry || "",
-        challenge: state.profile.challenge || "", source: state.profile.source || "",
+        role: state.profile.role || "", challenge: g.challenge,
         utm_source: utm.utm_source, utm_medium: utm.utm_medium, utm_campaign: utm.utm_campaign,
         result_url: resultUrl(code), tags: "quiz-completed"
       };
@@ -348,6 +371,7 @@
       first_name: f.first_name.value.trim().slice(0, 60),
       email: f.email.value.trim().toLowerCase().slice(0, 255),
       phone: f.phone.value.trim().slice(0, 40),
+      challenge: f.challenge.value.trim().slice(0, 1000),
       consent: f.consent.checked
     };
     state.gate = g;
