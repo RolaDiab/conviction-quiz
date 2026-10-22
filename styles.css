@@ -182,4 +182,4 @@ details.science p { margin-top: 12px; }
 }
 .result-hero h1 { font-weight: 700; font-size: clamp(2.2rem, 5.5vw, 3.6rem); }
 .score { font-weight: 700; font-size: 4.8rem; font-variant-numeric: lining-nums; }
-.tier { font-weight: 600; font-style: italic; }
+.tier { font-weight: 600; font-style: normal; }

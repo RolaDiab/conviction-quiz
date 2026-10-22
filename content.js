@@ -69,13 +69,13 @@ window.QUIZ = {
         "This is not a reflection of your intelligence, ambition, or potential. It's a reflection of the internal system currently driving your decisions."
       ] },
       { h: "Why This Happens", p: [
-        "The way you think, interpret experiences, and respond to uncertainty shapes the decisions you make every day. Those decisions become habits. Those habits become performance. And performance becomes results.",
+        "The way you think, interpret experiences, and respond to uncertainty shapes the decisions you make every day. Those decisions become habits. Those habits become performance, and performance becomes results.",
         "That's why two people with the same talent and opportunities can produce very different outcomes. The difference is often the system they're running."
       ] },
       { h: "Your Greatest Opportunity", p: [
         "These patterns are not permanent. They're measurable, and they're trainable.",
         "Most people spend years trying to change their habits or circumstances without ever seeing the system producing them. You just looked beneath the surface. That awareness is where predictable success begins.",
-        "Strengthen the system one pillar at a time and something shifts. You think more clearly. You decide with more conviction. And your results stop feeling random."
+        "Strengthen the system one pillar at a time and something shifts. You think more clearly. You decide with more conviction. Your results stop feeling random."
       ] }
     ],
     "The Builder": [
@@ -133,7 +133,7 @@ window.QUIZ = {
       why: "Research on habit formation (Wendy Wood) found that about 43% of daily behavior is habitual. That means your systems, not your effort, determine most outcomes."
     },
     alignment: {
-      d: "Alignment is your mind-body connection. Internal limiting beliefs don't just sit in your head. They sit in your body. Sometimes your mind says yes, but your body says no. And your body will always win.",
+      d: "Alignment is your mind-body connection. Internal limiting beliefs don't just sit in your head. They sit in your body. Sometimes your mind says yes, but your body says no. Your body will always win.",
       hi: "Your body is calm under pressure. You walk into high-stakes rooms and stay present. There's no gap between what you say and what you feel.",
       lo: "Your body signals discomfort before your mind catches up. You brace for meetings you should own. You override the \"no\" and pay for it in energy, sleep, or health.",
       why: "Somatic research (van der Kolk, polyvagal theory) suggests limiting beliefs live in the nervous system, not just cognition. You can't think your way past a body that's braced. You have to regulate the state first."
@@ -153,7 +153,7 @@ window.QUIZ = {
   },
 
   HIGH_CONVICTION: [
-    "The Conviction Code isn't a personality trait. It's a state. And it's trainable.",
+    "The Conviction Code isn't a personality trait. It's a state, and it's trainable.",
     "People operating with high conviction share something specific. Once they've decided on a direction, they don't relitigate it in every high-stakes moment. They move.",
     "They walk into rooms with the presence of someone who's already made peace with the outcome. They make decisions the way most people make coffee. Automatic. Grounded. Not because they're certain, but because they've built the internal architecture to act before certainty arrives.",
     "They don't wait to feel ready. They've stopped needing permission from the version of themselves that used to hesitate.",
