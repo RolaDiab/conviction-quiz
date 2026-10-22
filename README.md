@@ -1,4 +1,4 @@
-# Conviction Code Performance Profile
+# The Performance Blocks Assessment
 
 Self-hosted replacement for the ScoreApp assessment. Static site on GitHub Pages at https://quiz.convictioncode.com
 

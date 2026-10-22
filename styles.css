@@ -179,3 +179,5 @@ details.science p { margin-top: 12px; }
 .result-hero h1 { font-weight: 800; font-size: clamp(2.2rem, 5.5vw, 3.6rem); letter-spacing: -0.03em; }
 .score { font-weight: 800; font-size: 5rem; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; }
 .tier { font-weight: 700; font-style: normal; letter-spacing: -0.01em; }
+
+.tagline { font-weight: 700; color: var(--gold); font-size: 1.15rem; margin-bottom: 10px; }

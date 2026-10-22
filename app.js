@@ -95,12 +95,13 @@
     app.innerHTML =
       '<section class="hero"><div class="wrap hero-grid">' +
         '<div class="hero-copy">' +
-          '<p class="eyebrow">Backed by Performance Science</p>' +
+          '<p class="eyebrow">The Performance Blocks Assessment</p>' +
           '<h1>Find the hidden <span class="gold">brake</span> on your performance.</h1>' +
+          '<p class="tagline">Release the brake. Make success predictable.</p>' +
           '<p class="lead">21 questions. About 4 minutes. Get your Conviction Index™, a score on all 7 IMPACT pillars, and the Performance Blocks™ holding you back.</p>' +
           '<div class="cta-row"><button class="btn btn-gold" data-act="start">' + (resume ? "Continue My Assessment" : "Reveal My Performance Profile") + '</button>' +
           (resume ? '<button class="btn btn-ghost" data-act="restart">Start over</button>' : "") + '</div>' +
-          '<p class="fine">Free. Instant results. No fluff.</p>' +
+          '<p class="fine">Free. Instant results. Built on the science behind predictable success.</p>' +
         '</div>' +
         '<div class="hero-photo"><img src="rola.jpg" alt="Rola Diab" width="560" height="695"></div>' +
       '</div></section>' +
@@ -134,7 +135,8 @@
       '</div></section>' +
 
       '<section class="final"><div class="wrap narrow center">' +
-        '<h2>Discover your Performance Profile.</h2>' +
+        '<h2>Take the Performance Blocks Assessment.</h2>' +
+        '<p class="tagline">Release the brake. Make success predictable.</p>' +
         '<p>About 4 minutes. Free. Results the moment you finish.</p>' +
         '<button class="btn btn-gold" data-act="start">Reveal My Performance Profile</button>' +
       '</div></section>' +
@@ -260,7 +262,7 @@
         cta(strong ? "Ready to raise the ceiling?" : "Ready to release the brake?") + '</div></section>' +
       '<section class="band"><div class="wrap narrow"><h2>Your 7 IMPACT Pillars</h2><p class="sub">' + esc(Q.PILLARS_INTRO) + ' Tap any pillar to read more.</p>' + pillars + '</div></section>' +
       '<section class="band alt"><div class="wrap narrow prose"><h2>What High Conviction Actually Looks Like</h2>' + paras(Q.HIGH_CONVICTION) +
-        '<details class="science"><summary>The science behind the code</summary>' + paras(Q.SCIENCE) + '</details></div></section>' +
+        '<details class="science"><summary>The science behind predictable success</summary>' + paras(Q.SCIENCE) + '</details></div></section>' +
       '<section class="final"><div class="wrap narrow center">' +
         '<h2>Your results won\'t change themselves.</h2>' +
         '<p>Book a Performance Diagnostic and leave with a clear first move.</p>' +
