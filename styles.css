@@ -174,3 +174,12 @@ details.science { margin-top: 24px; border-top: 1px solid var(--line); padding-t
 details.science summary { cursor: pointer; font-weight: 700; color: var(--navy); }
 details.science p { margin-top: 12px; }
 .gate textarea { resize: vertical; }
+
+/* Display serif for the score moment */
+.result-hero h1, .score, .tier {
+  font-family: "Playfair Display", Georgia, serif;
+  letter-spacing: -0.01em;
+}
+.result-hero h1 { font-weight: 700; font-size: clamp(2.2rem, 5.5vw, 3.6rem); }
+.score { font-weight: 700; font-size: 4.8rem; font-variant-numeric: lining-nums; }
+.tier { font-weight: 600; font-style: italic; }
