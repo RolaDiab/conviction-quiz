@@ -96,7 +96,7 @@
       '<section class="hero"><div class="wrap hero-grid">' +
         '<div class="hero-copy">' +
           '<p class="eyebrow">The Performance Blocks Assessment</p>' +
-          '<h1>Find the hidden <span class="gold">brake</span> on your performance.</h1>' +
+          '<h1>Discover what\'s really affecting your <span class="gold">success</span>.</h1>' +
           '<p class="tagline">Release the brake. Make success predictable.</p>' +
           '<p class="lead">21 questions. About 4 minutes. Get your Conviction Index™, a score on all 7 IMPACT pillars, and the Performance Blocks™ holding you back.</p>' +
           '<div class="cta-row"><button class="btn btn-gold" data-act="start">' + (resume ? "Continue My Assessment" : "Reveal My Performance Profile") + '</button>' +
