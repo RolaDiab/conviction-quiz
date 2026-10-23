@@ -135,7 +135,7 @@
 
       '<section class="final"><div class="wrap narrow center">' +
         '<h2>Take the Performance Blocks Assessment.</h2>' +
-        '<p class="tagline">Release the brake. Make success predictable.</p>' +
+        '<p class="tagline">Get back what\'s missing.</p>' +
         '<p>Reach your biggest goals in less time. About 4 minutes. Free.</p>' +
         '<button class="btn btn-gold" data-act="start">Take the Assessment</button>' +
       '</div></section>' +
@@ -258,7 +258,7 @@
       '</div></section>' +
       '<section class="band"><div class="wrap narrow prose">' + tierBlocks + '</div></section>' +
       '<section class="band alt"><div class="wrap narrow"><h2>' + blocksTitle + '</h2><p class="sub">' + blocksSub + '</p>' + blocks +
-        cta(strong ? "Ready to raise the ceiling?" : "Ready to release the brake?") + '</div></section>' +
+        cta(s.overall >= 100 ? "Ready to go even further?" : "Ready to get your missing " + (100 - s.overall) + "% back?") + '</div></section>' +
       '<section class="band"><div class="wrap narrow"><h2>Your 7 IMPACT Pillars</h2><p class="sub">' + esc(Q.PILLARS_INTRO) + ' Tap any pillar to read more.</p>' + pillars + '</div></section>' +
       '<section class="band alt"><div class="wrap narrow prose"><h2>What High Conviction Actually Looks Like</h2>' + paras(Q.HIGH_CONVICTION) +
         '<details class="science"><summary>The science behind predictable success</summary>' + paras(Q.SCIENCE) + '</details></div></section>' +
