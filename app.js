@@ -97,7 +97,7 @@
         '<div class="hero-copy">' +
           '<p class="eyebrow">The Performance Blocks Assessment</p>' +
           '<h1><span class="gold">Successful</span>, but running at 70%?</h1>' +
-          '<p class="tagline">Find the hidden blocks capping your performance, and reach your biggest goals in less time.</p>' +
+          '<p class="tagline">Find the hidden blocks capping your performance.</p>' +
           '<p class="lead">21 questions. About 4 minutes. Free.</p>' +
           '<div class="cta-row"><button class="btn btn-gold" data-act="start">' + (resume ? "Continue My Assessment" : "Take the Assessment") + '</button>' +
           (resume ? '<button class="btn btn-ghost" data-act="restart">Start over</button>' : "") + '</div>' +
@@ -136,7 +136,7 @@
       '<section class="final"><div class="wrap narrow center">' +
         '<h2>Take the Performance Blocks Assessment.</h2>' +
         '<p class="tagline">Release the brake. Make success predictable.</p>' +
-        '<p>About 4 minutes. Free. Results the moment you finish.</p>' +
+        '<p>Reach your biggest goals in less time. About 4 minutes. Free.</p>' +
         '<button class="btn btn-gold" data-act="start">Take the Assessment</button>' +
       '</div></section>' +
       footer();
