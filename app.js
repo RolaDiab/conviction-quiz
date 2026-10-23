@@ -98,7 +98,7 @@
           '<p class="eyebrow">The Performance Blocks Assessment</p>' +
           '<h1>Discover what\'s really affecting your <span class="gold">success</span>.</h1>' +
           '<p class="tagline">Release the brake. Make success predictable.</p>' +
-          '<p class="lead">21 questions. About 4 minutes. Get your Conviction Index™, a score on all 7 IMPACT pillars, and the Performance Blocks™ holding you back.</p>' +
+          '<p class="lead">21 questions. About 4 minutes. See exactly what's holding you back.</p>' +
           '<div class="cta-row"><button class="btn btn-gold" data-act="start">' + (resume ? "Continue My Assessment" : "Reveal My Performance Profile") + '</button>' +
           (resume ? '<button class="btn btn-ghost" data-act="restart">Start over</button>' : "") + '</div>' +
           '<p class="fine">Free. Instant results. Built on the science behind predictable success.</p>' +
@@ -113,7 +113,6 @@
           '<li>Which of the seven pillars is affecting your Performance Operating System</li>' +
           '<li>What to strengthen to make success predictable</li>' +
         '</ul>' +
-        '<p class="pillar-strip">Intention · Identity · Meaning · Practice · Alignment · Communication · Trust</p>' +
       '</div></section>' +
 
       '<section class="trust"><div class="wrap">' +
