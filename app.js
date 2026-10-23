@@ -230,7 +230,8 @@
       return '<div class="block"><span class="block-n">' + (n + 1) + '</span><div>' +
         '<h4>' + cap(p) + ' <span class="pct">' + s.pct[idx] + '%</span></h4>' +
         '<p>' + esc(c.d) + '</p>' +
-        '<p class="lo"><strong>' + (strong ? "Watch for:" : "How it shows up:") + '</strong> ' + esc(c.lo) + '</p></div></div>';
+        '<p class="lo"><strong>' + (strong ? "Watch for:" : "How it shows up:") + '</strong> ' + esc(c.lo) + '</p>' +
+        (c.act ? '<p class="act"><strong>One move:</strong> ' + esc(c.act) + '</p>' : '') + '</div></div>';
     }).join("");
 
     var pillars = Q.PILLARS.map(function (p, idx) {
@@ -240,7 +241,8 @@
         '<div class="pillar-body"><p>' + esc(c.d) + '</p>' +
         '<p><strong>High ' + p + ':</strong> ' + esc(c.hi) + '</p>' +
         '<p><strong>Low ' + p + ':</strong> ' + esc(c.lo) + '</p>' +
-        '<p class="why"><strong>Why it matters:</strong> ' + esc(c.why) + '</p></div></details>';
+        '<p class="why"><strong>Why it matters:</strong> ' + esc(c.why) + '</p>' +
+        (c.act ? '<p class="act"><strong>One move:</strong> ' + esc(c.act) + '</p>' : '') + '</div></details>';
     }).join("");
 
     var applyUrl = "/apply/?r=" + code;

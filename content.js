@@ -125,10 +125,11 @@ window.QUIZ = {
       why: "Research on identity-based habits (Fogg, Dweck) shows lasting behavioral change happens when you shift the underlying identity, not just the behavior."
     },
     meaning: {
-      d: "The difference between being successful and being fulfilled. Meaning is the internal experience of your work mattering to you, not to the market. Without Meaning, you can hit every external goal and still feel empty.",
-      hi: "Your work feels like it's yours. Hard days feel purposeful. You can articulate why you're doing this at a level beyond the paycheck or title.",
-      lo: "Achievements feel hollow. You hit milestones and feel oddly flat.",
-      why: "Positive psychology research (Seligman, Frankl) links Meaning to long-term wellbeing and burnout resistance. Success without Meaning tends to collapse into exhaustion."
+      d: "Meaning is the engine of intrinsic motivation. It's what keeps you moving when no one is watching, no reward is coming, and the work gets hard. When the reason behind your work is bigger than the moment you're in, effort stops feeling like a cost. Without it, you can hit every external goal and still run out of fuel.",
+      hi: "Your reason is bigger than any single result. Hard days still feel worth it, so you keep going without needing outside rewards to push you.",
+      lo: "You're running on external fuel: money, praise, the next milestone. When those fade, so does your drive. Wins feel flat, and setbacks feel bigger than they are.",
+      why: "Self-Determination Theory (Deci and Ryan) links intrinsic motivation to greater persistence, performance and wellbeing than motivation driven by external rewards. Teresa Amabile's research on daily work found that making progress on work that feels meaningful is one of the strongest drivers of motivation.",
+      act: "Make the meaning greater than the moment. Before your next hard task, finish this sentence: \"This matters because...\" Name who it serves and what it builds, not what it pays."
     },
     practice: {
       d: "Discipline is architecture, not effort. Practice is the invisible operating system underneath your performance. It's the systems and habits that carry you when motivation dips (which it will).",
