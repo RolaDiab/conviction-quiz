@@ -128,8 +128,7 @@ window.QUIZ = {
       d: "Meaning is the engine of intrinsic motivation. It's what keeps you moving when no one is watching, no reward is coming, and the work gets hard. When the reason behind your work is bigger than the moment you're in, effort stops feeling like a cost. Without it, you can hit every external goal and still run out of fuel.",
       hi: "Your reason is bigger than any single result. Hard days still feel worth it, so you keep going without needing outside rewards to push you.",
       lo: "You're running on external fuel: money, praise, the next milestone. When those fade, so does your drive. Wins feel flat, and setbacks feel bigger than they are.",
-      why: "Self-Determination Theory (Deci and Ryan) links intrinsic motivation to greater persistence, performance and wellbeing than motivation driven by external rewards. Teresa Amabile's research on daily work found that making progress on work that feels meaningful is one of the strongest drivers of motivation.",
-      act: "Make the meaning greater than the moment. Before your next hard task, finish this sentence: \"This matters because...\" Name who it serves and what it builds, not what it pays."
+      why: "Self-Determination Theory (Deci and Ryan) links intrinsic motivation to greater persistence, performance and wellbeing than motivation driven by external rewards. Teresa Amabile's research on daily work found that making progress on work that feels meaningful is one of the strongest drivers of motivation."
     },
     practice: {
       d: "Discipline is architecture, not effort. Practice is the invisible operating system underneath your performance. It's the systems and habits that carry you when motivation dips (which it will).",
