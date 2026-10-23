@@ -183,3 +183,14 @@ details.science p { margin-top: 12px; }
 .tagline { font-weight: 700; color: var(--gold); font-size: 1.15rem; margin-bottom: 10px; }
 
 .gate select { appearance: none; -webkit-appearance: none; background-image: linear-gradient(45deg, transparent 50%, #5B6273 50%), linear-gradient(135deg, #5B6273 50%, transparent 50%); background-position: calc(100% - 22px) 50%, calc(100% - 16px) 50%; background-size: 6px 6px; background-repeat: no-repeat; padding-right: 40px; }
+
+/* Application page */
+.gate fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; }
+.gate legend { font-weight: 600; font-size: .95rem; color: var(--navy); margin-bottom: 8px; padding: 0; }
+.opt.radio { display: flex; gap: 10px; align-items: center; font-weight: 500; color: var(--ink); }
+.opt.radio input { accent-color: var(--navy); width: 18px; height: 18px; margin: 0; flex: none; }
+.opt.radio:has(input:checked) { border-color: var(--navy); background: #EEF1F6; }
+.calendar { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin-top: 8px; }
+.calendar iframe { width: 100%; height: 820px; border: 0; display: block; }
+.fine-dark { font-size: .9rem; color: var(--muted); margin-top: 12px; }
+.sub a { color: var(--navy-2); }

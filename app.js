@@ -98,20 +98,20 @@
           '<p class="eyebrow">The Performance Blocks Assessment</p>' +
           '<h1><span class="gold">Successful</span>, but running at 70%?</h1>' +
           '<p class="tagline">Find the hidden blocks capping your performance, and reach your biggest goals in less time.</p>' +
-          '<p class="lead">21 questions. About 4 minutes. See exactly what\'s holding you back.</p>' +
-          '<div class="cta-row"><button class="btn btn-gold" data-act="start">' + (resume ? "Continue My Assessment" : "Reveal My Performance Profile") + '</button>' +
+          '<p class="lead">21 questions. About 4 minutes. Free.</p>' +
+          '<div class="cta-row"><button class="btn btn-gold" data-act="start">' + (resume ? "Continue My Assessment" : "Take the Assessment") + '</button>' +
           (resume ? '<button class="btn btn-ghost" data-act="restart">Start over</button>' : "") + '</div>' +
-          '<p class="fine">Free. Instant results. Built on the science behind predictable success.</p>' +
+          '<p class="fine">Instant results. Built on the science behind predictable success.</p>' +
         '</div>' +
         '<div class="hero-photo"><img src="rola.jpg" alt="Rola Diab" width="560" height="695"></div>' +
       '</div></section>' +
 
       '<section class="band"><div class="wrap narrow">' +
-        '<h2>Your Performance Profile will reveal:</h2>' +
+        '<h2>Your results will show you:</h2>' +
         '<ul class="checks">' +
-          '<li>Why success has felt inconsistent</li>' +
-          '<li>Which of the seven pillars is affecting your Performance Operating System</li>' +
-          '<li>What to strengthen to make success predictable</li>' +
+          '<li>Why more effort has stopped producing more results</li>' +
+          '<li>Which of the 7 pillars of performance is holding you back</li>' +
+          '<li>What to strengthen first</li>' +
         '</ul>' +
       '</div></section>' +
 
@@ -137,7 +137,7 @@
         '<h2>Take the Performance Blocks Assessment.</h2>' +
         '<p class="tagline">Release the brake. Make success predictable.</p>' +
         '<p>About 4 minutes. Free. Results the moment you finish.</p>' +
-        '<button class="btn btn-gold" data-act="start">Reveal My Performance Profile</button>' +
+        '<button class="btn btn-gold" data-act="start">Take the Assessment</button>' +
       '</div></section>' +
       footer();
   }
@@ -247,10 +247,11 @@
         '<p class="why"><strong>Why it matters:</strong> ' + esc(c.why) + '</p></div></details>';
     }).join("");
 
+    var applyUrl = "/apply/?r=" + code;
     var cta = function (headline) {
       return '<div class="cta-box"><h3>' + headline + '</h3>' +
-        '<p>A 45-minute Performance Diagnostic with Rola. We pinpoint the block costing you the most and map what to strengthen first.</p>' +
-        '<a class="btn btn-gold" href="' + Q.BOOKING_URL + '" target="_blank" rel="noopener">Book Your Performance Diagnostic</a></div>';
+        '<p>Apply for a 45-minute Performance Diagnostic with Rola. Together we pinpoint the block costing you the most and map what to strengthen first.</p>' +
+        '<a class="btn btn-gold" href="' + applyUrl + '">Apply for a Performance Diagnostic</a></div>';
     };
 
     app.innerHTML =
@@ -267,8 +268,8 @@
         '<details class="science"><summary>The science behind predictable success</summary>' + paras(Q.SCIENCE) + '</details></div></section>' +
       '<section class="final"><div class="wrap narrow center">' +
         '<h2>Your results won\'t change themselves.</h2>' +
-        '<p>Book a Performance Diagnostic and leave with a clear first move.</p>' +
-        '<a class="btn btn-gold" href="' + Q.BOOKING_URL + '" target="_blank" rel="noopener">Book Your Performance Diagnostic</a>' +
+        '<p>Apply for a Performance Diagnostic and leave with a clear first move.</p>' +
+        '<a class="btn btn-gold" href="' + applyUrl + '">Apply for a Performance Diagnostic</a>' +
         '<div class="share"><button class="btn btn-ghost" data-act="copy" data-url="' + esc(resultUrl(code)) + '">Copy link to my results</button></div>' +
         '<p class="contact">Questions? <a href="mailto:rola@alorsolutions.com">rola@alorsolutions.com</a> · <a href="https://www.instagram.com/rolaspeaks/" target="_blank" rel="noopener">@rolaspeaks</a> · <a href="https://www.youtube.com/@Rolaspeaks" target="_blank" rel="noopener">YouTube</a></p>' +
       '</div></section>' + footer();

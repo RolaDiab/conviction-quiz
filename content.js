@@ -109,7 +109,7 @@ window.QUIZ = {
     ]
   },
 
-  PILLARS_INTRO: "Your Conviction Index™ is one number. Underneath it, seven pillars shape it. Read each one. Notice which resonate most and which feel out of tune. That's your diagnostic snapshot.",
+  PILLARS_INTRO: "Your overall score is one number. Underneath it, seven pillars shape it. Read each one. Notice which resonate most and which feel out of tune. That's your diagnostic snapshot.",
 
   PILLAR_COPY: {
     intention: {
