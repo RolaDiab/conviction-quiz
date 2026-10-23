@@ -15,7 +15,7 @@
       QUESTIONS.push({ pillar: pillar, text: reverse ? raw.slice(2) : raw, reverse: reverse });
     });
   }
-  var TOTAL_STEPS = QUESTIONS.length;
+  var TOTAL_STEPS = QUESTIONS.length + Q.PROFILE.length;
 
   // ---------- Scoring ----------
   // optionIndex 0 = Strongly Agree. Normal items score 5..1, reverse items 1..5.
@@ -169,12 +169,13 @@
     } else {
       var pq = Q.PROFILE[i - QUESTIONS.length];
       var val = state.profile[pq.key] || "";
-      html += '<p class="instruction">A few quick questions about you.</p><h2 class="q">' + esc(pq.text) + '</h2>';
+      html += '<p class="instruction">Optional.</p><h2 class="q">' + esc(pq.text) + '</h2>';
       if (pq.options) {
         html += '<div class="opts">' + pq.options.map(function (o) {
           var sel = val === o ? " selected" : "";
           return '<button class="opt' + sel + '" data-act="profile" data-v="' + esc(o) + '">' + esc(o) + '</button>';
-        }).join("") + '</div>';
+        }).join("") + '</div>' +
+          '<div class="cta-row"><button class="btn btn-link" data-act="profile-skip">Skip and see my results</button></div>';
       } else {
         html += (pq.multiline
           ? '<textarea id="ptext" maxlength="1000" rows="4" placeholder="' + esc(pq.placeholder) + '">' + esc(val) + '</textarea>'
@@ -193,8 +194,6 @@
   function renderGate(error) {
     document.body.className = "is-flow";
     var g = state.gate || {};
-    var role = state.profile.role || "";
-    var roles = Q.PROFILE[0].options;
     app.innerHTML =
       '<section class="flow"><div class="wrap flow-wrap gate">' +
         '<p class="eyebrow dark">Before you begin</p>' +
@@ -203,9 +202,6 @@
         '<form id="gate" novalidate>' +
           '<label>First name<input name="first_name" autocomplete="given-name" maxlength="60" required value="' + esc(g.first_name || "") + '"></label>' +
           '<label>Email<input name="email" type="email" autocomplete="email" maxlength="255" required value="' + esc(g.email || "") + '"></label>' +
-          '<label><span>What best describes you? <span class="opt-label">(optional)</span></span><select name="role"><option value="">Choose one</option>' +
-            roles.map(function (r) { return '<option' + (r === role ? " selected" : "") + '>' + esc(r) + '</option>'; }).join("") +
-          '</select></label>' +
           '<label class="consent"><input name="consent" type="checkbox"' + (g.consent ? " checked" : "") + '> Send me my results and occasional insights from Rola. Unsubscribe anytime.</label>' +
           (error ? '<p class="err">' + esc(error) + '</p>' : "") +
           '<button class="btn btn-gold wide" type="submit">Start the Assessment</button>' +
@@ -408,7 +404,6 @@
     };
     state.gate = g;
     state.profile = state.profile || {};
-    state.profile.role = f.role.value;
     save();
     if (!g.first_name) return renderGate("Please enter your first name.");
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(g.email)) return renderGate("Please enter a valid email.");
