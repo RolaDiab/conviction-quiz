@@ -252,14 +252,14 @@
 
     app.innerHTML =
       '<section class="result-hero"><div class="wrap result-grid">' +
-        '<div><p class="eyebrow">' + (name ? esc(name) + "'s" : "Your") + ' Performance Profile</p><h1>Your Conviction Index™</h1>' +
-        '<p class="hero-note">Scored across the 7 IMPACT pillars. 0% is the floor, 100% is the ceiling.</p></div>' +
+        '<div><p class="eyebrow">' + (name ? esc(name) + "'s" : "Your") + ' Results</p><h1>Your Performance Score</h1>' +
+        '<p class="hero-note">Scored across 7 pillars of performance. 0% is the floor, 100% is the ceiling.</p></div>' +
         '<div class="score-card"><div class="score">' + s.overall + '%</div><div class="bar"><div class="fill" style="width:' + s.overall + '%"></div></div><div class="tier">' + esc(s.tier) + '</div></div>' +
       '</div></section>' +
       '<section class="band"><div class="wrap narrow prose">' + tierBlocks + '</div></section>' +
       '<section class="band alt"><div class="wrap narrow"><h2>' + blocksTitle + '</h2><p class="sub">' + blocksSub + '</p>' + blocks +
         cta(s.overall >= 100 ? "Ready to go even further?" : "Ready to get your missing " + (100 - s.overall) + "% back?") + '</div></section>' +
-      '<section class="band"><div class="wrap narrow"><h2>Your 7 IMPACT Pillars</h2><p class="sub">' + esc(Q.PILLARS_INTRO) + ' Tap any pillar to read more.</p>' + pillars + '</div></section>' +
+      '<section class="band"><div class="wrap narrow"><h2>Your 7 Pillars</h2><p class="sub">' + esc(Q.PILLARS_INTRO) + ' Tap any pillar to read more.</p>' + pillars + '</div></section>' +
       '<section class="band alt"><div class="wrap narrow prose"><h2>What High Conviction Actually Looks Like</h2>' + paras(Q.HIGH_CONVICTION) +
         '<details class="science"><summary>The science behind predictable success</summary>' + paras(Q.SCIENCE) + '</details></div></section>' +
       '<section class="final"><div class="wrap narrow center">' +
@@ -425,7 +425,7 @@
     if (finishing) return;
     finishing = true;
     document.body.className = "is-flow";
-    app.innerHTML = '<section class="flow"><div class="wrap flow-wrap center"><p class="eyebrow dark">Complete</p><h2 class="q">Calculating your Performance Profile...</h2></div></section>';
+    app.innerHTML = '<section class="flow"><div class="wrap flow-wrap center"><p class="eyebrow dark">Complete</p><h2 class="q">Calculating your results...</h2></div></section>';
     var g = state.gate;
     var points = pillarPoints(state.answers);
     var code = encodeResult(g.first_name, points);

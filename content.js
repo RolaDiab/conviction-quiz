@@ -67,8 +67,8 @@ window.QUIZ = {
   TIER_COPY: {
     "The Survivor": [
       { p: [
-        "Your Conviction Index™ indicates you're currently operating in Survivor Mode.",
-        "Your Performance Operating System isn't yet producing the outcomes you're capable of. Instead of predictable success, you're likely running on effort, resilience, and determination to push through.",
+        "Your score shows you're currently operating in Survivor Mode.",
+        "The system driving your performance isn't yet producing the outcomes you're capable of. Instead of predictable success, you're likely running on effort, resilience, and determination to push through.",
         "You may get brief bursts of momentum, then find yourself second-guessing decisions or feeling like you're constantly starting over.",
         "This is not a reflection of your intelligence, ambition, or potential. It's a reflection of the internal system currently driving your decisions."
       ] },
@@ -84,26 +84,26 @@ window.QUIZ = {
     ],
     "The Builder": [
       { p: [
-        "Your Performance Profile reveals a Confidence Builder pattern. You've done the work. The capability is real, the wins are real, the discipline holding it together is real, but the strategies that got you here are starting to plateau.",
+        "Your results reveal a Confidence Builder pattern. You've done the work. The capability is real, the wins are real, the discipline holding it together is real, but the strategies that got you here are starting to plateau.",
         "Confidence is what gets you into the room. Conviction is what holds you in it. The gap between them is the wall every high performer eventually hits.",
-        "Your IMPACT Pillar scores below show a mix of strong and underdeveloped areas. The weak ones aren't ruining you. They're capping you. That's why more effort has stopped converting into more progress.",
-        "The 7 IMPACT Pillars below (Intention, Identity, Meaning, Practice, Alignment, Communication, Trust) are where the reinforcement goes. Read each score. Your highs are what got you here. Your lows are what's keeping you stuck."
+        "Your pillar scores below show a mix of strong and underdeveloped areas. The weak ones aren't ruining you. They're capping you. That's why more effort has stopped converting into more progress.",
+        "The 7 pillars below (Intention, Identity, Meaning, Practice, Alignment, Communication, Trust) are where the reinforcement goes. Read each score. Your highs are what got you here. Your lows are what's keeping you stuck."
       ] }
     ],
     "The Achiever": [
       { p: [
-        "Your Performance Profile reveals a Conviction-Seeking pattern. You're producing. You're delivering. People look at your life and see success, and they're not wrong.",
+        "Your results reveal a Conviction-Seeking pattern. You're producing. You're delivering. People look at your life and see success, and they're not wrong.",
         "But you know, even if you can't articulate it, that the internal experience hasn't caught up to the external one. The wins are real. The interior signal that should match them is faint, intermittent, or absent entirely.",
-        "You don't have a system failure. You have a tuning problem. Most of your IMPACT Pillars are strong, but one or two specific ones are off-frequency, quietly draining the energy and certainty that should be flowing through everything else.",
-        "Read your 7 IMPACT Pillar scores below. The pattern shows where the signal is solid and where it's weak.",
+        "You don't have a system failure. You have a tuning problem. Most of your pillars are strong, but one or two specific ones are off-frequency, quietly draining the energy and certainty that should be flowing through everything else.",
+        "Read your 7 pillar scores below. The pattern shows where the signal is solid and where it's weak.",
         "You're not far. You're tuning the last few degrees."
       ] }
     ],
     "The High Performer": [
       { p: [
-        "Your Performance Profile reveals a Conviction-Driven pattern. You're not chasing the result anymore. You're operating from the belief that already produced it. The internal architecture is sound. The external is keeping pace because the inside set the tempo first. This is what conviction looks like when it's installed and running.",
+        "Your results reveal a Conviction-Driven pattern. You're not chasing the result anymore. You're operating from the belief that already produced it. The internal architecture is sound. The external is keeping pace because the inside set the tempo first. This is what conviction looks like when it's installed and running.",
         "This doesn't mean there's no room for growth. At this level, the game changes. It's no longer about fixing what's broken. It's about deepening mastery, expanding capacity, and often helping others build what you've built. Your growth edge is in optimization and leadership: raising your ceiling, not repairing your floor.",
-        "Read your 7 IMPACT Pillar scores below. The pattern shows where mastery already lives and the one or two places to deepen next.",
+        "Read your 7 pillar scores below. The pattern shows where mastery already lives and the one or two places to deepen next.",
         "From here, the next move is to install repeatable systems and processes to support your ongoing development as you expand."
       ] }
     ]
@@ -157,7 +157,7 @@ window.QUIZ = {
   },
 
   HIGH_CONVICTION: [
-    "The Conviction Code isn't a personality trait. It's a state, and it's trainable.",
+    "Conviction isn't a personality trait. It's a state, and it's trainable.",
     "People operating with high conviction share something specific. Once they've decided on a direction, they don't relitigate it in every high-stakes moment. They move.",
     "They walk into rooms with the presence of someone who's already made peace with the outcome. They make decisions the way most people make coffee. Automatic. Grounded. Not because they're certain, but because they've built the internal architecture to act before certainty arrives.",
     "They don't wait to feel ready. They've stopped needing permission from the version of themselves that used to hesitate.",
@@ -168,6 +168,6 @@ window.QUIZ = {
     "This assessment is rooted in research from neuroscience, behavioral psychology, and performance science.",
     "Peter Gollwitzer's research on implementation intentions shows that direction anchored in clear plans substantially improves follow-through. Bessel van der Kolk's somatic research suggests that limiting beliefs live in the body, not just the mind. Antonio Damasio's neuroscience of decision-making shows that the fear response fires faster than rational thought. Conviction is a trained override, not a personality trait.",
     "fMRI research shows that when a speaker delivers with high internal conviction, audience brain activity synchronizes 26% more strongly. Conviction isn't just felt. It's measured.",
-    "The IMPACT Model integrates these findings into a single trainable system. Each of the 7 pillars maps to a specific research base. Together, they make performance predictable."
+    "The 7 pillars bring these findings together into one system you can train. Together, they make performance predictable."
   ]
 };
