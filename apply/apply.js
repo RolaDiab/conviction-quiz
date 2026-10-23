@@ -7,7 +7,7 @@
   var params = new URLSearchParams(location.search);
   var resultCode = (params.get("r") || "").replace(/[^A-Za-z0-9_-]/g, "");
 
-  var REVENUE = ["Under $250K", "$250K to $1M", "$1M to $5M", "$5M+", "I'm an executive, not a business owner"];
+  var REVENUE = ["Business owner: under $250K revenue", "Business owner: $250K to $1M", "Business owner: $1M to $5M", "Business owner: $5M+", "I work for a company (executive, manager or employee)"];
   var START = ["Right away", "In the next 30 days", "In 1 to 3 months", "I'm just exploring"];
   var INVEST = ["Yes, if it's the right fit", "I'd need to discuss it with someone first", "Not right now"];
 
@@ -44,7 +44,7 @@
           '<label>Email<input name="email" type="email" autocomplete="email" maxlength="255" value="' + esc(v.email || prefill.email || "") + '"></label>' +
           '<label>Phone or WhatsApp<input name="phone" type="tel" autocomplete="tel" maxlength="40" value="' + esc(v.phone || "") + '"></label>' +
           '<label>Your role and company<input name="company" maxlength="150" placeholder="For example: CEO, Acme Group" value="' + esc(v.company || "") + '"></label>' +
-          '<fieldset><legend>Annual revenue of your business</legend>' + radios("revenue", REVENUE, v.revenue) + '</fieldset>' +
+          '<fieldset><legend>Which best describes you?</legend>' + radios("revenue", REVENUE, v.revenue) + '</fieldset>' +
           '<label>What do you want to be true 90 days from now?<textarea name="goal" rows="3" maxlength="1000">' + esc(v.goal || "") + '</textarea></label>' +
           '<label><span>What feels like the biggest thing in the way right now? <span class="opt-label">(optional)</span></span><textarea name="obstacle" rows="3" maxlength="1000">' + esc(v.obstacle || "") + '</textarea></label>' +
           '<fieldset><legend>When do you want to start?</legend>' + radios("start", START, v.start) + '</fieldset>' +
@@ -61,7 +61,7 @@
     var resultLink = resultCode ? "https://quiz.convictioncode.com/#r=" + resultCode : "No quiz result linked";
     var message =
       "QUALIFIED: " + (qualified ? "YES, shown the booking calendar" : "NO, not shown the calendar") + "\n\n" +
-      "Revenue: " + v.revenue + "\n" +
+      "Describes them: " + v.revenue + "\n" +
       "Wants to start: " + v.start + "\n" +
       "Ready to invest: " + v.invest + "\n\n" +
       "90-day goal:\n" + v.goal + "\n\n" +
@@ -125,7 +125,7 @@
       !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.email) ? "Please enter a valid email." :
       v.phone.replace(/\D/g, "").length < 7 ? "Please enter a phone or WhatsApp number." :
       !v.company ? "Please share your role and company." :
-      !v.revenue ? "Please choose your annual revenue." :
+      !v.revenue ? "Please choose what best describes you." :
       !v.goal ? "Please tell us what you want to be true in 90 days." :
       !v.start ? "Please choose when you want to start." :
       !v.invest ? "Please answer the investment question." : "";
