@@ -267,7 +267,7 @@
         '<p>Apply for a Performance Diagnostic and leave with a clear first move.</p>' +
         '<a class="btn btn-gold" href="' + applyUrl + '">Apply for a Performance Diagnostic</a>' +
         '<div class="share"><button class="btn btn-ghost" data-act="copy" data-url="' + esc(resultUrl(code)) + '">Copy link to my results</button></div>' +
-        '<p class="contact">Questions? <a href="mailto:rola@alorsolutions.com">rola@alorsolutions.com</a> · <a href="https://www.instagram.com/rolaspeaks/" target="_blank" rel="noopener">@rolaspeaks</a> · <a href="https://www.youtube.com/@Rolaspeaks" target="_blank" rel="noopener">YouTube</a></p>' +
+        '<p class="contact">Follow Rola: <a href="https://www.instagram.com/rolaspeaks/" target="_blank" rel="noopener">Instagram @rolaspeaks</a> · <a href="https://www.youtube.com/@Rolaspeaks" target="_blank" rel="noopener">YouTube @Rolaspeaks</a></p>' +
       '</div></section>' + footer();
   }
 
