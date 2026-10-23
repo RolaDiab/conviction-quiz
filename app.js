@@ -130,7 +130,7 @@
 
       '<section class="quotes"><div class="wrap quote-grid">' +
         '<blockquote><p>"When I first started working with Rola I was hoping to work towards a promotion and move up in my career in the next 2-3 years. Rola helped remove some limitations and guided me using her strategies so that I accelerated that timeline to receiving multiple offers and a project from the Minister himself within 3.5 months!"</p><cite>Lujain Ghalib, Executive</cite></blockquote>' +
-        '<blockquote><p>"During her coaching sessions, she really gets to know you and like a brain surgeon, takes out what is hurting you and installs new belief systems that change the game. I was promoted within 3 months, and had 3 raises within a 12-month period."</p><cite>Aaron Wilson, National Business Manager, Human Interest</cite></blockquote>' +
+        '<blockquote><p>"She really gets to know you and like a brain surgeon, takes out what is hurting you and installs new belief systems that change the game. I was promoted within 3 months, and had 3 raises within a 12-month period."</p><cite>Aaron Wilson, National Business Manager, Human Interest</cite></blockquote>' +
       '</div></section>' +
 
       '<section class="final"><div class="wrap narrow center">' +
