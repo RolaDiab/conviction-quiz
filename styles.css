@@ -113,7 +113,7 @@ body.is-flow { background: var(--ivory); }
 .opt:hover { border-color: var(--navy-2); }
 .opt.selected { border-color: var(--navy); background: var(--navy); color: #fff; }
 .back { margin-top: 22px; }
-textarea, input[type=text], input[type=email], input[type=tel], .gate input:not([type=checkbox]) {
+textarea, select, input[type=text], input[type=email], input[type=tel], .gate input:not([type=checkbox]) {
   width: 100%; font: inherit; padding: 14px 16px; border-radius: 12px; border: 1.5px solid var(--line); background: #fff; color: var(--ink);
 }
 textarea:focus, input:focus { outline: 2px solid var(--gold); outline-offset: 1px; border-color: var(--navy-2); }
@@ -181,3 +181,5 @@ details.science p { margin-top: 12px; }
 .tier { font-weight: 700; font-style: normal; letter-spacing: -0.01em; }
 
 .tagline { font-weight: 700; color: var(--gold); font-size: 1.15rem; margin-bottom: 10px; }
+
+.gate select { appearance: none; -webkit-appearance: none; background-image: linear-gradient(45deg, transparent 50%, #5B6273 50%), linear-gradient(135deg, #5B6273 50%, transparent 50%); background-position: calc(100% - 22px) 50%, calc(100% - 16px) 50%; background-size: 6px 6px; background-repeat: no-repeat; padding-right: 40px; }

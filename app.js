@@ -15,7 +15,7 @@
       QUESTIONS.push({ pillar: pillar, text: reverse ? raw.slice(2) : raw, reverse: reverse });
     });
   }
-  var TOTAL_STEPS = QUESTIONS.length + Q.PROFILE.length;
+  var TOTAL_STEPS = QUESTIONS.length;
 
   // ---------- Scoring ----------
   // optionIndex 0 = Strongly Agree. Normal items score 5..1, reverse items 1..5.
@@ -98,7 +98,7 @@
           '<p class="eyebrow">The Performance Blocks Assessment</p>' +
           '<h1>Discover what\'s really affecting your <span class="gold">success</span>.</h1>' +
           '<p class="tagline">Release the brake. Make success predictable.</p>' +
-          '<p class="lead">21 questions. About 4 minutes. See exactly what's holding you back.</p>' +
+          '<p class="lead">21 questions. About 4 minutes. See exactly what\'s holding you back.</p>' +
           '<div class="cta-row"><button class="btn btn-gold" data-act="start">' + (resume ? "Continue My Assessment" : "Reveal My Performance Profile") + '</button>' +
           (resume ? '<button class="btn btn-ghost" data-act="restart">Start over</button>' : "") + '</div>' +
           '<p class="fine">Free. Instant results. Built on the science behind predictable success.</p>' +
@@ -183,7 +183,7 @@
           (pq.optional ? '<button class="btn btn-link" data-act="profile-skip">Skip</button>' : "") + '</div>';
       }
     }
-    html += (i > 0 ? '<button class="btn btn-link back" data-act="back">← Back</button>' : '<button class="btn btn-link back" data-act="home">← Back</button>') +
+    html += '<button class="btn btn-link back" data-act="back">← Back</button>' +
       '</div></section>';
     app.innerHTML = html;
     var t = document.getElementById("ptext");
@@ -193,21 +193,24 @@
   function renderGate(error) {
     document.body.className = "is-flow";
     var g = state.gate || {};
+    var role = state.profile.role || "";
+    var roles = Q.PROFILE[0].options;
     app.innerHTML =
       '<section class="flow"><div class="wrap flow-wrap gate">' +
-        '<p class="eyebrow dark">Complete</p>' +
-        '<h2 class="q">Your Performance Profile is ready.</h2>' +
-        '<p class="sub">Where should we send your results?</p>' +
+        '<p class="eyebrow dark">Before you begin</p>' +
+        '<h2 class="q">Where should we send your results?</h2>' +
+        '<p class="sub">21 questions. About 4 minutes. Your results appear the moment you finish.</p>' +
         '<form id="gate" novalidate>' +
           '<label>First name<input name="first_name" autocomplete="given-name" maxlength="60" required value="' + esc(g.first_name || "") + '"></label>' +
           '<label>Email<input name="email" type="email" autocomplete="email" maxlength="255" required value="' + esc(g.email || "") + '"></label>' +
-          '<label>Phone <span class="opt-label">(optional)</span><input name="phone" type="tel" autocomplete="tel" maxlength="40" value="' + esc(g.phone || "") + '"></label>' +
-          '<label>Your biggest challenge in the next 90 days <span class="opt-label">(optional)</span><textarea name="challenge" rows="3" maxlength="1000">' + esc(g.challenge || "") + '</textarea></label>' +
+          '<label><span>What best describes you? <span class="opt-label">(optional)</span></span><select name="role"><option value="">Choose one</option>' +
+            roles.map(function (r) { return '<option' + (r === role ? " selected" : "") + '>' + esc(r) + '</option>'; }).join("") +
+          '</select></label>' +
           '<label class="consent"><input name="consent" type="checkbox"' + (g.consent ? " checked" : "") + '> Send me my results and occasional insights from Rola. Unsubscribe anytime.</label>' +
           (error ? '<p class="err">' + esc(error) + '</p>' : "") +
-          '<button class="btn btn-gold wide" type="submit">Show My Results</button>' +
+          '<button class="btn btn-gold wide" type="submit">Start the Assessment</button>' +
         '</form>' +
-        '<button class="btn btn-link back" data-act="back">← Back</button>' +
+        '<button class="btn btn-link back" data-act="home">← Back</button>' +
       '</div></section>';
   }
 
@@ -276,15 +279,20 @@
     return Promise.race([promise, new Promise(function (r) { setTimeout(r, ms); })]);
   }
 
-  function sendLead(g, points, code) {
-    var s = summarize(points);
-    var jobs = [];
-    jobs.push(fetch(Q.ADHARA_FORM_URL, {
+  // Called when they submit the start form, so people who quit halfway are still on the list.
+  function addToList(g) {
+    fetch(Q.ADHARA_FORM_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ response_data: { first_name: g.first_name, email: g.email, email_consent: ["yes"] }, is_complete: true }),
       keepalive: true
-    }).catch(function () {}));
+    }).catch(function () {});
+  }
+
+  // Called when they finish: results email to them, lead alert to Rola.
+  function sendLead(g, points, code) {
+    var s = summarize(points);
+    var jobs = [];
 
     var items = function (idxs) { return idxs.map(function (i) { return { name: cap(Q.PILLARS[i]), pct: s.pct[i] }; }); };
     var emailData = {
@@ -302,16 +310,16 @@
     };
     jobs.push(sendEmail("quiz-results", g.email, emailData));
     jobs.push(sendEmail("quiz-lead-notification", null, Object.assign({}, emailData, {
-      email: g.email, phone: g.phone, role: state.profile.role || "", challenge: g.challenge,
+      email: g.email, role: state.profile.role || "",
       utmSource: utm.utm_source, utmMedium: utm.utm_medium, utmCampaign: utm.utm_campaign
     })));
 
     if (Q.GHL_WEBHOOK_URL) {
       var payload = {
-        first_name: g.first_name, email: g.email, phone: g.phone,
+        first_name: g.first_name, email: g.email,
         overall_score: s.overall, tier: s.tier,
         top_block_1: cap(Q.PILLARS[s.blocks[0]]), top_block_2: cap(Q.PILLARS[s.blocks[1]]), top_block_3: cap(Q.PILLARS[s.blocks[2]]),
-        role: state.profile.role || "", challenge: g.challenge,
+        role: state.profile.role || "",
         utm_source: utm.utm_source, utm_medium: utm.utm_medium, utm_campaign: utm.utm_campaign,
         result_url: resultUrl(code), tags: "quiz-completed"
       };
@@ -334,8 +342,9 @@
       if (r) { renderResult(r.name, r.points); scrollTop(); return; }
     }
     if (state.step < 0) renderLanding();
+    else if (!state.gate || !state.gate.done) renderGate();
     else if (state.step < TOTAL_STEPS) renderQuestion();
-    else renderGate();
+    else finish();
     scrollTop();
   }
 
@@ -352,9 +361,12 @@
     var act = el.getAttribute("data-act");
 
     if (act === "start") { if (location.hash) history.replaceState(null, "", location.pathname + location.search); go(Math.max(0, state.step)); }
-    else if (act === "restart") { state = { step: 0, answers: [], profile: {} }; save(); route(); }
+    else if (act === "restart") { state = { step: 0, answers: [], profile: state.profile || {}, gate: state.gate }; save(); route(); }
     else if (act === "home") { go(-1); }
-    else if (act === "back") { go(state.step - 1); }
+    else if (act === "back") {
+      if (state.step === 0) { state.gate.done = false; go(0); }
+      else go(state.step - 1);
+    }
     else if (act === "answer" || act === "profile") {
       if (advancing) return;
       advancing = true;
@@ -391,30 +403,43 @@
     var g = {
       first_name: f.first_name.value.trim().slice(0, 60),
       email: f.email.value.trim().toLowerCase().slice(0, 255),
-      phone: f.phone.value.trim().slice(0, 40),
-      challenge: f.challenge.value.trim().slice(0, 1000),
       consent: f.consent.checked
     };
     state.gate = g;
+    state.profile = state.profile || {};
+    state.profile.role = f.role.value;
     save();
     if (!g.first_name) return renderGate("Please enter your first name.");
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(g.email)) return renderGate("Please enter a valid email.");
     if (!g.consent) return renderGate("Please tick the box so we can send your results.");
+    g.done = true;
+    if (state.listed !== g.email) { addToList(g); state.listed = g.email; save(); }
     for (var i = 0; i < QUESTIONS.length; i++) {
       if (state.answers[i] == null) return go(i);
     }
+    go(TOTAL_STEPS);
+  });
 
-    var btn = f.querySelector("button[type=submit]");
-    btn.disabled = true;
-    btn.textContent = "Calculating...";
+  // After the last answer: score, send the emails, show results.
+  var finishing = false;
+  function finish() {
+    for (var i = 0; i < QUESTIONS.length; i++) {
+      if (state.answers[i] == null) return go(i);
+    }
+    if (finishing) return;
+    finishing = true;
+    document.body.className = "is-flow";
+    app.innerHTML = '<section class="flow"><div class="wrap flow-wrap center"><p class="eyebrow dark">Complete</p><h2 class="q">Calculating your Performance Profile...</h2></div></section>';
+    var g = state.gate;
     var points = pillarPoints(state.answers);
     var code = encodeResult(g.first_name, points);
     sendLead(g, points, code).then(function () {
-      state = { step: -1, answers: [], profile: {} };
+      finishing = false;
+      state = { step: -1, answers: [], profile: { role: state.profile.role }, gate: { first_name: g.first_name, email: g.email, consent: g.consent }, listed: state.listed };
       save();
       location.hash = "r=" + code;
     });
-  });
+  }
 
   window.addEventListener("hashchange", route);
   route();
