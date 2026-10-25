@@ -229,18 +229,13 @@
       var p = Q.PILLARS[idx], c = Q.PILLAR_COPY[p];
       return '<div class="block"><span class="block-n">' + (n + 1) + '</span><div>' +
         '<h4>' + cap(p) + ' <span class="pct">' + s.pct[idx] + '%</span></h4>' +
-        '<p>' + esc(c.d) + '</p>' +
+        '<p>' + esc(c.line) + '</p>' +
         '<p class="lo"><strong>' + (strong ? "Watch for:" : "How it shows up:") + '</strong> ' + esc(c.lo) + '</p></div></div>';
     }).join("");
 
     var pillars = Q.PILLARS.map(function (p, idx) {
-      var c = Q.PILLAR_COPY[p];
-      return '<details class="pillar"><summary><div class="pillar-head"><h4>' + cap(p) + '</h4><span class="pct">' + s.pct[idx] + '%</span></div>' +
-        '<div class="bar"><div class="fill" style="width:' + s.pct[idx] + '%"></div></div></summary>' +
-        '<div class="pillar-body"><p>' + esc(c.d) + '</p>' +
-        '<p><strong>High ' + p + ':</strong> ' + esc(c.hi) + '</p>' +
-        '<p><strong>Low ' + p + ':</strong> ' + esc(c.lo) + '</p>' +
-        '<p class="why"><strong>Why it matters:</strong> ' + esc(c.why) + '</p></div></details>';
+      return '<div class="pillar"><div class="pillar-head"><h4>' + cap(p) + '</h4><span class="pct">' + s.pct[idx] + '%</span></div>' +
+        '<div class="bar"><div class="fill" style="width:' + s.pct[idx] + '%"></div></div></div>';
     }).join("");
 
     var applyUrl = "/apply/?r=" + code;
@@ -253,13 +248,13 @@
     app.innerHTML =
       '<section class="result-hero"><div class="wrap result-grid">' +
         '<div><p class="eyebrow">' + (name ? esc(name) + "'s" : "Your") + ' Results</p><h1>Your Performance Score</h1>' +
-        '<p class="hero-note">Scored across 7 pillars of performance. 0% is the floor, 100% is the ceiling.</p></div>' +
+        '<p class="hero-note">Scored across 7 pillars of performance.</p></div>' +
         '<div class="score-card"><div class="score">' + s.overall + '%</div><div class="bar"><div class="fill" style="width:' + s.overall + '%"></div></div><div class="tier">' + esc(s.tier) + '</div></div>' +
       '</div></section>' +
       '<section class="band"><div class="wrap narrow prose">' + tierBlocks + '</div></section>' +
       '<section class="band alt"><div class="wrap narrow"><h2>' + blocksTitle + '</h2><p class="sub">' + blocksSub + '</p>' + blocks +
         cta(s.overall >= 100 ? "Ready to go even further?" : "Ready to get your missing " + (100 - s.overall) + "% back?") + '</div></section>' +
-      '<section class="band"><div class="wrap narrow"><h2>Your 7 Pillars</h2><p class="sub">' + esc(Q.PILLARS_INTRO) + ' Tap any pillar to read more.</p>' + pillars + '</div></section>' +
+      '<section class="band"><div class="wrap narrow"><h2>Your 7 Pillars</h2><p class="sub">' + esc(Q.PILLARS_INTRO) + '</p>' + pillars + '</div></section>' +
       '<section class="band alt"><div class="wrap narrow prose"><h2>What High Conviction Actually Looks Like</h2>' + paras(Q.HIGH_CONVICTION) +
         '<details class="science"><summary>The science behind predictable success</summary>' + paras(Q.SCIENCE) + '</details></div></section>' +
       '<section class="final"><div class="wrap narrow center">' +

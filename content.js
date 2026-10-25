@@ -109,46 +109,53 @@ window.QUIZ = {
     ]
   },
 
-  PILLARS_INTRO: "Your overall score is one number. Underneath it, seven pillars shape it. Read each one. Notice which resonate most and which feel out of tune. That's your diagnostic snapshot.",
+  PILLARS_INTRO: "Your overall score is one number. Underneath it, seven pillars shape it. Notice which are strong and which are holding you back.",
 
   PILLAR_COPY: {
     intention: {
+      line: "The clarity behind your direction, and the values underneath it.",
       d: "The clarity behind your direction, and the values underneath it. When your underlying values align with your stated goals, decisions feel clean. When they don't, even if the goal looks right on paper, every choice creates internal friction.",
       hi: "You know exactly what you're building and why it matters to you. Priorities filter themselves through your bigger goal.",
       lo: "You feel torn in decision-making. Often the conflict isn't between goal and effort. It's between the goal you chose and a value you haven't consciously named.",
       why: "Research from Acceptance and Commitment Therapy and Gollwitzer's implementation intention studies shows direction anchored in identified values improves follow-through compared with goals set on external metrics alone."
     },
     identity: {
+      line: "The gap between who you're being and who you're becoming.",
       d: "The gap between who you're being and who you're becoming. Identity precedes action. You don't consistently do things that don't match how you see yourself. Every high performer eventually hits a moment where their old identity can't hold their new capacity.",
       hi: "You act like the version of you already exists. You don't wait for permission or external validation.",
       lo: "You self-sabotage wins because they don't fit the story you're still telling yourself. You accept standards lower than what you deserve.",
       why: "Research on identity-based habits (Fogg, Dweck) shows lasting behavioral change happens when you shift the underlying identity, not just the behavior."
     },
     meaning: {
+      line: "The engine of intrinsic motivation that keeps you going when no reward is coming.",
       d: "Meaning is the engine of intrinsic motivation. It's what keeps you moving when no one is watching, no reward is coming, and the work gets hard. When the reason behind your work is bigger than the moment you're in, effort stops feeling like a cost. Without it, you can hit every external goal and still run out of fuel.",
       hi: "Your reason is bigger than any single result. Hard days still feel worth it, so you keep going without needing outside rewards to push you.",
       lo: "You're running on external fuel: money, praise, the next milestone. When those fade, so does your drive. Wins feel flat, and setbacks feel bigger than they are.",
       why: "Self-Determination Theory (Deci and Ryan) links intrinsic motivation to greater persistence, performance and wellbeing than motivation driven by external rewards. Teresa Amabile's research on daily work found that making progress on work that feels meaningful is one of the strongest drivers of motivation."
     },
     practice: {
+      line: "The systems and habits that carry you when motivation dips.",
       d: "Discipline is architecture, not effort. Practice is the invisible operating system underneath your performance. It's the systems and habits that carry you when motivation dips (which it will).",
       hi: "Your consistency runs on systems, not moods. Your worst week still ships.",
       lo: "You start strong and fade. Motivation is your primary strategy. When energy dips, follow-through evaporates.",
       why: "Research on habit formation (Wendy Wood) found that about 43% of daily behavior is habitual. That means your systems, not your effort, determine most outcomes."
     },
     alignment: {
+      line: "The connection between what your mind decides and what your body allows.",
       d: "Alignment is your mind-body connection. Internal limiting beliefs don't just sit in your head. They sit in your body. Sometimes your mind says yes, but your body says no. Your body will always win.",
       hi: "Your body is calm under pressure. You walk into high-stakes rooms and stay present. There's no gap between what you say and what you feel.",
       lo: "Your body signals discomfort before your mind catches up. You brace for meetings you should own. You override the \"no\" and pay for it in energy, sleep, or health.",
       why: "Somatic research (van der Kolk, polyvagal theory) suggests limiting beliefs live in the nervous system, not just cognition. You can't think your way past a body that's braced. You have to regulate the state first."
     },
     communication: {
+      line: "The match between your words, your body, and your energy.",
       d: "Communication isn't just what you say to yourself. It's the alignment between your words, your body, and your energy. Internal self-talk and external presence. When your body and energy don't match your stated intention, people feel it before they hear it.",
       hi: "Your self-talk supports the person you're becoming. Your body language, tone, and energy match your words. You show up whole.",
       lo: "You say one thing, your body signals another. Your self-talk erodes what your words are trying to build. You leave conversations feeling like you didn't fully land.",
       why: "Research on nonverbal communication (Ekman and others) shows that when body, tone, and words don't align, listeners lean on the nonverbal signal. Misalignment is felt even when you're saying the right thing."
     },
     trust: {
+      line: "Your capacity to override fear and move forward anyway.",
       d: "Trust is your capacity to override the initial fear response and move forward anyway. Every consequential decision hits a threshold where fear fires. Doubt, hesitation, the \"what if I'm wrong.\" Trust is the internal architecture, the plan, that lets you move through it, not around it.",
       hi: "You commit before certainty arrives. You have a plan for how you'll act when fear shows up. Because it will. You've built the muscle of moving forward when your system says stop.",
       lo: "You freeze at decision points. You poll five people before making a call you already knew. You wait for one more sign that never comes.",
