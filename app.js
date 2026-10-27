@@ -230,7 +230,9 @@
       '</div></section>';
   }
 
+  var justFinished = false;
   function renderResult(name, points) {
+    var fresh = justFinished;
     document.body.className = "is-result";
     var s = summarize(points);
     var code = encodeResult(name, points);
@@ -271,7 +273,7 @@
         '<p class="hero-note">Scored across 7 pillars of performance.</p></div>' +
         '<div class="score-card"><div class="score">' + s.overall + '%</div><div class="bar"><div class="fill" style="width:' + s.overall + '%"></div></div><div class="tier">' + esc(s.tier) + '</div></div>' +
       '</div></section>' +
-      '<section class="band"><div class="wrap narrow prose">' + tierBlocks + '</div></section>' +
+      '<section class="band"><div class="wrap narrow prose">' + (fresh ? '<p class="mail-note">A copy of your results is on its way to your inbox. Don\'t see it? Check your Promotions or Spam folder.</p>' : '') + tierBlocks + '</div></section>' +
       '<section class="band alt"><div class="wrap narrow"><h2>' + blocksTitle + '</h2><p class="sub">' + blocksSub + '</p>' + blocks +
         cta(s.overall >= 100 ? "Ready to go even further?" : "Ready to get your missing " + (100 - s.overall) + "% back?") + '</div></section>' +
       '<section class="band"><div class="wrap narrow"><h2>Your 7 Pillars</h2><p class="sub">' + esc(Q.PILLARS_INTRO) + '</p>' + pillars + '</div></section>' +
@@ -451,6 +453,7 @@
       finishing = false;
       state = { step: -1, answers: [], profile: { role: state.profile.role }, gate: { first_name: g.first_name, email: g.email, consent: g.consent }, listed: state.listed, src: state.src };
       save();
+      justFinished = true;
       location.hash = "r=" + code;
     });
   }
