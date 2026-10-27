@@ -3,7 +3,9 @@
 window.QUIZ = {
   // Paste the GHL inbound webhook URL here once the workflow exists. Empty = skip.
   GHL_WEBHOOK_URL: "",
-  ADHARA_FORM_URL: "https://api.adharaweb.com/api/v1/public/forms/rola/quiz-gate",
+  // PAUSED 2026-10-27: the Adhara "quiz-gate" form sends an old ScoreApp-era auto-reply (Aug 11 Masterclass).
+  // Re-enable by restoring the URL once that auto-reply is turned off in Adhara.
+  ADHARA_FORM_URL: "",
   // Results email + new-lead alert, sent through the convictioncode.com email system
   // (Lovable Cloud, sender notify.alorsolutions.com). The key below is the public browser key.
   EMAIL_FUNCTION_URL: "https://zyonpiskcpoiwhkgxdjp.supabase.co/functions/v1/send-transactional-email",

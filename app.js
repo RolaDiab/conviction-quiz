@@ -295,6 +295,7 @@
 
   // Called when they submit the start form, so people who quit halfway are still on the list.
   function addToList(g) {
+    if (!Q.ADHARA_FORM_URL) return;
     fetch(Q.ADHARA_FORM_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
