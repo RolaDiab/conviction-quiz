@@ -163,6 +163,8 @@ textarea:focus, input:focus { outline: 2px solid var(--gold); outline-offset: 1p
 .cta-box { background: var(--navy); color: #fff; border-radius: var(--radius); padding: 28px; margin-top: 28px; text-align: center; }
 .cta-box h3 { color: #fff; margin-top: 0; }
 .cta-box p { color: rgba(255,255,255,.8); }
+.self-paced { font-size: .92rem; margin: 18px auto 0; max-width: 34em; }
+.self-paced a { color: var(--gold); font-weight: 600; }
 details.pillar { border-top: 1px solid var(--line); padding: 18px 0; }
 details.pillar summary { list-style: none; cursor: pointer; }
 details.pillar summary::-webkit-details-marker { display: none; }

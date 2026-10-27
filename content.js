@@ -12,6 +12,9 @@ window.QUIZ = {
   EVENTS_URL: "https://zyonpiskcpoiwhkgxdjp.supabase.co/rest/v1/quiz_events",
   EMAIL_PUBLIC_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5b25waXNrY3BvaXdoa2d4ZGpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NTM0MDgsImV4cCI6MjA4NDIyOTQwOH0.2AdGgTflahS0Y_jO66BmH4b8n5PwDp-0wtQPtFPh_BI",
   BOOKING_URL: "https://api.leadconnectorhq.com/widget/booking/T5FW8VnbAbvoi3C1zAuA",
+  // Self-paced CLEAR Method on Whop. Leave empty while the Whop product is hidden; the results
+  // page shows the CLEAR link only when this is set. Live URL: https://whop.com/rola-diab-218e/clear-method-rola-diab
+  CLEAR_URL: "",
 
   PILLARS: ["intention", "identity", "meaning", "practice", "alignment", "communication", "trust"],
 
