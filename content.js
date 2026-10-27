@@ -175,6 +175,7 @@ window.QUIZ = {
   SCIENCE: [
     "This assessment is rooted in research from neuroscience, behavioral psychology, and performance science.",
     "Peter Gollwitzer's research on implementation intentions shows that direction anchored in clear plans substantially improves follow-through. Bessel van der Kolk's somatic research suggests that limiting beliefs live in the body, not just the mind. Antonio Damasio's neuroscience of decision-making shows that the fear response fires faster than rational thought. Conviction is a trained override, not a personality trait.",
+    "In an fMRI study published in the Journal of Business Venturing, investors watched startup pitches with identical content. When the founder delivered with high passion, investor interest rose 26% and neural engagement rose 39%. Same words. Different delivery. Different result.",
     "The 7 pillars bring these findings together into one system you can train. Together, they make performance predictable."
   ]
 };
