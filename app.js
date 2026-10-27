@@ -114,14 +114,14 @@
       '<section class="hero"><div class="wrap hero-grid">' +
         '<div class="hero-copy">' +
           '<p class="eyebrow">The Performance Blocks Assessment</p>' +
-          '<h1><span class="gold">Successful</span>, but running at 70%?</h1>' +
-          '<p class="tagline">Find the hidden blocks capping your performance.</p>' +
-          '<p class="lead">21 questions. About 4 minutes. Free.</p>' +
-          '<div class="cta-row"><button class="btn btn-gold" data-act="start">' + (resume ? "Continue My Assessment" : "Take the Assessment") + '</button>' +
+          '<h1>Frustrated that you feel stuck, even though you\'ve already built <span class="gold">real success</span>?</h1>' +
+          '<p class="tagline">Answer 21 questions to find out why, and where to focus first.</p>' +
+          '<p class="lead">About 4 minutes. Free. Instant results.</p>' +
+          '<div class="cta-row"><button class="btn btn-gold" data-act="start">' + (resume ? "Continue My Assessment" : "Answer the 21 Questions") + '</button>' +
           (resume ? '<button class="btn btn-ghost" data-act="restart">Start over</button>' : "") + '</div>' +
-          '<p class="fine">Instant results. Built on the science behind predictable success.</p>' +
+          '<p class="fine">Built on the science behind predictable success.</p>' +
         '</div>' +
-        '<div class="hero-photo"><img src="rola.jpg" alt="Rola Diab" width="560" height="695"></div>' +
+        '<div class="hero-photo"><img src="rola.jpg?v=2" alt="Rola Diab" width="744" height="760"></div>' +
       '</div></section>' +
 
       '<section class="band"><div class="wrap narrow">' +
@@ -155,7 +155,7 @@
         '<h2>Take the Performance Blocks Assessment.</h2>' +
         '<p class="tagline">Get back what\'s missing.</p>' +
         '<p>Reach your biggest goals in less time. About 4 minutes. Free.</p>' +
-        '<button class="btn btn-gold" data-act="start">Take the Assessment</button>' +
+        '<button class="btn btn-gold" data-act="start">Answer the 21 Questions</button>' +
       '</div></section>' +
       footer();
   }
