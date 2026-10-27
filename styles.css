@@ -198,3 +198,5 @@ details.science p { margin-top: 12px; }
 
 div.pillar { border-top: 1px solid var(--line); padding: 16px 0; }
 div.pillar .bar { margin: 6px 0 0; }
+.foot a { color: var(--muted); }
+.consent a { color: var(--navy-2); }

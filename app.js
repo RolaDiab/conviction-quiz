@@ -62,6 +62,23 @@
     utm_campaign: params.get("utm_campaign") || ""
   };
 
+  // ---------- Funnel counter (views, starts, finishes) ----------
+  var sessionId;
+  try { sessionId = sessionStorage.getItem("cc_sid"); if (!sessionId) { sessionId = Math.random().toString(36).slice(2, 12); sessionStorage.setItem("cc_sid", sessionId); } } catch (e) { sessionId = Math.random().toString(36).slice(2, 12); }
+  var tracked = {};
+  function track(event) {
+    if (tracked[event]) return;
+    tracked[event] = true;
+    try {
+      fetch(Q.EVENTS_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "apikey": Q.EMAIL_PUBLIC_KEY, "Authorization": "Bearer " + Q.EMAIL_PUBLIC_KEY, "Prefer": "return=minimal" },
+        body: JSON.stringify({ event: event, source: (utm.utm_source || "direct").slice(0, 100), session_id: sessionId }),
+        keepalive: true
+      }).catch(function () {});
+    } catch (e) {}
+  }
+
   // ---------- Helpers ----------
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
@@ -91,6 +108,7 @@
   // ---------- Views ----------
   function renderLanding() {
     document.body.className = "is-landing";
+    track("landing_view");
     var resume = state.step >= 0 && state.step < TOTAL_STEPS;
     app.innerHTML =
       '<section class="hero"><div class="wrap hero-grid">' +
@@ -143,13 +161,15 @@
   }
 
   function footer() {
-    return '<footer class="foot">Conviction Code™ by Rola Diab © 2026</footer>';
+    return '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
   }
 
   function progressBar() {
-    var n = Math.min(state.step + 1, TOTAL_STEPS);
-    var pct = Math.round(state.step / TOTAL_STEPS * 100);
-    return '<div class="progress"><div class="progress-meta"><span>Question ' + n + ' of ' + TOTAL_STEPS + '</span><span>' + pct + '%</span></div>' +
+    // Count only the 21 scored questions; the optional role screen shows as "Last one".
+    var Qn = QUESTIONS.length;
+    var label = state.step < Qn ? "Question " + (state.step + 1) + " of " + Qn : "Last one";
+    var pct = Math.min(100, Math.round(state.step / Qn * 100));
+    return '<div class="progress"><div class="progress-meta"><span>' + label + '</span><span>' + pct + '%</span></div>' +
       '<div class="bar"><div class="fill" style="width:' + pct + '%"></div></div></div>';
   }
 
@@ -202,7 +222,7 @@
         '<form id="gate" novalidate>' +
           '<label>First name<input name="first_name" autocomplete="given-name" maxlength="60" required value="' + esc(g.first_name || "") + '"></label>' +
           '<label>Email<input name="email" type="email" autocomplete="email" maxlength="255" required value="' + esc(g.email || "") + '"></label>' +
-          '<label class="consent"><input name="consent" type="checkbox"' + (g.consent ? " checked" : "") + '> Send me my results and occasional insights from Rola. Unsubscribe anytime.</label>' +
+          '<label class="consent"><input name="consent" type="checkbox"' + (g.consent ? " checked" : "") + '> Send me my results and occasional insights from Rola. Unsubscribe anytime. <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy policy</a>.</label>' +
           (error ? '<p class="err">' + esc(error) + '</p>' : "") +
           '<button class="btn btn-gold wide" type="submit">Start the Assessment</button>' +
         '</form>' +
@@ -405,6 +425,8 @@
     if (!g.consent) return renderGate("Please tick the box so we can send your results.");
     g.done = true;
     if (state.listed !== g.email) { addToList(g); state.listed = g.email; save(); }
+    state.src = utm.utm_source || "direct"; save();
+    track("quiz_start");
     for (var i = 0; i < QUESTIONS.length; i++) {
       if (state.answers[i] == null) return go(i);
     }
@@ -424,9 +446,10 @@
     var g = state.gate;
     var points = pillarPoints(state.answers);
     var code = encodeResult(g.first_name, points);
+    track("quiz_complete");
     sendLead(g, points, code).then(function () {
       finishing = false;
-      state = { step: -1, answers: [], profile: { role: state.profile.role }, gate: { first_name: g.first_name, email: g.email, consent: g.consent }, listed: state.listed };
+      state = { step: -1, answers: [], profile: { role: state.profile.role }, gate: { first_name: g.first_name, email: g.email, consent: g.consent }, listed: state.listed, src: state.src };
       save();
       location.hash = "r=" + code;
     });

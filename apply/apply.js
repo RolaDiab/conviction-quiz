@@ -7,6 +7,19 @@
   var params = new URLSearchParams(location.search);
   var resultCode = (params.get("r") || "").replace(/[^A-Za-z0-9_-]/g, "");
 
+  function track(event) {
+    try {
+      var src = "direct";
+      try { var st = JSON.parse(localStorage.getItem("cc_quiz_v1")) || {}; src = st.src || "direct"; } catch (e) {}
+      fetch(Q.EVENTS_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "apikey": Q.EMAIL_PUBLIC_KEY, "Authorization": "Bearer " + Q.EMAIL_PUBLIC_KEY, "Prefer": "return=minimal" },
+        body: JSON.stringify({ event: event, source: src.slice(0, 100) }),
+        keepalive: true
+      }).catch(function () {});
+    } catch (e) {}
+  }
+
   var REVENUE = ["Business owner: under $250K revenue", "Business owner: $250K to $1M", "Business owner: $1M to $5M", "Business owner: $5M+", "I work for a company (executive, manager or employee)"];
   var START = ["Right away", "In the next 30 days", "In 1 to 3 months", "I'm just exploring"];
   var INVEST = ["Yes, if it's the right fit", "I'd need to discuss it with someone first", "Not right now"];
@@ -54,7 +67,7 @@
         '</form>' +
         (resultCode ? '<a class="btn btn-link back" href="/#r=' + resultCode + '">← Back to my results</a>' : '<a class="btn btn-link back" href="/">← Take the assessment first</a>') +
       '</div></section>' +
-      '<footer class="foot">Conviction Code™ by Rola Diab © 2026</footer>';
+      '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
   }
 
   function sendApplication(v, qualified) {
@@ -88,7 +101,7 @@
         '<div class="calendar"><iframe src="' + Q.BOOKING_URL + '" title="Book your Performance Diagnostic" loading="lazy"></iframe></div>' +
         '<p class="fine-dark">Calendar not loading? <a href="' + Q.BOOKING_URL + '" target="_blank" rel="noopener">Open it in a new tab</a>.</p>' +
       '</div></section>' +
-      '<footer class="foot">Conviction Code™ by Rola Diab © 2026</footer>';
+      '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
     window.scrollTo(0, 0);
   }
 
@@ -101,7 +114,7 @@
         '<p class="sub">In the meantime, follow along on <a href="https://www.instagram.com/rolaspeaks/" target="_blank" rel="noopener">Instagram</a> and <a href="https://www.youtube.com/@Rolaspeaks" target="_blank" rel="noopener">YouTube</a>.</p>' +
         (resultCode ? '<a class="btn btn-navy" href="/#r=' + resultCode + '">Back to my results</a>' : "") +
       '</div></section>' +
-      '<footer class="foot">Conviction Code™ by Rola Diab © 2026</footer>';
+      '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
     window.scrollTo(0, 0);
   }
 
@@ -132,6 +145,8 @@
     if (err) { renderForm(v, err); return; }
 
     var qualified = v.start !== START[3] && v.invest !== INVEST[2];
+    track("apply_submit");
+    if (qualified) track("apply_qualified");
     var btn = f.querySelector("button[type=submit]");
     btn.disabled = true;
     btn.textContent = "Submitting...";
@@ -140,5 +155,6 @@
     });
   });
 
+  track("apply_view");
   renderForm();
 })();
