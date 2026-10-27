@@ -262,7 +262,7 @@
 
     var applyUrl = "/apply/?r=" + code;
     var clearLink = Q.CLEAR_URL
-      ? '<p class="self-paced">Prefer to start on your own? <a href="' + esc(Q.CLEAR_URL) + '" target="_blank" rel="noopener">The CLEAR Method™</a>: a workbook and guided audio to clear the limiting beliefs your body\'s been carrying for years.</p>'
+      ? '<p class="self-paced">Prefer to start on your own? <a href="' + esc(Q.CLEAR_URL) + '" target="_blank" rel="noopener">The CLEAR Method™</a>: clear the limiting beliefs that have been stuck in your body in as little as 10 minutes.</p>'
       : "";
     var cta = function (headline) {
       return '<div class="cta-box"><h3>' + headline + '</h3>' +
