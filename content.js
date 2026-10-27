@@ -1,8 +1,8 @@
 // All assessment copy and question data. Edit text here; app.js handles the flow.
 
 window.QUIZ = {
-  // Paste the GHL inbound webhook URL here once the workflow exists. Empty = skip.
-  GHL_WEBHOOK_URL: "",
+  // GHL workflow "Quiz Leads from quiz.convictioncode.com": creates/updates the contact, tags quiz-completed.
+  GHL_WEBHOOK_URL: "https://services.leadconnectorhq.com/hooks/lEqWwjtkibEh35SiVbMP/webhook-trigger/968f8efd-b7b4-4b7d-839c-fac1c3ae215d",
   // Adhara "quiz-gate" form. Its auto-reply ("Send confirmation email") must stay OFF in Adhara,
   // because the quiz sends its own results email. Turned off 2026-10-27.
   ADHARA_FORM_URL: "https://api.adharaweb.com/api/v1/public/forms/rola/quiz-gate",
