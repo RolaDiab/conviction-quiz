@@ -59,7 +59,7 @@
           '<label>Your role and company<input name="company" maxlength="150" placeholder="For example: CEO, Acme Group" value="' + esc(v.company || "") + '"></label>' +
           '<fieldset><legend>Which best describes you?</legend>' + radios("revenue", REVENUE, v.revenue) + '</fieldset>' +
           '<label>What do you want to be true 90 days from now?<textarea name="goal" rows="3" maxlength="1000">' + esc(v.goal || "") + '</textarea></label>' +
-          '<label><span>What feels like the biggest thing in the way right now? <span class="opt-label">(optional)</span></span><textarea name="obstacle" rows="3" maxlength="1000">' + esc(v.obstacle || "") + '</textarea></label>' +
+          '<label>What feels like the biggest thing in the way right now?<textarea name="obstacle" rows="3" maxlength="1000">' + esc(v.obstacle || "") + '</textarea></label>' +
           '<fieldset><legend>When do you want to start?</legend>' + radios("start", START, v.start) + '</fieldset>' +
           '<fieldset><legend>Working with Rola is a premium investment in yourself. If it\'s the right fit, are you ready to invest now?</legend>' + radios("invest", INVEST, v.invest) + '</fieldset>' +
           (error ? '<p class="err">' + esc(error) + '</p>' : "") +
@@ -78,7 +78,7 @@
       "Wants to start: " + v.start + "\n" +
       "Ready to invest: " + v.invest + "\n\n" +
       "90-day goal:\n" + v.goal + "\n\n" +
-      "Biggest thing in the way:\n" + (v.obstacle || "Not answered") + "\n\n" +
+      "Biggest thing in the way:\n" + v.obstacle + "\n\n" +
       "Quiz role: " + (prefill.role || "Not answered") + "\n" +
       "Quiz results: " + resultLink;
     return fetch(Q.EMAIL_FUNCTION_URL, {
@@ -140,6 +140,7 @@
       !v.company ? "Please share your role and company." :
       !v.revenue ? "Please choose what best describes you." :
       !v.goal ? "Please tell us what you want to be true in 90 days." :
+      !v.obstacle ? "Please tell us the biggest thing in the way right now." :
       !v.start ? "Please choose when you want to start." :
       !v.invest ? "Please answer the investment question." : "";
     if (err) { renderForm(v, err); return; }
