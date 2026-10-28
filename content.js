@@ -21,7 +21,7 @@ window.QUIZ = {
   // isn't readable in the page source (hash it with: printf %s "CODE" | shasum -a 256).
   // Each code must also exist as a promo code on the Whop product; Whop applies the real discount.
   CLEAR_PROMOS: [
-    { hash: "9fb70adf37e9f58d36d15819497b71cc03573a2e23c914f65d80e3c26c91bf22", label: "Womanifest price", price: "$207.90" } // WOMANIFEST30, 30% off
+    { hash: "9fb70adf37e9f58d36d15819497b71cc03573a2e23c914f65d80e3c26c91bf22", label: "Womanifest price", price: "$207.90" } // Womanifest event, 30% off
   ],
 
   PILLARS: ["intention", "identity", "meaning", "practice", "alignment", "communication", "trust"],
