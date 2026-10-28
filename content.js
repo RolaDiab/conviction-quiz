@@ -17,11 +17,12 @@ window.QUIZ = {
   CLEAR_URL: "",
   CLEAR_PRICE: "$297",
   CLEAR_REGULAR_PRICE: "$497",
-  // Event prices. A link with ?promo=<key> (e.g. ?promo=womanifest) shows that price and its code
-  // on the results page. The code must also exist as a promo code on the Whop product.
-  CLEAR_PROMOS: {
-    womanifest: { label: "Womanifest price", price: "$207.90", code: "WOMANIFEST30" }
-  },
+  // Event codes for the "Have a code?" field. Stored as SHA-256 of the uppercase code so the code
+  // isn't readable in the page source (hash it with: printf %s "CODE" | shasum -a 256).
+  // Each code must also exist as a promo code on the Whop product; Whop applies the real discount.
+  CLEAR_PROMOS: [
+    { hash: "9fb70adf37e9f58d36d15819497b71cc03573a2e23c914f65d80e3c26c91bf22", label: "Womanifest price", price: "$207.90" } // WOMANIFEST30, 30% off
+  ],
 
   PILLARS: ["intention", "identity", "meaning", "practice", "alignment", "communication", "trust"],
 

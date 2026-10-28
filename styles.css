@@ -176,7 +176,12 @@ textarea:focus, input:focus { outline: 2px solid var(--gold); outline-offset: 1p
 .offer-price s { color: var(--muted); }
 .offer-price strong { font-size: 2rem; color: var(--navy); margin: 0 6px; }
 .offer-price span { color: var(--muted); font-size: .9rem; }
-.offer-code { margin: -6px 0 16px; }
+.offer-promo { margin-top: 18px; font-size: .92rem; }
+.offer-promo summary { cursor: pointer; color: var(--muted); text-decoration: underline; }
+.offer-promo form { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
+.offer-promo input { padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 10px; font: inherit; width: 12em; text-transform: uppercase; }
+.offer-promo .btn { padding: 10px 18px; }
+.promo-msg { margin: 10px 0 0; min-height: 1em; }
 .offer-note { font-size: .85rem; color: var(--muted); margin-top: 14px; }
 details.pillar { border-top: 1px solid var(--line); padding: 18px 0; }
 details.pillar summary { list-style: none; cursor: pointer; }

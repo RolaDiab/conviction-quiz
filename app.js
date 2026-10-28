@@ -62,14 +62,6 @@
     utm_campaign: params.get("utm_campaign") || ""
   };
 
-  // Event promo (?promo=womanifest). Kept in storage so it survives until the results page.
-  var promoKey = (params.get("promo") || "").toLowerCase();
-  try {
-    if (promoKey) localStorage.setItem("cc_promo", promoKey);
-    else promoKey = localStorage.getItem("cc_promo") || "";
-  } catch (e) {}
-  var promo = (Q.CLEAR_PROMOS || {})[promoKey] || null;
-
   // ---------- Funnel counter (views, starts, finishes) ----------
   var sessionId;
   try { sessionId = sessionStorage.getItem("cc_sid"); if (!sessionId) { sessionId = Math.random().toString(36).slice(2, 12); sessionStorage.setItem("cc_sid", sessionId); } } catch (e) { sessionId = Math.random().toString(36).slice(2, 12); }
@@ -270,7 +262,7 @@
 
     var applyUrl = "/apply/?r=" + code;
     var clearLink = Q.CLEAR_URL
-      ? '<p class="self-paced">Prefer to start on your own? <a href="' + esc(Q.CLEAR_URL) + '" target="_blank" rel="noopener">Get the CLEAR Method</a> for ' + esc(promo ? promo.price : Q.CLEAR_PRICE) + '.</p>'
+      ? '<p class="self-paced">Prefer to start on your own? <a href="' + esc(Q.CLEAR_URL) + '" target="_blank" rel="noopener">Get the CLEAR Method</a> for ' + esc(Q.CLEAR_PRICE) + '.</p>'
       : "";
     var cta = function (headline) {
       return '<div class="cta-box"><h3>' + headline + '</h3>' +
@@ -282,7 +274,7 @@
     var topBlock = cap(Q.PILLARS[s.blocks[0]]);
     var offer = !Q.CLEAR_URL ? "" :
       '<section class="band offer-band"><div class="wrap narrow"><div class="offer">' +
-        '<p class="eyebrow dark">' + (promo ? esc(promo.label) : "Start on your own, tonight") + '</p>' +
+        '<p class="eyebrow dark">Start on your own, tonight</p>' +
         '<h2>The CLEAR Method™</h2>' +
         '<p class="offer-lead">Behind every missing piece sits a belief holding the gap open. Your quiz points to ' + esc(topBlock) + '. CLEAR finds the belief behind it and clears it, in as little as 10 minutes.</p>' +
         '<ul class="offer-list">' +
@@ -290,11 +282,14 @@
           '<li>The CLEAR workbook to write it all down</li>' +
           '<li>Yours to keep. Run it on any belief, any time.</li>' +
         '</ul>' +
-        '<div class="offer-price"><s>' + esc(promo ? Q.CLEAR_PRICE : Q.CLEAR_REGULAR_PRICE) + '</s> <strong>' + esc(promo ? promo.price : Q.CLEAR_PRICE) + '</strong>' +
-          (promo ? '' : ' <span>founding price</span>') + '</div>' +
-        (promo ? '<p class="offer-code">Use code <strong>' + esc(promo.code) + '</strong> at checkout.</p>' : '') +
+        '<div class="offer-price"><s>' + esc(Q.CLEAR_REGULAR_PRICE) + '</s> <strong>' + esc(Q.CLEAR_PRICE) + '</strong> <span>founding price</span></div>' +
         '<a class="btn btn-gold" href="' + esc(Q.CLEAR_URL) + '" target="_blank" rel="noopener" data-act="clear">Get the CLEAR Method</a>' +
         '<p class="offer-note">Instant access through Whop. Coaching, not therapy.</p>' +
+        ((Q.CLEAR_PROMOS || []).length ?
+          '<details class="offer-promo"><summary>Have a code?</summary>' +
+            '<form id="promo" novalidate><input name="code" maxlength="40" autocomplete="off" aria-label="Promo code" placeholder="Enter code">' +
+            '<button class="btn btn-navy" type="submit">Apply</button></form>' +
+            '<p class="promo-msg" aria-live="polite"></p></details>' : '') +
       '</div></div></section>';
 
     app.innerHTML =
@@ -442,7 +437,23 @@
     }
   });
 
+  // "Have a code?" on the CLEAR offer. Only changes the price shown; Whop applies the real discount.
+  function applyPromo(f) {
+    var code = f.code.value.trim().toUpperCase();
+    var msg = app.querySelector(".promo-msg");
+    if (!code || !window.crypto || !crypto.subtle) return;
+    crypto.subtle.digest("SHA-256", new TextEncoder().encode(code)).then(function (buf) {
+      var hex = Array.prototype.map.call(new Uint8Array(buf), function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
+      var hit = (Q.CLEAR_PROMOS || []).filter(function (p) { return p.hash === hex; })[0];
+      if (!hit) { msg.textContent = "That code isn't valid."; return; }
+      app.querySelector(".offer-price").innerHTML = '<s>' + esc(Q.CLEAR_PRICE) + '</s> <strong>' + esc(hit.price) + '</strong> <span>' + esc(hit.label) + '</span>';
+      msg.innerHTML = 'Code applied. Enter <strong>' + esc(code) + '</strong> again at checkout.';
+      track("promo_applied");
+    });
+  }
+
   app.addEventListener("submit", function (e) {
+    if (e.target.id === "promo") { e.preventDefault(); applyPromo(e.target); return; }
     if (e.target.id !== "gate") return;
     e.preventDefault();
     var f = e.target;
