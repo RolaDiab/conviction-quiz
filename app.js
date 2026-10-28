@@ -271,12 +271,11 @@
     };
 
     // The self-paced sale. Only shows once CLEAR_URL is set (Whop product visible).
-    var topBlock = cap(Q.PILLARS[s.blocks[0]]);
     var offer = !Q.CLEAR_URL ? "" :
       '<section class="band offer-band"><div class="wrap narrow"><div class="offer">' +
         '<p class="eyebrow dark">Start on your own, tonight</p>' +
         '<h2>The CLEAR Method™</h2>' +
-        '<p class="offer-lead">Behind every missing piece sits a belief holding the gap open. Your quiz points to ' + esc(topBlock) + '. CLEAR finds the belief behind it and clears it, in as little as 10 minutes.</p>' +
+        '<p class="offer-lead">Your results show where effort is leaking. If an old belief keeps pulling you back, start here. CLEAR clears a limiting belief stuck in your body, in as little as 10 minutes.</p>' +
         '<ul class="offer-list">' +
           '<li>7 guided audio lessons, one per step</li>' +
           '<li>The CLEAR workbook to write it all down</li>' +
