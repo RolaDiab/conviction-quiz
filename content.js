@@ -15,6 +15,13 @@ window.QUIZ = {
   // Self-paced CLEAR Method on Whop. Leave empty while the Whop product is hidden; the results
   // page shows the CLEAR link only when this is set. Live URL: https://whop.com/rola-diab-218e/clear-method-rola-diab
   CLEAR_URL: "",
+  CLEAR_PRICE: "$297",
+  CLEAR_REGULAR_PRICE: "$497",
+  // Event prices. A link with ?promo=<key> (e.g. ?promo=womanifest) shows that price and its code
+  // on the results page. The code must also exist as a promo code on the Whop product.
+  CLEAR_PROMOS: {
+    womanifest: { label: "Womanifest price", price: "$207.90", code: "WOMANIFEST30" }
+  },
 
   PILLARS: ["intention", "identity", "meaning", "practice", "alignment", "communication", "trust"],
 

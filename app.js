@@ -62,6 +62,14 @@
     utm_campaign: params.get("utm_campaign") || ""
   };
 
+  // Event promo (?promo=womanifest). Kept in storage so it survives until the results page.
+  var promoKey = (params.get("promo") || "").toLowerCase();
+  try {
+    if (promoKey) localStorage.setItem("cc_promo", promoKey);
+    else promoKey = localStorage.getItem("cc_promo") || "";
+  } catch (e) {}
+  var promo = (Q.CLEAR_PROMOS || {})[promoKey] || null;
+
   // ---------- Funnel counter (views, starts, finishes) ----------
   var sessionId;
   try { sessionId = sessionStorage.getItem("cc_sid"); if (!sessionId) { sessionId = Math.random().toString(36).slice(2, 12); sessionStorage.setItem("cc_sid", sessionId); } } catch (e) { sessionId = Math.random().toString(36).slice(2, 12); }
@@ -262,13 +270,32 @@
 
     var applyUrl = "/apply/?r=" + code;
     var clearLink = Q.CLEAR_URL
-      ? '<p class="self-paced">Prefer to start on your own? <a href="' + esc(Q.CLEAR_URL) + '" target="_blank" rel="noopener">The CLEAR Method™</a>: clear the limiting beliefs that have been stuck in your body in as little as 10 minutes.</p>'
+      ? '<p class="self-paced">Prefer to start on your own? <a href="' + esc(Q.CLEAR_URL) + '" target="_blank" rel="noopener">Get the CLEAR Method</a> for ' + esc(promo ? promo.price : Q.CLEAR_PRICE) + '.</p>'
       : "";
     var cta = function (headline) {
       return '<div class="cta-box"><h3>' + headline + '</h3>' +
         '<p>Apply for a 45-minute Performance Diagnostic with Rola. Together we pinpoint the block costing you the most and map what to strengthen first.</p>' +
-        '<a class="btn btn-gold" href="' + applyUrl + '">Apply for a Performance Diagnostic</a>' + clearLink + '</div>';
+        '<a class="btn btn-gold" href="' + applyUrl + '">Apply for a Performance Diagnostic</a></div>';
     };
+
+    // The self-paced sale. Only shows once CLEAR_URL is set (Whop product visible).
+    var topBlock = cap(Q.PILLARS[s.blocks[0]]);
+    var offer = !Q.CLEAR_URL ? "" :
+      '<section class="band offer-band"><div class="wrap narrow"><div class="offer">' +
+        '<p class="eyebrow dark">' + (promo ? esc(promo.label) : "Start on your own, tonight") + '</p>' +
+        '<h2>The CLEAR Method™</h2>' +
+        '<p class="offer-lead">Behind every missing piece sits a belief holding the gap open. Your quiz points to ' + esc(topBlock) + '. CLEAR finds the belief behind it and clears it, in as little as 10 minutes.</p>' +
+        '<ul class="offer-list">' +
+          '<li>7 guided audio lessons, one per step</li>' +
+          '<li>The CLEAR workbook to write it all down</li>' +
+          '<li>Yours to keep. Run it on any belief, any time.</li>' +
+        '</ul>' +
+        '<div class="offer-price"><s>' + esc(promo ? Q.CLEAR_PRICE : Q.CLEAR_REGULAR_PRICE) + '</s> <strong>' + esc(promo ? promo.price : Q.CLEAR_PRICE) + '</strong>' +
+          (promo ? '' : ' <span>founding price</span>') + '</div>' +
+        (promo ? '<p class="offer-code">Use code <strong>' + esc(promo.code) + '</strong> at checkout.</p>' : '') +
+        '<a class="btn btn-gold" href="' + esc(Q.CLEAR_URL) + '" target="_blank" rel="noopener" data-act="clear">Get the CLEAR Method</a>' +
+        '<p class="offer-note">Instant access through Whop. Coaching, not therapy.</p>' +
+      '</div></div></section>';
 
     app.innerHTML =
       '<section class="result-hero"><div class="wrap result-grid">' +
@@ -278,7 +305,7 @@
       '</div></section>' +
       '<section class="band"><div class="wrap narrow prose">' + (fresh ? '<p class="mail-note">A copy of your results is on its way to your inbox. Don\'t see it? Check your Promotions or Spam folder.</p>' : '') + tierBlocks + '</div></section>' +
       '<section class="band alt"><div class="wrap narrow"><h2>' + blocksTitle + '</h2><p class="sub">' + blocksSub + '</p>' + blocks +
-        cta(s.overall >= 100 ? "Ready to go even further?" : "Ready to get your missing " + (100 - s.overall) + "% back?") + '</div></section>' +
+        cta(s.overall >= 100 ? "Ready to go even further?" : "Ready to get your missing " + (100 - s.overall) + "% back?") + '</div></section>' + offer +
       '<section class="band"><div class="wrap narrow"><h2>Your 7 Pillars</h2><p class="sub">' + esc(Q.PILLARS_INTRO) + '</p>' + pillars + '</div></section>' +
       '<section class="band alt"><div class="wrap narrow prose"><h2>What High Conviction Actually Looks Like</h2>' + paras(Q.HIGH_CONVICTION) +
         '<details class="science"><summary>The science behind predictable success</summary>' + paras(Q.SCIENCE) + '</details></div></section>' +
@@ -381,6 +408,7 @@
     if (act === "start") { if (location.hash) history.replaceState(null, "", location.pathname + location.search); go(Math.max(0, state.step)); }
     else if (act === "restart") { state = { step: 0, answers: [], profile: state.profile || {}, gate: state.gate }; save(); route(); }
     else if (act === "home") { go(-1); }
+    else if (act === "clear") { track("clear_click"); }
     else if (act === "back") {
       if (state.step === 0) { state.gate.done = false; go(0); }
       else go(state.step - 1);
