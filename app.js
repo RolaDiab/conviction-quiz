@@ -121,7 +121,7 @@
           (resume ? '<button class="btn btn-ghost" data-act="restart">Start over</button>' : "") + '</div>' +
           '<p class="fine">Built on the science behind predictable success.</p>' +
         '</div>' +
-        '<div class="hero-photo"><img src="rola.jpg?v=2" alt="Rola Diab" width="744" height="760"></div>' +
+        '<div class="hero-photo"><img src="rola.jpg?v=3" alt="Rola Diab" width="564" height="630"></div>' +
       '</div></section>' +
 
       '<section class="band"><div class="wrap narrow">' +
