@@ -279,7 +279,7 @@
         '<h2>The CLEAR Method™</h2>' +
         '<p class="offer-lead">Your results show where effort is leaking. If an old belief keeps pulling you back, start here. CLEAR clears a limiting belief stuck in your body, in as little as 10 minutes.</p>' +
         '<ul class="offer-list">' +
-          '<li>7 guided audio lessons, one per step</li>' +
+          '<li>Guided audio lessons, including the Clearing: a 10-minute session you can replay any time</li>' +
           '<li>The CLEAR workbook to write it all down</li>' +
           '<li>Yours to keep. Run it on any belief, any time.</li>' +
         '</ul>' +
