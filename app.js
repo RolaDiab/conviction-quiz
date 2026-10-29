@@ -114,7 +114,7 @@
       '<section class="hero"><div class="wrap hero-grid">' +
         '<div class="hero-copy">' +
           '<p class="eyebrow">The Performance Blocks Assessment</p>' +
-          '<h1>Frustrated that you feel stuck, even though you\'ve already built <span class="gold">real success</span>?</h1>' +
+          '<h1>You\'ve had <span class="gold">real success</span>. Then why do you feel stuck?</h1>' +
           '<p class="tagline">Answer 21 questions to find out why, and where to focus first.</p>' +
           '<p class="lead">About 4 minutes. Free. Instant results.</p>' +
           '<div class="cta-row"><button class="btn btn-gold" data-act="start">' + (resume ? "Continue My Assessment" : "Answer the 21 Questions") + '</button>' +
