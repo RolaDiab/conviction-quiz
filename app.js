@@ -125,11 +125,13 @@
       '</div></section>' +
 
       '<section class="band"><div class="wrap narrow">' +
-        '<h2>Your results will show you:</h2>' +
+        '<h2>Find the leak before you add more fuel.</h2>' +
+        '<p>In 4 minutes, you\'ll walk away with:</p>' +
         '<ul class="checks">' +
-          '<li>Why more effort has stopped producing more results</li>' +
-          '<li>Which of the 7 pillars of performance is holding you back</li>' +
-          '<li>What to strengthen first</li>' +
+          '<li>The hidden block quietly draining your results, named</li>' +
+          '<li>Your score across the 7 pillars of performance</li>' +
+          '<li>Where to focus first, so more effort means more results again</li>' +
+          '<li>Your next step to enjoy the wins, not just reach them</li>' +
         '</ul>' +
       '</div></section>' +
 
@@ -152,9 +154,9 @@
       '</div></section>' +
 
       '<section class="final"><div class="wrap narrow center">' +
-        '<h2>Take the Performance Blocks Assessment.</h2>' +
-        '<p class="tagline">Get back what\'s missing.</p>' +
-        '<p>Reach your biggest goals in less time. About 4 minutes. Free.</p>' +
+        '<h2>You\'ve already proven you can win.</h2>' +
+        '<p class="tagline">Now find out why it stopped feeling like winning.</p>' +
+        '<p>21 questions. About 4 minutes. Free, with instant results.</p>' +
         '<button class="btn btn-gold" data-act="start">Answer the 21 Questions</button>' +
       '</div></section>' +
       footer();
@@ -165,10 +167,10 @@
   }
 
   function progressBar() {
-    // Count only the 21 scored questions; the optional role screen shows as "Last one".
+    // Count only the 21 scored questions; the optional profile screens show as "Almost done" / "Last one".
     var Qn = QUESTIONS.length;
-    var label = state.step < Qn ? "Question " + (state.step + 1) + " of " + Qn : "Last one";
-    var pct = Math.min(100, Math.round(state.step / Qn * 100));
+    var label = state.step < Qn ? "Question " + (state.step + 1) + " of " + Qn : state.step === TOTAL_STEPS - 1 ? "Last one" : "Almost done";
+    var pct = state.step < Qn ? Math.round(state.step / Qn * 100) : Math.round(state.step / TOTAL_STEPS * 100);
     return '<div class="progress"><div class="progress-meta"><span>' + label + '</span><span>' + pct + '%</span></div>' +
       '<div class="bar"><div class="fill" style="width:' + pct + '%"></div></div></div>';
   }
@@ -195,7 +197,7 @@
           var sel = val === o ? " selected" : "";
           return '<button class="opt' + sel + '" data-act="profile" data-v="' + esc(o) + '">' + esc(o) + '</button>';
         }).join("") + '</div>' +
-          '<div class="cta-row"><button class="btn btn-link" data-act="profile-skip">Skip and see my results</button></div>';
+          '<div class="cta-row"><button class="btn btn-link" data-act="profile-skip">' + (i === TOTAL_STEPS - 1 ? "Skip and see my results" : "Skip") + '</button></div>';
       } else {
         html += (pq.multiline
           ? '<textarea id="ptext" maxlength="1000" rows="4" placeholder="' + esc(pq.placeholder) + '">' + esc(val) + '</textarea>'
@@ -349,7 +351,7 @@
     };
     jobs.push(sendEmail("quiz-results", g.email, emailData));
     jobs.push(sendEmail("quiz-lead-notification", null, Object.assign({}, emailData, {
-      email: g.email, role: state.profile.role || "",
+      email: g.email, role: (state.profile.role || "") + (state.profile.urgency ? " | Wants to change: " + state.profile.urgency : ""),
       utmSource: utm.utm_source, utmMedium: utm.utm_medium, utmCampaign: utm.utm_campaign
     })));
 
@@ -358,9 +360,9 @@
         first_name: g.first_name, email: g.email,
         overall_score: s.overall, tier: s.tier,
         top_block_1: cap(Q.PILLARS[s.blocks[0]]), top_block_2: cap(Q.PILLARS[s.blocks[1]]), top_block_3: cap(Q.PILLARS[s.blocks[2]]),
-        role: state.profile.role || "",
+        role: state.profile.role || "", urgency: state.profile.urgency || "",
         utm_source: utm.utm_source, utm_medium: utm.utm_medium, utm_campaign: utm.utm_campaign,
-        result_url: resultUrl(code), tags: "quiz-completed"
+        result_url: resultUrl(code), tags: "quiz-completed" + (state.profile.urgency ? ",urgency-" + state.profile.urgency.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") : "")
       };
       Q.PILLARS.forEach(function (p, i) { payload[p] = s.pct[i]; });
       jobs.push(fetch(Q.GHL_WEBHOOK_URL, {

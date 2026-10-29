@@ -68,7 +68,8 @@ window.QUIZ = {
   OPTIONS: ["Strongly Agree", "Agree", "Neither Agree nor Disagree", "Disagree", "Strongly Disagree"],
 
   PROFILE: [
-    { key: "role", text: "What best describes you?", options: ["Founder / CEO", "Executive / C-Suite", "Consultant or Coach", "Employee at a company", "Other"] }
+    { key: "role", text: "What best describes you?", options: ["Founder / CEO", "Executive / C-Suite", "Consultant or Coach", "Employee at a company", "Other"] },
+    { key: "urgency", text: "How soon do you want to change this?", options: ["Right now", "In the next 30 days", "In the next 3 months", "I'm just curious"] }
   ],
 
   TIERS: [
