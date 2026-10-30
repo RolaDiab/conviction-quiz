@@ -268,8 +268,8 @@
       : "";
     var cta = function (headline) {
       return '<div class="cta-box"><h3>' + headline + '</h3>' +
-        '<p>Apply for a 45-minute Performance Diagnostic with Rola. Together we pinpoint the block costing you the most and map what to strengthen first.</p>' +
-        '<a class="btn btn-gold" href="' + applyUrl + '">Apply for a Performance Diagnostic</a></div>';
+        '<p>Apply for a 45-minute Performance Strategy Session with Rola. Together we pinpoint the block costing you the most and map what to strengthen first.</p>' +
+        '<a class="btn btn-gold" href="' + applyUrl + '">Apply for a Performance Strategy Session</a></div>';
     };
 
     // The self-paced sale. Only shows once CLEAR_URL is set (Whop product visible).
@@ -307,8 +307,8 @@
         '<details class="science"><summary>The science behind predictable success</summary>' + paras(Q.SCIENCE) + '</details></div></section>' +
       '<section class="final"><div class="wrap narrow center">' +
         '<h2>Your results won\'t change themselves.</h2>' +
-        '<p>Apply for a Performance Diagnostic and leave with a clear first move.</p>' +
-        '<a class="btn btn-gold" href="' + applyUrl + '">Apply for a Performance Diagnostic</a>' + clearLink +
+        '<p>Apply for a Performance Strategy Session and leave with a clear first move.</p>' +
+        '<a class="btn btn-gold" href="' + applyUrl + '">Apply for a Performance Strategy Session</a>' + clearLink +
         '<div class="share"><button class="btn btn-ghost" data-act="copy" data-url="' + esc(resultUrl(code)) + '">Copy link to my results</button></div>' +
         '<p class="contact">Follow Rola: <a href="https://www.instagram.com/rolaspeaks/" target="_blank" rel="noopener">Instagram @rolaspeaks</a> · <a href="https://www.youtube.com/@Rolaspeaks" target="_blank" rel="noopener">YouTube @Rolaspeaks</a></p>' +
       '</div></section>' + footer();
