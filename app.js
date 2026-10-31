@@ -62,6 +62,23 @@
     utm_campaign: params.get("utm_campaign") || ""
   };
 
+  // The website that sent them (Instagram, Google, etc.), kept from their first visit.
+  // Catches some visitors who used the plain link with no utm tag. In-app browsers often hide it.
+  try {
+    var refHost = document.referrer ? new URL(document.referrer).hostname.replace(/^www\./, "") : "";
+    if (refHost && refHost !== location.hostname) { state.ref = refHost; save(); }
+  } catch (e) {}
+  function refName() {
+    var h = state.ref || "";
+    var known = [["instagram", "Instagram"], ["facebook", "Facebook"], ["linkedin", "LinkedIn"], ["lnkd.in", "LinkedIn"],
+      ["tiktok", "TikTok"], ["youtube", "YouTube"], ["t.co", "X"], ["twitter", "X"], ["mail.google", "Gmail"], ["google.", "Google search"], ["bing.", "Bing search"]];
+    for (var i = 0; i < known.length; i++) if (h.indexOf(known[i][0]) !== -1) return known[i][1];
+    return h;
+  }
+  function slug(t) { return String(t).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+  // utm_source when the link had one, else the referring site, else "direct".
+  function sourceLabel() { return utm.utm_source || (state.ref ? refName() + " (referrer)" : "direct"); }
+
   // ---------- Funnel counter (views, starts, finishes) ----------
   var sessionId;
   try { sessionId = sessionStorage.getItem("cc_sid"); if (!sessionId) { sessionId = Math.random().toString(36).slice(2, 12); sessionStorage.setItem("cc_sid", sessionId); } } catch (e) { sessionId = Math.random().toString(36).slice(2, 12); }
@@ -73,7 +90,7 @@
       fetch(Q.EVENTS_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json", "apikey": Q.EMAIL_PUBLIC_KEY, "Authorization": "Bearer " + Q.EMAIL_PUBLIC_KEY, "Prefer": "return=minimal" },
-        body: JSON.stringify({ event: event, source: (utm.utm_source || "direct").slice(0, 100), session_id: sessionId }),
+        body: JSON.stringify({ event: event, source: sourceLabel().slice(0, 100), session_id: sessionId }),
         keepalive: true
       }).catch(function () {});
     } catch (e) {}
@@ -352,7 +369,7 @@
     jobs.push(sendEmail("quiz-results", g.email, emailData));
     jobs.push(sendEmail("quiz-lead-notification", null, Object.assign({}, emailData, {
       email: g.email, role: (state.profile.role || "") + (state.profile.urgency ? " | Wants to change: " + state.profile.urgency : ""),
-      utmSource: utm.utm_source, utmMedium: utm.utm_medium, utmCampaign: utm.utm_campaign
+      utmSource: sourceLabel(), utmMedium: utm.utm_medium, utmCampaign: utm.utm_campaign
     })));
 
     if (Q.GHL_WEBHOOK_URL) {
@@ -360,9 +377,9 @@
         first_name: g.first_name, email: g.email,
         overall_score: s.overall, tier: s.tier,
         top_block_1: cap(Q.PILLARS[s.blocks[0]]), top_block_2: cap(Q.PILLARS[s.blocks[1]]), top_block_3: cap(Q.PILLARS[s.blocks[2]]),
-        role: state.profile.role || "", urgency: state.profile.urgency || "",
+        role: state.profile.role || "", urgency: state.profile.urgency || "", referrer: state.ref || "",
         utm_source: utm.utm_source, utm_medium: utm.utm_medium, utm_campaign: utm.utm_campaign,
-        result_url: resultUrl(code), tags: "quiz-completed" + (state.profile.urgency ? ",urgency-" + state.profile.urgency.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") : "")
+        result_url: resultUrl(code), tags: "quiz-completed" + (state.profile.urgency ? ",urgency-" + slug(state.profile.urgency) : "") + ",source-" + slug(utm.utm_source || (state.ref ? refName() : "direct"))
       };
       Q.PILLARS.forEach(function (p, i) { payload[p] = s.pct[i]; });
       jobs.push(fetch(Q.GHL_WEBHOOK_URL, {
@@ -471,7 +488,7 @@
     if (!g.consent) return renderGate("Please tick the box so we can send your results.");
     g.done = true;
     if (state.listed !== g.email) { addToList(g); state.listed = g.email; save(); }
-    state.src = utm.utm_source || "direct"; save();
+    state.src = sourceLabel(); save();
     track("quiz_start");
     for (var i = 0; i < QUESTIONS.length; i++) {
       if (state.answers[i] == null) return go(i);
@@ -495,7 +512,7 @@
     track("quiz_complete");
     sendLead(g, points, code).then(function () {
       finishing = false;
-      state = { step: -1, answers: [], profile: { role: state.profile.role }, gate: { first_name: g.first_name, email: g.email, consent: g.consent }, listed: state.listed, src: state.src };
+      state = { step: -1, answers: [], profile: { role: state.profile.role }, gate: { first_name: g.first_name, email: g.email, consent: g.consent }, listed: state.listed, src: state.src, ref: state.ref };
       save();
       justFinished = true;
       location.hash = "r=" + code;
