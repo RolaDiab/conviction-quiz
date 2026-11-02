@@ -20,7 +20,7 @@
     } catch (e) {}
   }
 
-  var REVENUE = ["Business owner: under $250K revenue", "Business owner: $250K to $1M", "Business owner: $1M to $5M", "Business owner: $5M+", "I work for a company (executive, manager or employee)"];
+  var REVENUE = ["Founder or business owner: under $250K revenue", "Founder or business owner: $250K to $1M", "Founder or business owner: $1M to $5M", "Founder or business owner: $5M+", "Senior leader at a company (C-suite, VP or director)", "Manager or team lead", "Employee", "Coach, consultant or solo professional"];
   var START = ["Right away", "In the next 30 days", "In 1 to 3 months", "I'm just exploring"];
   var ENERGY = ["Very open. I've done energy work before", "Open and curious", "Not sure yet", "I prefer only the science-backed performance work"];
   var INVEST = ["Yes, if it's the right fit", "I'd need to discuss it with someone first", "Not right now"];
@@ -55,10 +55,11 @@
         '<p class="sub">A private 45-minute strategy call for leaders and founders ready for their next level. A few questions first, so the call is spent on you.</p>' +
         '<form id="app-form" novalidate>' +
           '<label>First name<input name="first_name" autocomplete="given-name" maxlength="60" value="' + esc(v.first_name || prefill.first_name || "") + '"></label>' +
+          '<label>Last name<input name="last_name" autocomplete="family-name" maxlength="60" value="' + esc(v.last_name || "") + '"></label>' +
           '<label>Email<input name="email" type="email" autocomplete="email" maxlength="255" value="' + esc(v.email || prefill.email || "") + '"></label>' +
           '<label>Phone or WhatsApp<input name="phone" type="tel" autocomplete="tel" maxlength="40" value="' + esc(v.phone || "") + '"></label>' +
           '<label>Your role and company<input name="company" maxlength="150" placeholder="For example: CEO, Acme Group" value="' + esc(v.company || "") + '"></label>' +
-          '<fieldset><legend>Which best describes you?</legend>' + radios("revenue", REVENUE, v.revenue) + '</fieldset>' +
+          '<fieldset><legend>Which best describes where you sit today?</legend>' + radios("revenue", REVENUE, v.revenue) + '</fieldset>' +
           '<fieldset><legend>What\'s going on for you right now? Share your top 3 challenges, with as much detail as you can.</legend>' +
             [1, 2, 3].map(function (n) { return '<textarea name="c' + n + '" rows="3" maxlength="1000" aria-label="Challenge ' + n + '" placeholder="' + n + '.' + (n === 1 ? ' For example: I second-guess big decisions, so I delay them for weeks and my team waits on me.' : '') + '">' + esc((v.challenges || [])[n - 1] || "") + '</textarea>'; }).join("") +
           '</fieldset>' +
@@ -91,7 +92,7 @@
       headers: { "Content-Type": "application/json", "Authorization": "Bearer " + Q.EMAIL_PUBLIC_KEY, "apikey": Q.EMAIL_PUBLIC_KEY },
       body: JSON.stringify({
         templateName: "application-submission",
-        templateData: { name: v.first_name, email: v.email, phone: v.phone, role: v.company, message: message }
+        templateData: { name: v.first_name + " " + v.last_name, email: v.email, phone: v.phone, role: v.company, message: message }
       }),
       keepalive: true
     }).catch(function () {});
@@ -130,6 +131,7 @@
     var pick = function (name) { var el = f.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : ""; };
     var v = {
       first_name: f.first_name.value.trim().slice(0, 60),
+      last_name: f.last_name.value.trim().slice(0, 60),
       email: f.email.value.trim().toLowerCase().slice(0, 255),
       phone: f.phone.value.trim().slice(0, 40),
       company: f.company.value.trim().slice(0, 150),
@@ -141,11 +143,12 @@
       invest: pick("invest")
     };
     var err = !v.first_name ? "Please enter your first name." :
+      !v.last_name ? "Please enter your last name." :
       !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.email) ? "Please enter a valid email." :
       v.phone.replace(/\D/g, "").length < 7 ? "Please enter a phone or WhatsApp number." :
       !v.company ? "Please share your role and company." :
       !v.revenue ? "Please choose what best describes you." :
-      !v.challenges[0] ? "Please share at least your top challenge." :
+      v.challenges.filter(Boolean).length < 3 ? "Please share your top 3 challenges." :
       !v.goal ? "Please tell us what you want to be true in 90 days." :
       !v.energy ? "Please answer the energy clearing question." :
       !v.start ? "Please choose when you want to start." :
