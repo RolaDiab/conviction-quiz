@@ -1,6 +1,6 @@
 (function () {
   "use strict";
-  // Qualifying application for a Performance Diagnostic.
+  // Qualifying application for a Performance Strategy Session.
   // Every application is emailed to Rola. Only qualified applicants see the booking calendar.
   var Q = window.QUIZ;
   var root = document.getElementById("apply");
@@ -49,8 +49,8 @@
     v = v || {};
     root.innerHTML =
       '<section class="flow"><div class="wrap flow-wrap gate">' +
-        '<p class="eyebrow dark">Performance Diagnostic</p>' +
-        '<h2 class="q">Apply for your Performance Diagnostic</h2>' +
+        '<p class="eyebrow dark">Performance Strategy Session</p>' +
+        '<h2 class="q">Apply for your Performance Strategy Session</h2>' +
         '<p class="sub">A 45-minute call with Rola to pinpoint the block costing you the most and map what to strengthen first. A few questions first, so the time is spent on you.</p>' +
         '<form id="app-form" novalidate>' +
           '<label>First name<input name="first_name" autocomplete="given-name" maxlength="60" value="' + esc(v.first_name || prefill.first_name || "") + '"></label>' +
@@ -98,7 +98,7 @@
         '<p class="eyebrow dark">Application received</p>' +
         '<h2 class="q">You\'re a fit, ' + esc(v.first_name) + '. Pick a time below.</h2>' +
         '<p class="sub">Choose the slot that works for you. You\'ll get a confirmation by email.</p>' +
-        '<div class="calendar"><iframe src="' + Q.BOOKING_URL + '" title="Book your Performance Diagnostic" loading="lazy"></iframe></div>' +
+        '<div class="calendar"><iframe src="' + Q.BOOKING_URL + '" title="Book your Performance Strategy Session" loading="lazy"></iframe></div>' +
         '<p class="fine-dark">Calendar not loading? <a href="' + Q.BOOKING_URL + '" target="_blank" rel="noopener">Open it in a new tab</a>.</p>' +
       '</div></section>' +
       '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
@@ -110,7 +110,7 @@
       '<section class="flow"><div class="wrap flow-wrap">' +
         '<p class="eyebrow dark">Application received</p>' +
         '<h2 class="q">Thank you, ' + esc(v.first_name) + '.</h2>' +
-        '<p class="sub">Based on your answers, a Performance Diagnostic isn\'t the right next step just yet. Rola reads every application, and you\'ll keep getting her insights by email.</p>' +
+        '<p class="sub">Based on your answers, a Performance Strategy Session isn\'t the right next step just yet. Rola reads every application, and you\'ll keep getting her insights by email.</p>' +
         '<p class="sub">In the meantime, follow along on <a href="https://www.instagram.com/rolaspeaks/" target="_blank" rel="noopener">Instagram</a> and <a href="https://www.youtube.com/@Rolaspeaks" target="_blank" rel="noopener">YouTube</a>.</p>' +
         (resultCode ? '<a class="btn btn-navy" href="/#r=' + resultCode + '">Back to my results</a>' : "") +
       '</div></section>' +
