@@ -20,10 +20,10 @@
     } catch (e) {}
   }
 
-  var REVENUE = ["Founder or business owner: under $250K revenue", "Founder or business owner: $250K to $1M", "Founder or business owner: $1M to $5M", "Founder or business owner: $5M+", "Senior leader at a company (C-suite, VP or director)", "Manager or team lead", "Employee", "Coach, consultant or solo professional"];
+  var REVENUE = ["Founder or CEO", "Business owner or entrepreneur", "C-suite executive", "VP or director", "Senior manager", "Consultant or advisor", "Other"];
   var START = ["Right away", "In the next 30 days", "In 1 to 3 months", "I'm just exploring"];
   var ENERGY = ["Very open. I've done energy work before", "Open and curious", "Not sure yet", "I prefer only the science-backed performance work"];
-  var INCOME = ["Under $75K", "$75K to $150K", "$150K to $300K", "$300K to $500K", "$500K+"];
+  var INCOME = ["Under $150K", "$150K to $500K", "$500K to $1M", "$1M to $5M", "$5M+"];
   var INVEST = ["Yes, if it's the right fit", "I'd need to discuss it with someone first", "Not right now"];
 
   function esc(s) {
@@ -60,15 +60,15 @@
           '<label>Email<input name="email" type="email" autocomplete="email" maxlength="255" value="' + esc(v.email || prefill.email || "") + '"></label>' +
           '<label>Phone or WhatsApp<input name="phone" type="tel" autocomplete="tel" maxlength="40" value="' + esc(v.phone || "") + '"></label>' +
           '<label>Your role and company<input name="company" maxlength="150" placeholder="For example: CEO, Acme Group" value="' + esc(v.company || "") + '"></label>' +
-          '<fieldset><legend>Which best describes where you sit today?</legend>' + radios("revenue", REVENUE, v.revenue) + '</fieldset>' +
+          '<fieldset><legend>Which best describes your role?</legend>' + radios("revenue", REVENUE, v.revenue) + '</fieldset>' +
           '<fieldset><legend>What\'s going on for you right now? Share your top 3 challenges, with as much detail as you can.</legend>' +
             [1, 2, 3].map(function (n) { return '<textarea name="c' + n + '" rows="3" maxlength="1000" aria-label="Challenge ' + n + '" placeholder="' + n + '.' + (n === 1 ? ' For example: I second-guess big decisions, so I delay them for weeks and my team waits on me.' : '') + '">' + esc((v.challenges || [])[n - 1] || "") + '</textarea>'; }).join("") +
           '</fieldset>' +
           '<label>What do you want to be true 90 days from now?<textarea name="goal" rows="3" maxlength="1000">' + esc(v.goal || "") + '</textarea></label>' +
           '<fieldset><legend>Rola\'s work combines science-backed performance tools with energy clearing. How open are you to energy clearing?</legend>' + radios("energy", ENERGY, v.energy) + '</fieldset>' +
           '<fieldset><legend>When do you want to start?</legend>' + radios("start", START, v.start) + '</fieldset>' +
-          '<fieldset><legend>What is your personal annual income (USD)?</legend>' + radios("income", INCOME, v.income) + '</fieldset>' +
-          '<fieldset><legend>Working with Rola is a premium investment in yourself. If it\'s the right fit, are you ready to invest now?</legend>' + radios("invest", INVEST, v.invest) + '</fieldset>' +
+          '<fieldset><legend>What is your annual income, or your business revenue if you own one (USD)?</legend>' + radios("income", INCOME, v.income) + '</fieldset>' +
+          '<fieldset><legend>Working with Rola is a private, premium engagement. If it\'s the right fit, are you ready to invest now?</legend>' + radios("invest", INVEST, v.invest) + '</fieldset>' +
           (error ? '<p class="err">' + esc(error) + '</p>' : "") +
           '<button class="btn btn-gold wide" type="submit">Submit My Application</button>' +
         '</form>' +
@@ -81,9 +81,9 @@
     var resultLink = resultCode ? "https://quiz.convictioncode.com/#r=" + resultCode : "No quiz result linked";
     var message =
       "QUALIFIED: " + (qualified ? "YES, shown the booking calendar" : "NO, not shown the calendar") + "\n\n" +
-      "Describes them: " + v.revenue + "\n" +
+      "Role: " + v.revenue + "\n" +
       "Wants to start: " + v.start + "\n" +
-      "Annual income: " + v.income + "\n" +
+      "Income or revenue: " + v.income + "\n" +
       "Ready to invest: " + v.invest + "\n\n" +
       "Open to energy clearing: " + v.energy + "\n\n" +
       "Top challenges:\n" + v.challenges.filter(Boolean).map(function (c, i) { return (i + 1) + ". " + c; }).join("\n") + "\n\n" +
@@ -151,17 +151,17 @@
       !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.email) ? "Please enter a valid email." :
       v.phone.replace(/\D/g, "").length < 7 ? "Please enter a phone or WhatsApp number." :
       !v.company ? "Please share your role and company." :
-      !v.revenue ? "Please choose what best describes you." :
+      !v.revenue ? "Please choose your role." :
       v.challenges.filter(Boolean).length < 3 ? "Please share your top 3 challenges." :
       !v.goal ? "Please tell us what you want to be true in 90 days." :
       !v.energy ? "Please answer the energy clearing question." :
       !v.start ? "Please choose when you want to start." :
-      !v.income ? "Please choose your annual income." :
+      !v.income ? "Please choose your income or revenue." :
       !v.invest ? "Please answer the investment question." : "";
     if (err) { renderForm(v, err); return; }
 
-    // Personal income of $150K+, or a founder whose business does $250K+ (founders often pay themselves less).
-    var earnsEnough = INCOME.indexOf(v.income) >= 2 || REVENUE.indexOf(v.revenue) >= 1 && REVENUE.indexOf(v.revenue) <= 3;
+    // Only $150K+ in personal income or business revenue sees the calendar.
+    var earnsEnough = INCOME.indexOf(v.income) >= 1;
     var qualified = earnsEnough && v.start !== START[3] && v.invest !== INVEST[2];
     track("apply_submit");
     if (qualified) track("apply_qualified");
