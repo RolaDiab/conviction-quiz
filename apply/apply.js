@@ -51,7 +51,7 @@
     root.innerHTML =
       '<section class="flow"><div class="wrap flow-wrap gate">' +
         '<p class="eyebrow dark">Work with Rola</p>' +
-        '<h2 class="q">You have the vision. Let\'s clear the path to accomplishing it.</h2>' +
+        '<h2 class="q">You have big dreams. Let\'s clear the path to accomplishing them.</h2>' +
         '<p class="sub">A private 45-minute strategy call for leaders and founders ready for their next level. A few questions first, so the call is spent on you.</p>' +
         '<form id="app-form" novalidate>' +
           '<label>First name<input name="first_name" autocomplete="given-name" maxlength="60" value="' + esc(v.first_name || prefill.first_name || "") + '"></label>' +
