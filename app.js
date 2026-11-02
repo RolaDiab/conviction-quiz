@@ -131,8 +131,8 @@
       '<section class="hero"><div class="wrap hero-grid">' +
         '<div class="hero-copy">' +
           '<p class="eyebrow">The Performance Blocks Assessment</p>' +
-          '<h1>You\'ve had <span class="gold">real success</span>. Then why do you feel stuck?</h1>' +
-          '<p class="tagline">Answer 21 questions to find out why, and where to focus first.</p>' +
+          '<h1>You\'ve built <span class="gold">real success</span>. Is your engine running on all 7 cylinders?</h1>' +
+          '<p class="tagline">When one misfires, keeping your success takes more out of you than building it did. Answer 21 questions to find which one, and where to focus first.</p>' +
           '<p class="lead">About 4 minutes. Free. Instant results.</p>' +
           '<div class="cta-row"><button class="btn btn-gold" data-act="start">' + (resume ? "Continue My Assessment" : "Answer the 21 Questions") + '</button>' +
           (resume ? '<button class="btn btn-ghost" data-act="restart">Start over</button>' : "") + '</div>' +
@@ -142,7 +142,7 @@
       '</div></section>' +
 
       '<section class="band"><div class="wrap narrow">' +
-        '<h2>You run on a 7-cylinder engine. Find the one that\'s misfiring.</h2>' +
+        '<h2>Find the misfiring cylinder before you push harder.</h2>' +
         '<p>In 4 minutes, you\'ll walk away with:</p>' +
         '<ul class="checks">' +
           '<li>The cylinder that\'s misfiring and quietly draining your results, named</li>' +
@@ -264,7 +264,7 @@
     var blocksTitle = strong ? "Your Top 3 Growth Edges" : "Your Top 3 Performance Blocks™";
     var blocksSub = strong
       ? "Your three lowest pillars. Even here you're strong. This is where mastery deepens next."
-      : "Your three lowest pillars. This is where effort is leaking. Start with number one.";
+      : "Your three lowest pillars. This is where your engine is misfiring. Start with number one.";
 
     var blocks = s.blocks.map(function (idx, n) {
       var p = Q.PILLARS[idx], c = Q.PILLAR_COPY[p];
@@ -294,7 +294,7 @@
       '<section class="band offer-band"><div class="wrap narrow"><div class="offer">' +
         '<p class="eyebrow dark">Start on your own, tonight</p>' +
         '<h2>The CLEAR Method™</h2>' +
-        '<p class="offer-lead">Your results show where effort is leaking. If an old belief keeps pulling you back, start here. CLEAR clears a limiting belief stuck in your body, in as little as 10 minutes.</p>' +
+        '<p class="offer-lead">Your results show where your engine is misfiring. If an old belief keeps pulling you back, start here. CLEAR clears a limiting belief stuck in your body, in as little as 10 minutes.</p>' +
         '<ul class="offer-list">' +
           '<li>Guided audio lessons, including the Clearing: a 10-minute session you can replay any time</li>' +
           '<li>The CLEAR workbook to write it all down</li>' +
