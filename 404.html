@@ -4,8 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Performance Blocks Assessment | Conviction Code</title>
-  <meta http-equiv="refresh" content="0; url=/">
-  <script>location.replace("/");</script>
+  <script>
+    // Unknown paths go to the quiz, except known pages typed with different
+    // capitals or no trailing slash (phones capitalise "Apply").
+    (function () {
+      var p = location.pathname.toLowerCase().replace(/\/+$/, "");
+      var known = ["/apply", "/ig", "/li", "/tt", "/yt"];
+      location.replace(known.indexOf(p) > -1 ? p + "/" + location.search + location.hash : "/");
+    })();
+  </script>
+  <noscript><meta http-equiv="refresh" content="0; url=/"></noscript>
 </head>
 <body style="background:#0F2544"></body>
 </html>
