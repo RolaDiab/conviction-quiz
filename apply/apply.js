@@ -23,6 +23,7 @@
   var REVENUE = ["Founder or business owner: under $250K revenue", "Founder or business owner: $250K to $1M", "Founder or business owner: $1M to $5M", "Founder or business owner: $5M+", "Senior leader at a company (C-suite, VP or director)", "Manager or team lead", "Employee", "Coach, consultant or solo professional"];
   var START = ["Right away", "In the next 30 days", "In 1 to 3 months", "I'm just exploring"];
   var ENERGY = ["Very open. I've done energy work before", "Open and curious", "Not sure yet", "I prefer only the science-backed performance work"];
+  var INCOME = ["Under $75K", "$75K to $150K", "$150K to $300K", "$300K to $500K", "$500K+"];
   var INVEST = ["Yes, if it's the right fit", "I'd need to discuss it with someone first", "Not right now"];
 
   function esc(s) {
@@ -66,6 +67,7 @@
           '<label>What do you want to be true 90 days from now?<textarea name="goal" rows="3" maxlength="1000">' + esc(v.goal || "") + '</textarea></label>' +
           '<fieldset><legend>Rola\'s work combines science-backed performance tools with energy clearing. How open are you to energy clearing?</legend>' + radios("energy", ENERGY, v.energy) + '</fieldset>' +
           '<fieldset><legend>When do you want to start?</legend>' + radios("start", START, v.start) + '</fieldset>' +
+          '<fieldset><legend>What is your personal annual income (USD)?</legend>' + radios("income", INCOME, v.income) + '</fieldset>' +
           '<fieldset><legend>Working with Rola is a premium investment in yourself. If it\'s the right fit, are you ready to invest now?</legend>' + radios("invest", INVEST, v.invest) + '</fieldset>' +
           (error ? '<p class="err">' + esc(error) + '</p>' : "") +
           '<button class="btn btn-gold wide" type="submit">Submit My Application</button>' +
@@ -81,6 +83,7 @@
       "QUALIFIED: " + (qualified ? "YES, shown the booking calendar" : "NO, not shown the calendar") + "\n\n" +
       "Describes them: " + v.revenue + "\n" +
       "Wants to start: " + v.start + "\n" +
+      "Annual income: " + v.income + "\n" +
       "Ready to invest: " + v.invest + "\n\n" +
       "Open to energy clearing: " + v.energy + "\n\n" +
       "Top challenges:\n" + v.challenges.filter(Boolean).map(function (c, i) { return (i + 1) + ". " + c; }).join("\n") + "\n\n" +
@@ -140,6 +143,7 @@
       challenges: [f.c1.value, f.c2.value, f.c3.value].map(function (c) { return c.trim().slice(0, 1000); }),
       energy: pick("energy"),
       start: pick("start"),
+      income: pick("income"),
       invest: pick("invest")
     };
     var err = !v.first_name ? "Please enter your first name." :
@@ -152,10 +156,13 @@
       !v.goal ? "Please tell us what you want to be true in 90 days." :
       !v.energy ? "Please answer the energy clearing question." :
       !v.start ? "Please choose when you want to start." :
+      !v.income ? "Please choose your annual income." :
       !v.invest ? "Please answer the investment question." : "";
     if (err) { renderForm(v, err); return; }
 
-    var qualified = v.start !== START[3] && v.invest !== INVEST[2];
+    // Personal income of $150K+, or a founder whose business does $250K+ (founders often pay themselves less).
+    var earnsEnough = INCOME.indexOf(v.income) >= 2 || REVENUE.indexOf(v.revenue) >= 1 && REVENUE.indexOf(v.revenue) <= 3;
+    var qualified = earnsEnough && v.start !== START[3] && v.invest !== INVEST[2];
     track("apply_submit");
     if (qualified) track("apply_qualified");
     var btn = f.querySelector("button[type=submit]");
