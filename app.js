@@ -131,8 +131,8 @@
       '<section class="hero"><div class="wrap hero-grid">' +
         '<div class="hero-copy">' +
           '<p class="eyebrow">The Performance Blocks Assessment</p>' +
-          '<h1>You\'ve built <span class="gold">real success</span>. Is your engine running on all 7 cylinders?</h1>' +
-          '<p class="tagline">When one misfires, keeping your success takes more out of you than building it did. Answer 21 questions to find which one, and where to focus first.</p>' +
+          '<h1>You\'ve built <span class="gold">real success</span>. Why does keeping it feel harder than building it?</h1>' +
+          '<p class="tagline">Answer 21 questions to find what\'s quietly draining you, and where to focus so you keep growing.</p>' +
           '<p class="lead">About 4 minutes. Free. Instant results.</p>' +
           '<div class="cta-row"><button class="btn btn-gold" data-act="start">' + (resume ? "Continue My Assessment" : "Answer the 21 Questions") + '</button>' +
           (resume ? '<button class="btn btn-ghost" data-act="restart">Start over</button>' : "") + '</div>' +
