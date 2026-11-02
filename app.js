@@ -136,7 +136,7 @@
           '<p class="lead">About 4 minutes. Free. Instant results.</p>' +
           '<div class="cta-row"><button class="btn btn-gold" data-act="start">' + (resume ? "Continue My Assessment" : "Answer the 21 Questions") + '</button>' +
           (resume ? '<button class="btn btn-ghost" data-act="restart">Start over</button>' : "") + '</div>' +
-          '<p class="fine">Built on the science behind predictable success.</p>' +
+          '<p class="fine">Built on neuroscience and performance research.</p>' +
         '</div>' +
         '<div class="hero-photo"><img src="rola.jpg?v=3" alt="Rola Diab" width="564" height="630"></div>' +
       '</div></section>' +
