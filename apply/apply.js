@@ -22,7 +22,6 @@
 
   var REVENUE = ["Business owner: under $250K revenue", "Business owner: $250K to $1M", "Business owner: $1M to $5M", "Business owner: $5M+", "I work for a company (executive, manager or employee)"];
   var START = ["Right away", "In the next 30 days", "In 1 to 3 months", "I'm just exploring"];
-  var HELP = ["Making more money", "Accelerating my career", "Becoming more influential", "Being visible: speaking, selling, showing up", "Leading my team", "Making big decisions", "Self-doubt or second-guessing myself", "Reducing anxiety and stress", "Burnout or low energy", "Overall well-being", "Boundaries and the people around me", "My growth has stalled", "Something else"];
   var ENERGY = ["Very open. I've done energy work before", "Open and curious", "Not sure yet", "I prefer only the science-backed performance work"];
   var INVEST = ["Yes, if it's the right fit", "I'd need to discuss it with someone first", "Not right now"];
 
@@ -47,13 +46,6 @@
     }).join("") + '</div>';
   }
 
-  function checks(name, options, values) {
-    values = values || [];
-    return '<div class="opts">' + options.map(function (o) {
-      return '<label class="opt radio"><input type="checkbox" name="' + name + '" value="' + esc(o) + '"' + (values.indexOf(o) > -1 ? " checked" : "") + '> ' + esc(o) + '</label>';
-    }).join("") + '</div>';
-  }
-
   function renderForm(v, error) {
     v = v || {};
     root.innerHTML =
@@ -67,8 +59,9 @@
           '<label>Phone or WhatsApp<input name="phone" type="tel" autocomplete="tel" maxlength="40" value="' + esc(v.phone || "") + '"></label>' +
           '<label>Your role and company<input name="company" maxlength="150" placeholder="For example: CEO, Acme Group" value="' + esc(v.company || "") + '"></label>' +
           '<fieldset><legend>Which best describes you?</legend>' + radios("revenue", REVENUE, v.revenue) + '</fieldset>' +
-          '<fieldset><legend>What do you want help with? Choose all that apply.</legend>' + checks("help", HELP, v.help) + '</fieldset>' +
-          '<label>What feels like the biggest thing in the way right now?<textarea name="obstacle" rows="3" maxlength="1000">' + esc(v.obstacle || "") + '</textarea></label>' +
+          '<fieldset><legend>What\'s going on for you right now? Share your top 3 challenges.</legend>' +
+            [1, 2, 3].map(function (n) { return '<input name="c' + n + '" maxlength="300" aria-label="Challenge ' + n + '" placeholder="' + n + '.' + (n === 1 ? ' For example: I second-guess big decisions' : '') + '" value="' + esc((v.challenges || [])[n - 1] || "") + '">'; }).join("") +
+          '</fieldset>' +
           '<label>What do you want to be true 90 days from now?<textarea name="goal" rows="3" maxlength="1000">' + esc(v.goal || "") + '</textarea></label>' +
           '<fieldset><legend>Rola\'s work combines science-backed performance tools with energy clearing. How open are you to energy clearing?</legend>' + radios("energy", ENERGY, v.energy) + '</fieldset>' +
           '<fieldset><legend>When do you want to start?</legend>' + radios("start", START, v.start) + '</fieldset>' +
@@ -89,9 +82,8 @@
       "Wants to start: " + v.start + "\n" +
       "Ready to invest: " + v.invest + "\n\n" +
       "Open to energy clearing: " + v.energy + "\n\n" +
-      "Wants help with:\n- " + v.help.join("\n- ") + "\n\n" +
+      "Top challenges:\n" + v.challenges.filter(Boolean).map(function (c, i) { return (i + 1) + ". " + c; }).join("\n") + "\n\n" +
       "90-day goal:\n" + v.goal + "\n\n" +
-      "Biggest thing in the way:\n" + v.obstacle + "\n\n" +
       "Quiz role: " + (prefill.role || "Not answered") + "\n" +
       "Quiz results: " + resultLink;
     return fetch(Q.EMAIL_FUNCTION_URL, {
@@ -143,8 +135,7 @@
       company: f.company.value.trim().slice(0, 150),
       revenue: pick("revenue"),
       goal: f.goal.value.trim().slice(0, 1000),
-      obstacle: f.obstacle.value.trim().slice(0, 1000),
-      help: [].map.call(f.querySelectorAll('input[name="help"]:checked'), function (el) { return el.value; }),
+      challenges: [f.c1.value, f.c2.value, f.c3.value].map(function (c) { return c.trim().slice(0, 300); }),
       energy: pick("energy"),
       start: pick("start"),
       invest: pick("invest")
@@ -154,8 +145,7 @@
       v.phone.replace(/\D/g, "").length < 7 ? "Please enter a phone or WhatsApp number." :
       !v.company ? "Please share your role and company." :
       !v.revenue ? "Please choose what best describes you." :
-      !v.help.length ? "Please choose at least one thing you want help with." :
-      !v.obstacle ? "Please tell us the biggest thing in the way right now." :
+      !v.challenges[0] ? "Please share at least your top challenge." :
       !v.goal ? "Please tell us what you want to be true in 90 days." :
       !v.energy ? "Please answer the energy clearing question." :
       !v.start ? "Please choose when you want to start." :
