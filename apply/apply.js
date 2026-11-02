@@ -76,7 +76,7 @@
           (error ? '<p class="err">' + esc(error) + '</p>' : "") +
           '<button class="btn btn-gold wide" type="submit">Submit My Application</button>' +
         '</form>' +
-        (resultCode ? '<a class="btn btn-link back" href="/#r=' + resultCode + '">← Back to my results</a>' : '<a class="btn btn-link back" href="/">← Take the assessment first</a>') +
+        (resultCode ? '<a class="btn btn-link back" href="/#r=' + resultCode + '">← Back to my results</a>' : '<a class="btn btn-link back" href="/">Not ready yet? Take the free 4-minute assessment</a>') +
       '</div></section>' +
       '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
   }
