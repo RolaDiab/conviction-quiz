@@ -142,11 +142,11 @@
       '</div></section>' +
 
       '<section class="band"><div class="wrap narrow">' +
-        '<h2>Find the leak before you add more fuel.</h2>' +
+        '<h2>You run on a 7-cylinder engine. Find the one that\'s misfiring.</h2>' +
         '<p>In 4 minutes, you\'ll walk away with:</p>' +
         '<ul class="checks">' +
-          '<li>The hidden block quietly draining your results, named</li>' +
-          '<li>Your score across the 7 pillars of performance</li>' +
+          '<li>The cylinder that\'s misfiring and quietly draining your results, named</li>' +
+          '<li>Your score on all 7 cylinders, the 7 pillars of performance</li>' +
           '<li>Where to focus first, so more effort means more results again</li>' +
           '<li>Your next step to enjoy the wins, not just reach them</li>' +
         '</ul>' +
