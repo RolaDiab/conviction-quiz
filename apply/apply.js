@@ -59,8 +59,8 @@
           '<label>Phone or WhatsApp<input name="phone" type="tel" autocomplete="tel" maxlength="40" value="' + esc(v.phone || "") + '"></label>' +
           '<label>Your role and company<input name="company" maxlength="150" placeholder="For example: CEO, Acme Group" value="' + esc(v.company || "") + '"></label>' +
           '<fieldset><legend>Which best describes you?</legend>' + radios("revenue", REVENUE, v.revenue) + '</fieldset>' +
-          '<fieldset><legend>What\'s going on for you right now? Share your top 3 challenges.</legend>' +
-            [1, 2, 3].map(function (n) { return '<input name="c' + n + '" maxlength="300" aria-label="Challenge ' + n + '" placeholder="' + n + '.' + (n === 1 ? ' For example: I second-guess big decisions' : '') + '" value="' + esc((v.challenges || [])[n - 1] || "") + '">'; }).join("") +
+          '<fieldset><legend>What\'s going on for you right now? Share your top 3 challenges, with as much detail as you can.</legend>' +
+            [1, 2, 3].map(function (n) { return '<textarea name="c' + n + '" rows="3" maxlength="1000" aria-label="Challenge ' + n + '" placeholder="' + n + '.' + (n === 1 ? ' For example: I second-guess big decisions, so I delay them for weeks and my team waits on me.' : '') + '">' + esc((v.challenges || [])[n - 1] || "") + '</textarea>'; }).join("") +
           '</fieldset>' +
           '<label>What do you want to be true 90 days from now?<textarea name="goal" rows="3" maxlength="1000">' + esc(v.goal || "") + '</textarea></label>' +
           '<fieldset><legend>Rola\'s work combines science-backed performance tools with energy clearing. How open are you to energy clearing?</legend>' + radios("energy", ENERGY, v.energy) + '</fieldset>' +
@@ -135,7 +135,7 @@
       company: f.company.value.trim().slice(0, 150),
       revenue: pick("revenue"),
       goal: f.goal.value.trim().slice(0, 1000),
-      challenges: [f.c1.value, f.c2.value, f.c3.value].map(function (c) { return c.trim().slice(0, 300); }),
+      challenges: [f.c1.value, f.c2.value, f.c3.value].map(function (c) { return c.trim().slice(0, 1000); }),
       energy: pick("energy"),
       start: pick("start"),
       invest: pick("invest")
