@@ -22,8 +22,8 @@
 
   var REVENUE = ["Business owner: under $250K revenue", "Business owner: $250K to $1M", "Business owner: $1M to $5M", "Business owner: $5M+", "I work for a company (executive, manager or employee)"];
   var START = ["Right away", "In the next 30 days", "In 1 to 3 months", "I'm just exploring"];
-  var HELP = ["Self-doubt or second-guessing myself", "Burnout or low energy", "Leading my team", "Making big decisions", "Being visible: speaking, selling, showing up", "Boundaries and the people around me", "My growth has stalled", "Something else"];
-  var ENERGY = ["Very open. I've done energy work before", "Open and curious", "Not sure yet", "I prefer a purely practical approach"];
+  var HELP = ["Making more money", "Accelerating my career", "Becoming more influential", "Being visible: speaking, selling, showing up", "Leading my team", "Making big decisions", "Self-doubt or second-guessing myself", "Reducing anxiety and stress", "Burnout or low energy", "Overall well-being", "Boundaries and the people around me", "My growth has stalled", "Something else"];
+  var ENERGY = ["Very open. I've done energy work before", "Open and curious", "Not sure yet", "I prefer only the science-backed performance work"];
   var INVEST = ["Yes, if it's the right fit", "I'd need to discuss it with someone first", "Not right now"];
 
   function esc(s) {
@@ -70,7 +70,7 @@
           '<fieldset><legend>What do you want help with? Choose all that apply.</legend>' + checks("help", HELP, v.help) + '</fieldset>' +
           '<label>What feels like the biggest thing in the way right now?<textarea name="obstacle" rows="3" maxlength="1000">' + esc(v.obstacle || "") + '</textarea></label>' +
           '<label>What do you want to be true 90 days from now?<textarea name="goal" rows="3" maxlength="1000">' + esc(v.goal || "") + '</textarea></label>' +
-          '<fieldset><legend>Rola\'s work includes energy clearing alongside practical strategy. How open are you to that?</legend>' + radios("energy", ENERGY, v.energy) + '</fieldset>' +
+          '<fieldset><legend>Rola\'s work combines science-backed performance tools with energy clearing. How open are you to energy clearing?</legend>' + radios("energy", ENERGY, v.energy) + '</fieldset>' +
           '<fieldset><legend>When do you want to start?</legend>' + radios("start", START, v.start) + '</fieldset>' +
           '<fieldset><legend>Working with Rola is a premium investment in yourself. If it\'s the right fit, are you ready to invest now?</legend>' + radios("invest", INVEST, v.invest) + '</fieldset>' +
           (error ? '<p class="err">' + esc(error) + '</p>' : "") +
