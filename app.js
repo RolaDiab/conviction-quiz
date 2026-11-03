@@ -142,8 +142,8 @@
       '</div></section>' +
 
       '<section class="band"><div class="wrap narrow">' +
-        '<h2>Find the misfiring cylinder before you push harder.</h2>' +
-        '<p>In 4 minutes, you\'ll walk away with:</p>' +
+        '<h2>Your strategy sets the direction. Your inner engine sets the pace.</h2>' +
+        '<p>In 4 minutes, see how all 7 cylinders are firing:</p>' +
         '<ul class="checks">' +
           '<li>The cylinder that\'s misfiring and quietly draining your results, named</li>' +
           '<li>Your score on all 7 cylinders, the 7 pillars of performance</li>' +
