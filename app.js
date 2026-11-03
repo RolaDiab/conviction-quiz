@@ -131,8 +131,8 @@
       '<section class="hero"><div class="wrap hero-grid">' +
         '<div class="hero-copy">' +
           '<p class="eyebrow">The Performance Blocks Assessment</p>' +
-          '<h1>Are you ready to make your <span class="gold">success predictable</span>?</h1>' +
-          '<p class="tagline">Answer 21 questions to find what\'s holding back your next level, and where to focus first.</p>' +
+          '<h1>Are you ready to make <span class="gold">success inevitable</span>?</h1>' +
+          '<p class="tagline">Unwavering belief isn\'t wished for. It\'s engineered across 7 pillars. In 4 minutes, find the one holding you back.</p>' +
           '<p class="lead">About 4 minutes. Free. Instant results.</p>' +
           '<div class="cta-row"><button class="btn btn-gold" data-act="start">' + (resume ? "Continue My Assessment" : "Answer the 21 Questions") + '</button>' +
           (resume ? '<button class="btn btn-ghost" data-act="restart">Start over</button>' : "") + '</div>' +
