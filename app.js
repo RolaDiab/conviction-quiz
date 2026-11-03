@@ -146,7 +146,7 @@
         '<p>In 4 minutes, see how all 7 cylinders are firing:</p>' +
         '<ul class="checks">' +
           '<li>The cylinder that\'s misfiring and quietly draining your results, named</li>' +
-          '<li>Your score on all 7 cylinders, the 7 pillars of performance</li>' +
+          '<li>Your score on each one, the 7 pillars of performance</li>' +
           '<li>Where to focus first, so more effort means more results again</li>' +
           '<li>Your next step to enjoy the wins, not just reach them</li>' +
         '</ul>' +
