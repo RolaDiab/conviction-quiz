@@ -312,3 +312,7 @@ textarea:focus, input:focus { outline: 2px solid var(--gold); border-color: tran
 /* Consent line: keep the privacy link inline with the sentence */
 .gate .consent { display: block; position: relative; padding-left: 30px; }
 .gate .consent input { position: absolute; left: 0; top: 0; margin-top: 3px; }
+/* Headlines: looser letter spacing (Rola, 2026-11-08) */
+h1, h2, .result-hero h1 { letter-spacing: -0.01em; }
+.q, h3, h4 { letter-spacing: -0.005em; }
+.score { letter-spacing: -0.02em; }
