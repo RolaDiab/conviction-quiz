@@ -161,7 +161,7 @@
 
       '<section class="band"><div class="wrap narrow about">' +
         '<h2>Hi, I\'m Rola.</h2>' +
-        '<p>I\'ve spent my career studying what makes success predictable. The gap between where you are and where you want to be isn\'t strategy. It\'s conviction. I built The Conviction Code™ on that premise, blending neuroscience and behavioral psychology into a system I teach to executives at KPMG, Bloomberg, and government leaders, on stages including Mindvalley University.</p>' +
+        '<p>I\'ve spent my career studying what makes success inevitable. The gap between where you are and where you want to be isn\'t strategy. It\'s conviction. I built The Conviction Code™ on that premise, blending neuroscience and behavioral psychology into a system I teach to executives at KPMG, Bloomberg, and government leaders, on stages including Mindvalley University.</p>' +
         '<p>Before that, I ran a $100M brand as its president, so I know what performance under pressure actually demands.</p>' +
       '</div></section>' +
 
@@ -321,7 +321,7 @@
         cta(s.overall >= 100 ? "Ready to go even further?" : "Ready to get your missing " + (100 - s.overall) + "% back?") + '</div></section>' + offer +
       '<section class="band"><div class="wrap narrow"><h2>Your 7 Pillars</h2><p class="sub">' + esc(Q.PILLARS_INTRO) + '</p>' + pillars + '</div></section>' +
       '<section class="band alt"><div class="wrap narrow prose"><h2>What High Conviction Actually Looks Like</h2>' + paras(Q.HIGH_CONVICTION) +
-        '<details class="science"><summary>The science behind predictable success</summary>' + paras(Q.SCIENCE) + '</details></div></section>' +
+        '<details class="science"><summary>The science behind inevitable success</summary>' + paras(Q.SCIENCE) + '</details></div></section>' +
       '<section class="final"><div class="wrap narrow center">' +
         '<h2>Your results won\'t change themselves.</h2>' +
         '<p>Apply for a private strategy call and leave with a clear first move.</p>' +

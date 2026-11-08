@@ -83,7 +83,7 @@ window.QUIZ = {
     "The Survivor": [
       { p: [
         "Your score shows you're currently operating in Survivor Mode.",
-        "The system driving your performance isn't yet producing the outcomes you're capable of. Instead of predictable success, you're likely running on effort, resilience, and determination to push through.",
+        "The system driving your performance isn't yet producing the outcomes you're capable of. Instead of inevitable success, you're likely running on effort, resilience, and determination to push through.",
         "You may get brief bursts of momentum, then find yourself second-guessing decisions or feeling like you're constantly starting over.",
         "This is not a reflection of your intelligence, ambition, or potential. It's a reflection of the internal system currently driving your decisions."
       ] },
@@ -93,7 +93,7 @@ window.QUIZ = {
       ] },
       { h: "Your Greatest Opportunity", p: [
         "These patterns are not permanent. They're measurable, and they're trainable.",
-        "Most people spend years trying to change their habits or circumstances without ever seeing the system producing them. You just looked beneath the surface. That awareness is where predictable success begins.",
+        "Most people spend years trying to change their habits or circumstances without ever seeing the system producing them. You just looked beneath the surface. That awareness is where inevitable success begins.",
         "Strengthen the system one pillar at a time and something shifts. You think more clearly. You decide with more conviction. Your results stop feeling random."
       ] }
     ],
@@ -190,6 +190,6 @@ window.QUIZ = {
     "This assessment is rooted in research from neuroscience, behavioral psychology, and performance science.",
     "Peter Gollwitzer's research on implementation intentions shows that direction anchored in clear plans substantially improves follow-through. Bessel van der Kolk's somatic research suggests that limiting beliefs live in the body, not just the mind. Antonio Damasio's neuroscience of decision-making shows that the fear response fires faster than rational thought. Conviction is a trained override, not a personality trait.",
     "In an fMRI study published in the Journal of Business Venturing, investors watched startup pitches with identical content. When the founder delivered with high passion, investor interest rose 26% and neural engagement rose 39%. Same words. Different delivery. Different result.",
-    "The 7 pillars bring these findings together into one system you can train. Together, they make performance predictable."
+    "The 7 pillars bring these findings together into one system you can train. Together, they make success inevitable."
   ]
 };
