@@ -138,7 +138,7 @@
           (resume ? '<button class="btn btn-ghost" data-act="restart">Start over</button>' : "") + '</div>' +
           '<p class="fine">Built on neuroscience and performance research.</p>' +
         '</div>' +
-        '<div class="hero-photo"><img src="rola.jpg?v=3" alt="Rola Diab" width="564" height="630"></div>' +
+        '<div class="hero-photo stage"><img src="stage.jpg?v=1" alt="Rola Diab on stage presenting The Conviction Code" width="1000" height="667"></div>' +
       '</div></section>' +
 
       '<section class="band"><div class="wrap narrow">' +
