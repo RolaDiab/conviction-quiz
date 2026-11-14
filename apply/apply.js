@@ -37,6 +37,7 @@
   try {
     var saved = JSON.parse(localStorage.getItem("cc_quiz_v1")) || {};
     prefill.first_name = (saved.gate && saved.gate.first_name) || "";
+    prefill.last_name = (saved.gate && saved.gate.last_name) || "";
     prefill.email = (saved.gate && saved.gate.email) || "";
     prefill.role = (saved.profile && saved.profile.role) || "";
   } catch (e) {}
@@ -56,7 +57,7 @@
         '<p class="sub">A private 45-minute strategy call for leaders and founders ready for their next level. A few questions first, so the call is spent on you.</p>' +
         '<form id="app-form" novalidate>' +
           '<label>First name<input name="first_name" autocomplete="given-name" maxlength="60" value="' + esc(v.first_name || prefill.first_name || "") + '"></label>' +
-          '<label>Last name<input name="last_name" autocomplete="family-name" maxlength="60" value="' + esc(v.last_name || "") + '"></label>' +
+          '<label>Last name<input name="last_name" autocomplete="family-name" maxlength="60" value="' + esc(v.last_name || prefill.last_name || "") + '"></label>' +
           '<label>Email<input name="email" type="email" autocomplete="email" maxlength="255" value="' + esc(v.email || prefill.email || "") + '"></label>' +
           '<label>Phone or WhatsApp<input name="phone" type="tel" autocomplete="tel" maxlength="40" value="' + esc(v.phone || "") + '"></label>' +
           '<label>Your role and company<input name="company" maxlength="150" placeholder="For example: CEO, Acme Group" value="' + esc(v.company || "") + '"></label>' +

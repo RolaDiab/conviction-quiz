@@ -240,6 +240,7 @@
         '<p class="sub">21 questions. About 4 minutes. Your results appear the moment you finish.</p>' +
         '<form id="gate" novalidate>' +
           '<label>First name<input name="first_name" autocomplete="given-name" maxlength="60" required value="' + esc(g.first_name || "") + '"></label>' +
+          '<label>Last name<input name="last_name" autocomplete="family-name" maxlength="60" required value="' + esc(g.last_name || "") + '"></label>' +
           '<label>Email<input name="email" type="email" autocomplete="email" maxlength="255" required value="' + esc(g.email || "") + '"></label>' +
           '<label class="consent"><input name="consent" type="checkbox"' + (g.consent ? " checked" : "") + '> Send me my results and occasional insights from Rola. Unsubscribe anytime. <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy policy</a>.</label>' +
           (error ? '<p class="err">' + esc(error) + '</p>' : "") +
@@ -342,7 +343,7 @@
     fetch(Q.ADHARA_FORM_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ response_data: { first_name: g.first_name, email: g.email, email_consent: ["yes"] }, is_complete: true }),
+      body: JSON.stringify({ response_data: { first_name: g.first_name, last_name: g.last_name, email: g.email, email_consent: ["yes"] }, is_complete: true }),
       keepalive: true
     }).catch(function () {});
   }
@@ -368,13 +369,13 @@
     };
     jobs.push(sendEmail("quiz-results", g.email, emailData));
     jobs.push(sendEmail("quiz-lead-notification", null, Object.assign({}, emailData, {
-      email: g.email, role: (state.profile.role || "") + (state.profile.urgency ? " | Wants to change: " + state.profile.urgency : ""),
+      firstName: g.first_name + " " + g.last_name, email: g.email, role: (state.profile.role || "") + (state.profile.urgency ? " | Wants to change: " + state.profile.urgency : ""),
       utmSource: sourceLabel(), utmMedium: utm.utm_medium, utmCampaign: utm.utm_campaign
     })));
 
     if (Q.GHL_WEBHOOK_URL) {
       var payload = {
-        first_name: g.first_name, email: g.email,
+        first_name: g.first_name, last_name: g.last_name, email: g.email,
         overall_score: s.overall, tier: s.tier,
         top_block_1: cap(Q.PILLARS[s.blocks[0]]), top_block_2: cap(Q.PILLARS[s.blocks[1]]), top_block_3: cap(Q.PILLARS[s.blocks[2]]),
         role: state.profile.role || "", urgency: state.profile.urgency || "", referrer: state.ref || "",
@@ -400,7 +401,7 @@
       if (r) { renderResult(r.name, r.points); scrollTop(); return; }
     }
     if (state.step < 0) renderLanding();
-    else if (!state.gate || !state.gate.done) renderGate();
+    else if (!state.gate || !state.gate.done || !state.gate.last_name) renderGate();
     else if (state.step < TOTAL_STEPS) renderQuestion();
     else finish();
     scrollTop();
@@ -477,6 +478,7 @@
     var f = e.target;
     var g = {
       first_name: f.first_name.value.trim().slice(0, 60),
+      last_name: f.last_name.value.trim().slice(0, 60),
       email: f.email.value.trim().toLowerCase().slice(0, 255),
       consent: f.consent.checked
     };
@@ -484,6 +486,7 @@
     state.profile = state.profile || {};
     save();
     if (!g.first_name) return renderGate("Please enter your first name.");
+    if (!g.last_name) return renderGate("Please enter your last name.");
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(g.email)) return renderGate("Please enter a valid email.");
     if (!g.consent) return renderGate("Please tick the box so we can send your results.");
     g.done = true;
@@ -512,7 +515,7 @@
     track("quiz_complete");
     sendLead(g, points, code).then(function () {
       finishing = false;
-      state = { step: -1, answers: [], profile: { role: state.profile.role }, gate: { first_name: g.first_name, email: g.email, consent: g.consent }, listed: state.listed, src: state.src, ref: state.ref };
+      state = { step: -1, answers: [], profile: { role: state.profile.role }, gate: { first_name: g.first_name, last_name: g.last_name, email: g.email, consent: g.consent }, listed: state.listed, src: state.src, ref: state.ref };
       save();
       justFinished = true;
       location.hash = "r=" + code;
