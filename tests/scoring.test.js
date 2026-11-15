@@ -42,6 +42,7 @@ ok(findPattern(P.map(() => 58)).key === 'one-system', 'pattern: even profile');
 ok(findPattern(pct({ intention: 100, practice: 75 })) === null, 'no pattern when the low pillar is still strong');
 ok(ctx.QUIZ.PATTERNS.every(x => P.includes(x.hi) && P.includes(x.lo) && x.p.length), 'patterns name real pillars');
 ok(ctx.QUIZ.OUTCOMES.length === 3, '3 outcome questions');
+ok(P.every(p => (ctx.QUIZ.PLAYBOOK[p] || []).length === 3 && ctx.QUIZ.PLAYBOOK[p].every(st => st[0] && st[1])), 'every pillar has a 3-step First 7 Days plan');
 const t = o => ctx.QUIZ.TIERS.filter(x => o <= x.max)[0].name;
 ok(t(35) === 'The Survivor' && t(36) === 'The Builder' && t(56) === 'The Builder' && t(57) === 'The Achiever' && t(78) === 'The Achiever' && t(79) === 'The High Performer', 'tier boundaries');
 ok(JSON.stringify(summarize([9, 9, 9, 9, 9, 9, 9]).blocks) === '[0,1,2]', 'ties break by pillar order');

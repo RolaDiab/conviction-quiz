@@ -195,6 +195,46 @@ window.QUIZ = {
     "Your first move is to raise the floor, not chase a single weakness."
   ] },
 
+  // "Your First 7 Days" plan, shown for the #1 block. Each step is small enough to do this week.
+  PLAYBOOK_INTRO: "Small, specific, and built to fit a full calendar. Start with your #1 block. One week is enough to feel the shift.",
+  PLAYBOOK: {
+    intention: [
+      ["Day 1", "Write one sentence: \"Success for me this year means ___.\" Then name the value underneath it, the reason it matters to you and not to anyone else."],
+      ["Days 2 to 6", "Before each important decision, ask one question: does this move me toward that sentence? When the answer is no, decide what you'll say no to."],
+      ["Day 7", "Look back at the week. Where did you feel torn? That's usually a value you haven't named yet. Name it, and add it to your sentence."]
+    ],
+    identity: [
+      ["Day 1", "Write who you're becoming in the present tense: \"I am a leader who ___.\" Keep it to one line you'd be willing to say out loud."],
+      ["Days 2 to 6", "Each morning, pick one action that person would take today, and take it before noon. Small counts. Every action is evidence for the new identity."],
+      ["Day 7", "List every win from the week, including the ones you shrugged off. Read the list out loud. Notice which ones felt like they didn't belong to you."]
+    ],
+    meaning: [
+      ["Day 1", "Finish this sentence three times: \"My work matters because ___.\" Keep going until the answer has nothing to do with money, praise, or a title."],
+      ["Days 2 to 6", "At the end of each day, write one line about a moment your work moved something forward or helped someone. This is how you refill the engine."],
+      ["Day 7", "Read your five lines. Pick the one that moved you most, and tell the person it was about."]
+    ],
+    practice: [
+      ["Day 1", "Pick the one habit that would change the most if it ran on autopilot. Attach it to something you already do every day: \"After I ___, I will ___.\""],
+      ["Days 2 to 6", "Run it at a size you can't fail at. Two minutes counts. This week the goal is consistency, not intensity."],
+      ["Day 7", "Check the streak, not the results. Name the one thing that made it easier, and keep it."]
+    ],
+    alignment: [
+      ["Day 1", "Before your next high-pressure conversation, take three slow breaths with an exhale twice as long as the inhale. Notice where your body was bracing."],
+      ["Days 2 to 6", "Do the same before every meeting that matters. Afterwards, write one line: what your body did, and what you did next."],
+      ["Day 7", "Pick the conversation you replayed most this week. Ask what your body was protecting you from. That answer is where the belief lives."]
+    ],
+    communication: [
+      ["Day 1", "Before your next important conversation, write the one sentence you most need them to hear. Say it out loud, standing, until it sounds like you mean it."],
+      ["Days 2 to 6", "In one conversation a day, lead with that kind of sentence, then stop talking. Let the pause carry it."],
+      ["Day 7", "Ask one person you trust: \"When I said ___, how did it land?\" Compare their answer with what you meant."]
+    ],
+    trust: [
+      ["Day 1", "Write down one decision you've been delaying. Give it a deadline in the next 72 hours, and decide now what information would actually change your mind."],
+      ["Days 2 to 6", "Make every small decision in under two minutes, without asking anyone. You're building evidence that your judgment holds."],
+      ["Day 7", "Review the week's decisions. Count how many you'd change. It's usually far fewer than the fear predicted."]
+    ]
+  },
+
   UNIFORM_NOTE: "Your answers were very uniform, so your pillar scores are less precise than they could be. For a sharper read, retake it and go with your first honest reaction to each statement.",
 
   PILLAR_COPY: {

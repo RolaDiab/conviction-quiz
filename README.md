@@ -14,4 +14,6 @@ Self-hosted replacement for the ScoreApp assessment. Static site on GitHub Pages
 - Answer sets that are too uniform (straight-lining, or agreeing with both the positive and the negative statement on 4+ pillars) get a note asking for a retake.
 - Signature patterns (`PATTERNS` in `content.js`) read two pillars together. A strength must score above every block.
 - 3 unscored outcome questions follow the 21. Every completed assessment is stored in `quiz_responses` (raw answers, outcomes, answer order) so reliability, norms and tier cut-offs can be set from real data.
+- Contact details are asked for after the questions, to unlock the results (start rate was 13% with the form first).
+- Results include a 7-pillar radar chart, a First 7 Days plan for the #1 block (`PLAYBOOK`), and a print-ready PDF report.
 - Run `node tests/scoring.test.js` before shipping.

@@ -226,6 +226,7 @@
           '<li>The cylinder that\'s misfiring and quietly draining your results, named</li>' +
           '<li>Your score on each one, the 7 pillars of performance</li>' +
           '<li>Where to focus first, so more effort means more results again</li>' +
+          '<li>Your Signature Pattern, and a First 7 Days plan to start clearing your #1 block</li>' +
           '<li>Your next step to enjoy the wins, not just reach them</li>' +
         '</ul>' +
       '</div></section>' +
@@ -324,19 +325,54 @@
     var g = state.gate || {};
     app.innerHTML =
       '<section class="flow"><div class="wrap flow-wrap gate">' +
-        '<p class="eyebrow dark">Before you begin</p>' +
-        '<h2 class="q">Where should we send your results?</h2>' +
-        '<p class="sub">21 questions. About 4 minutes. Your results appear the moment you finish.</p>' +
+        '<p class="eyebrow dark">Your results are ready</p>' +
+        '<h2 class="q">Where should we send your Performance Profile?</h2>' +
+        '<ul class="checks unlock">' +
+          '<li>Your Performance Score and tier</li>' +
+          '<li>Your #1 Performance Block™, named</li>' +
+          '<li>Your Signature Pattern across the 7 pillars</li>' +
+          '<li>Your First 7 Days plan to start clearing it</li>' +
+        '</ul>' +
+        '<p class="sub">Your results open the moment you submit, and a copy goes to your inbox.</p>' +
         '<form id="gate" novalidate>' +
           '<label>First name<input name="first_name" autocomplete="given-name" maxlength="60" required value="' + esc(g.first_name || "") + '"></label>' +
           '<label>Last name<input name="last_name" autocomplete="family-name" maxlength="60" required value="' + esc(g.last_name || "") + '"></label>' +
           '<label>Email<input name="email" type="email" autocomplete="email" maxlength="255" required value="' + esc(g.email || "") + '"></label>' +
           '<label class="consent"><input name="consent" type="checkbox"' + (g.consent ? " checked" : "") + '> Send me my results and occasional insights from Rola. Unsubscribe anytime. <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy policy</a>.</label>' +
           (error ? '<p class="err">' + esc(error) + '</p>' : "") +
-          '<button class="btn btn-gold wide" type="submit">Start the Assessment</button>' +
+          '<button class="btn btn-gold wide" type="submit">See My Results</button>' +
         '</form>' +
-        '<button class="btn btn-link back" data-act="home">← Back</button>' +
+        '<button class="btn btn-link back" data-act="gate-back">← Back</button>' +
       '</div></section>';
+  }
+
+  // Seven-sided radar of the pillar scores. Pure SVG, so it prints and needs no library.
+  function radarSvg(pct) {
+    var cx = 230, cy = 168, R = 100, n = Q.PILLARS.length;
+    var pt = function (i, r) {
+      var a = -Math.PI / 2 + i * 2 * Math.PI / n;
+      return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+    };
+    var poly = function (rs) { return rs.map(function (r, i) { return pt(i, r).map(function (v) { return v.toFixed(1); }).join(","); }).join(" "); };
+    var grid = [25, 50, 75, 100].map(function (g) {
+      return '<polygon class="radar-grid" points="' + poly(Q.PILLARS.map(function () { return R * g / 100; })) + '"/>';
+    }).join("");
+    var axes = Q.PILLARS.map(function (p, i) {
+      var e = pt(i, R);
+      return '<line class="radar-axis" x1="' + cx + '" y1="' + cy + '" x2="' + e[0].toFixed(1) + '" y2="' + e[1].toFixed(1) + '"/>';
+    }).join("");
+    var vals = pct.map(function (v) { return R * Math.max(v, 3) / 100; });
+    var dots = vals.map(function (r, i) { var d = pt(i, r); return '<circle class="radar-dot" cx="' + d[0].toFixed(1) + '" cy="' + d[1].toFixed(1) + '" r="4"/>'; }).join("");
+    var labels = Q.PILLARS.map(function (p, i) {
+      // Two lines (name, then score) so the longest name fits at phone width.
+      var l = pt(i, R + 16), anchor = Math.abs(l[0] - cx) < 8 ? "middle" : l[0] < cx ? "end" : "start";
+      var y = l[1] < cy - R + 10 ? l[1] - 18 : l[1] > cy + 40 ? l[1] + 8 : l[1] - 4;
+      return '<text class="radar-label" x="' + l[0].toFixed(1) + '" y="' + y.toFixed(1) + '" text-anchor="' + anchor + '">' + esc(cap(p)) +
+        '<tspan class="radar-pct" x="' + l[0].toFixed(1) + '" dy="15">' + pct[i] + '%</tspan></text>';
+    }).join("");
+    var summary = Q.PILLARS.map(function (p, i) { return cap(p) + " " + pct[i] + "%"; }).join(", ");
+    return '<svg class="radar" viewBox="0 0 460 330" role="img" aria-label="Your 7 pillar scores: ' + esc(summary) + '">' +
+      grid + axes + '<polygon class="radar-shape" points="' + poly(vals) + '"/>' + dots + labels + '</svg>';
   }
 
   var justFinished = false;
@@ -374,6 +410,13 @@
         '<h4>' + cap(p) + ' <span class="pct">' + s.pct[idx] + '%</span></h4>' +
         '<p>' + esc(s.pct[idx] >= 60 ? c.hi : c.line + " This is your strongest area right now. Build from here.") + '</p></div></div>';
     }).join("");
+
+    var b1 = Q.PILLARS[s.blocks[0]];
+    var plan = '<section class="band alt plan-band"><div class="wrap narrow"><p class="eyebrow dark">Your First 7 Days</p>' +
+      '<h2>' + (strong ? "Deepen " : "Clear ") + esc(cap(b1)) + '</h2><p class="sub">' + esc(Q.PLAYBOOK_INTRO) + '</p>' +
+      '<ol class="plan">' + Q.PLAYBOOK[b1].map(function (st) {
+        return '<li><span class="plan-day">' + esc(st[0]) + '</span><p>' + esc(st[1]) + '</p></li>';
+      }).join("") + '</ol></div></section>';
 
     var pattern = !s.pattern ? "" :
       '<section class="band alt"><div class="wrap narrow prose"><p class="eyebrow dark">Your Signature Pattern</p><h2>' + esc(s.pattern.name) + '</h2>' +
@@ -430,16 +473,18 @@
         (uniform ? '<p class="mail-note">' + esc(Q.UNIFORM_NOTE) + '</p>' : '') + tierBlocks + '</div></section>' +
       pattern +
       '<section class="band"><div class="wrap narrow"><h2>' + blocksTitle + '</h2><p class="sub">' + blocksSub + '</p>' + blocks +
-        cta(strong ? "Ready to go even further?" : "Ready to clear your " + cap(Q.PILLARS[s.blocks[0]]) + " block?") + '</div></section>' + offer +
+        '</div></section>' + plan +
+      '<section class="band"><div class="wrap narrow">' + cta(strong ? "Ready to go even further?" : "Ready to clear your " + cap(b1) + " block faster?") + '</div></section>' + offer +
       (s.strengths.length ? '<section class="band alt"><div class="wrap narrow"><h2>' + (s.strengths.length === 2 ? "Your Top 2 Strengths" : "Your Top Strength") + '</h2><p class="sub">Your highest ' + (s.strengths.length === 2 ? "pillars. These are" : "pillar. This is") + ' what got you here, and what you\'ll build the rest on.</p>' + strengths + '</div></section>' : '') +
-      '<section class="band"><div class="wrap narrow"><h2>Your 7 Pillars</h2><p class="sub">' + esc(Q.PILLARS_INTRO) + '</p>' + pillars + '</div></section>' +
+      '<section class="band"><div class="wrap narrow"><h2>Your 7 Pillars</h2><p class="sub">' + esc(Q.PILLARS_INTRO) + '</p>' + radarSvg(s.pct) + pillars + '</div></section>' +
       '<section class="band alt"><div class="wrap narrow prose"><h2>What High Conviction Actually Looks Like</h2>' + paras(Q.HIGH_CONVICTION) +
         '<details class="science"><summary>The science behind inevitable success</summary>' + paras(Q.SCIENCE) + '</details></div></section>' +
       '<section class="final"><div class="wrap narrow center">' +
         '<h2>Your results won\'t change themselves.</h2>' +
         '<p>Apply for a private strategy call and leave with a clear first move.</p>' +
         '<a class="btn btn-gold" href="' + applyUrl + '">Apply for a Strategy Call</a>' + clearLink +
-        '<div class="share"><button class="btn btn-ghost" data-act="copy" data-url="' + esc(resultUrl(code)) + '">Copy link to my results</button></div>' +
+        '<div class="share"><button class="btn btn-ghost" data-act="print">Save my report as PDF</button>' +
+          '<button class="btn btn-ghost" data-act="copy" data-url="' + esc(resultUrl(code)) + '">Copy link to my results</button></div>' +
         '<p class="contact">Follow Rola: <a href="https://www.instagram.com/rolaspeaks/" target="_blank" rel="noopener">Instagram @rolaspeaks</a> · <a href="https://www.youtube.com/@Rolaspeaks" target="_blank" rel="noopener">YouTube @Rolaspeaks</a></p>' +
       '</div></section>' + footer();
   }
@@ -537,9 +582,11 @@
       var r = decodeResult(m[1]);
       if (r) { renderResult(r.name, r.points, r.rev, r.uniform); scrollTop(); return; }
     }
+    // Questions first, contact details last: the form unlocks the results instead of blocking the start.
     if (state.step < 0) renderLanding();
-    else if (!state.gate || !state.gate.done || !state.gate.last_name) renderGate();
     else if (state.step < TOTAL_STEPS) renderQuestion();
+    else if (firstMissing() >= 0) go(firstMissing());
+    else if (!state.gate || !state.gate.done || !state.gate.last_name) renderGate();
     else finish();
     scrollTop();
   }
@@ -556,13 +603,19 @@
     if (!el) return;
     var act = el.getAttribute("data-act");
 
-    if (act === "start") { if (location.hash) history.replaceState(null, "", location.pathname + location.search); go(Math.max(0, state.step)); }
+    if (act === "start") {
+      if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+      state.src = sourceLabel();
+      track("quiz_start");
+      go(Math.max(0, Math.min(state.step, TOTAL_STEPS)));
+    }
     else if (act === "restart") { state = { step: 0, answers: [], outcomes: [], profile: state.profile || {}, gate: state.gate, flip: state.flip, listed: state.listed, src: state.src, ref: state.ref }; save(); route(); }
     else if (act === "home") { go(-1); }
+    else if (act === "gate-back") { go(TOTAL_STEPS - 1); }
+    else if (act === "print") { track("report_print"); window.print(); }
     else if (act === "clear") { track("clear_click"); }
     else if (act === "back") {
-      if (state.step === 0) { state.gate.done = false; go(0); }
-      else go(state.step - 1);
+      go(state.step - 1);
     }
     else if (act === "answer" || act === "outcome" || act === "profile") {
       if (advancing) return;
@@ -628,11 +681,11 @@
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(g.email)) return renderGate("Please enter a valid email.");
     if (!g.consent) return renderGate("Please tick the box so we can send your results.");
     g.done = true;
-    if (state.listed !== g.email) { addToList(g); state.listed = g.email; save(); }
+    state.gate = g;
+    if (state.listed !== g.email) { addToList(g); state.listed = g.email; }
+    save();
     state.src = sourceLabel(); save();
-    track("quiz_start");
-    var missing = firstMissing();
-    go(missing >= 0 ? missing : TOTAL_STEPS);
+    finish();
   });
 
   // After the last answer: score, send the emails, show results.
@@ -666,6 +719,10 @@
     });
   }
 
+  // The printed report includes the collapsed research section.
+  window.addEventListener("beforeprint", function () {
+    Array.prototype.forEach.call(document.querySelectorAll("details"), function (d) { d.open = true; });
+  });
   window.addEventListener("hashchange", route);
   route();
 })();
