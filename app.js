@@ -195,7 +195,8 @@
       return ok ? { name: String(data.n || "").slice(0, 60), points: data.p, rev: rev, uniform: data.u === 1 } : null;
     } catch (e) { return null; }
   }
-  function resultUrl(code) { return location.origin + location.pathname + "#r=" + code; }
+  // Always the site root, so links match what the results email accepts (https://quiz.convictioncode.com/#r=...).
+  function resultUrl(code) { return location.origin + "/#r=" + code; }
 
   function scrollTop() { window.scrollTo(0, 0); }
 
