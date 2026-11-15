@@ -17,3 +17,9 @@ Self-hosted replacement for the ScoreApp assessment. Static site on GitHub Pages
 - Contact details are asked for after the questions, to unlock the results (start rate was 13% with the form first).
 - Results include a 7-pillar radar chart, a First 7 Days plan for the #1 block (`PLAYBOOK`), and a print-ready PDF report.
 - Run `node tests/scoring.test.js` before shipping.
+
+## Backend: Lovable Cloud today, GoHighLevel next
+
+`EMAILS_SENT_BY` in `content.js` decides who sends the results email and lead alert. The GHL webhook already
+carries every score, the pattern, ready-made email sentences and the raw answers. Setup and switch-over steps:
+`docs/GHL-SETUP.md`. GHL results email template: `email/quiz-results-ghl.html`.

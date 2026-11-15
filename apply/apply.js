@@ -11,6 +11,7 @@
     try {
       var src = "direct";
       try { var st = JSON.parse((localStorage.getItem("cc_quiz_v2") || localStorage.getItem("cc_quiz_v1"))) || {}; src = st.src || "direct"; } catch (e) {}
+      if (!Q.EVENTS_URL) return;
       fetch(Q.EVENTS_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json", "apikey": Q.EMAIL_PUBLIC_KEY, "Authorization": "Bearer " + Q.EMAIL_PUBLIC_KEY, "Prefer": "return=minimal" },
@@ -91,6 +92,27 @@
       "90-day goal:\n" + v.goal + "\n\n" +
       "Quiz role: " + (prefill.role || "Not answered") + "\n" +
       "Quiz results: " + resultLink;
+    var jobs = [];
+    if (Q.GHL_APPLY_WEBHOOK_URL) {
+      jobs.push(fetch(Q.GHL_APPLY_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          first_name: v.first_name, last_name: v.last_name, email: v.email, phone: v.phone, company: v.company,
+          qualified: qualified ? "yes" : "no", role: v.revenue, start: v.start, income: v.income, invest: v.invest,
+          energy: v.energy, challenges: v.challenges.filter(Boolean).join(" | "), goal: v.goal,
+          result_url: resultCode ? "https://quiz.convictioncode.com/#r=" + resultCode : "",
+          tags: "application-submitted," + (qualified ? "application-qualified" : "application-not-yet"), summary: message
+        }),
+        keepalive: true
+      }).catch(function () {}));
+    }
+    // The Lovable email stays on until GHL handles applications, so none are ever dropped.
+    if ((Q.EMAILS_SENT_BY !== "ghl" || !Q.GHL_APPLY_WEBHOOK_URL) && Q.EMAIL_FUNCTION_URL) jobs.push(sendLovableEmail(v, message));
+    return Promise.all(jobs);
+  }
+
+  function sendLovableEmail(v, message) {
     return fetch(Q.EMAIL_FUNCTION_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": "Bearer " + Q.EMAIL_PUBLIC_KEY, "apikey": Q.EMAIL_PUBLIC_KEY },

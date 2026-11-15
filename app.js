@@ -156,7 +156,7 @@
   try { sessionId = sessionStorage.getItem("cc_sid"); if (!sessionId) { sessionId = Math.random().toString(36).slice(2, 12); sessionStorage.setItem("cc_sid", sessionId); } } catch (e) { sessionId = Math.random().toString(36).slice(2, 12); }
   var tracked = {};
   function track(event) {
-    if (tracked[event]) return;
+    if (tracked[event] || !Q.EVENTS_URL) return;
     tracked[event] = true;
     try {
       fetch(Q.EVENTS_URL, {
@@ -509,7 +509,7 @@
   // Stores the full response (every answer, the outcome questions, answer order) so the assessment can be
   // checked and normed. The database re-scores the answers itself; the client's scores aren't trusted.
   function saveResponse(g, points, rev, uniform) {
-    if (!Q.RESPONSES_URL) return Promise.resolve();
+    if (!Q.RESPONSES_URL) return Promise.resolve(); // retired: GHL holds the raw answers
     var s = summarize(points, rev);
     // Stored as agreement: 5 = Strongly Agree ... 1 = Strongly Disagree, before any reverse scoring.
     var agree = function (k) { return 5 - k; };
@@ -547,8 +547,10 @@
         keepalive: true
       }).catch(function () {});
     };
-    jobs.push(sendEmail("quiz-results", g.email, emailData));
-    jobs.push(sendEmail("quiz-lead-notification", null, Object.assign({}, emailData, {
+    // With EMAILS_SENT_BY "ghl" the browser sends no email at all; the GHL workflow does it from the webhook.
+    var browserEmails = Q.EMAILS_SENT_BY !== "ghl" && Q.EMAIL_FUNCTION_URL;
+    if (browserEmails) jobs.push(sendEmail("quiz-results", g.email, emailData));
+    if (browserEmails) jobs.push(sendEmail("quiz-lead-notification", null, Object.assign({}, emailData, {
       firstName: g.first_name + " " + g.last_name, email: g.email, role: (state.profile.role || "") + (state.profile.urgency ? " | Wants to change: " + state.profile.urgency : ""),
       utmSource: sourceLabel(), utmMedium: utm.utm_medium, utmCampaign: utm.utm_campaign
     })));
@@ -560,7 +562,22 @@
         top_block_1: cap(Q.PILLARS[s.blocks[0]]), top_block_2: cap(Q.PILLARS[s.blocks[1]]), top_block_3: cap(Q.PILLARS[s.blocks[2]]),
         role: state.profile.role || "", urgency: state.profile.urgency || "", referrer: state.ref || "",
         utm_source: utm.utm_source, utm_medium: utm.utm_medium, utm_campaign: utm.utm_campaign,
-        pattern: s.pattern ? s.pattern.name : "", top_block_tied: s.tied[0] ? "yes" : "no", answers_uniform: uniform ? "yes" : "no",
+        pattern: s.pattern ? s.pattern.name : "",
+        // Ready-made sentences for the GHL results email, so it needs no if/else logic.
+        pattern_line: s.pattern
+          ? "Your Signature Pattern is " + s.pattern.name + ". " + s.pattern.p[s.pattern.p.length - 1]
+          : "Your results page shows how your 7 pillars work together, and where to start.",
+        strength_line: s.strengths.length
+          ? "Your strongest pillar is " + cap(Q.PILLARS[s.strengths[0]]) + " at " + s.pct[s.strengths[0]] + "%. That's what you build the rest on."
+          : "Your pillars are close together, so strengthening one tends to lift the others.",
+        day1_action: Q.PLAYBOOK[Q.PILLARS[s.blocks[0]]][0][1],
+        apply_url: location.origin + "/apply/?r=" + code,
+        // Raw data, so nothing is lost if the Lovable Cloud database is retired.
+        quiz_version: Q.QUIZ_VERSION, scale_order: state.flip ? "disagree_first" : "agree_first",
+        quiz_answers: state.answers.slice(0, QUESTIONS.length).map(function (k) { return 5 - k; }).join(","),
+        quiz_outcomes: state.outcomes.slice(0, Q.OUTCOMES.length).map(function (k) { return 5 - k; }).join(","),
+        emails_sent_by: Q.EMAILS_SENT_BY === "ghl" ? "ghl" : "lovable",
+        top_block_tied: s.tied[0] ? "yes" : "no", answers_uniform: uniform ? "yes" : "no",
         outcome_capability: 5 - state.outcomes[0], outcome_enjoy: 5 - state.outcomes[1], outcome_satisfaction: 5 - state.outcomes[2],
         result_url: resultUrl(code), tags: "quiz-completed" + (state.profile.urgency ? ",urgency-" + slug(state.profile.urgency) : "") + ",source-" + slug(utm.utm_source || (state.ref ? refName() : "direct"))
       };

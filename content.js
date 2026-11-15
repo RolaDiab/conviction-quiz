@@ -6,6 +6,16 @@ window.QUIZ = {
   // Adhara "quiz-gate" form. Its auto-reply ("Send confirmation email") must stay OFF in Adhara,
   // because the quiz sends its own results email. Turned off 2026-10-27.
   ADHARA_FORM_URL: "https://api.adharaweb.com/api/v1/public/forms/rola/quiz-gate",
+  // Who sends the results email and the lead alert:
+  //   "lovable" = the browser asks the Lovable Cloud email function (today's setup)
+  //   "ghl"     = the GHL workflow sends both from the webhook data (see docs/GHL-SETUP.md).
+  // Switch to "ghl" only after the GHL workflow is tested. Set EVENTS_URL / RESPONSES_URL to "" to stop
+  // using Lovable Cloud for the funnel counter and stored responses; GHL keeps the raw answers too.
+  EMAILS_SENT_BY: "lovable",
+  // GHL inbound webhook for strategy-call applications (a second workflow; see docs/GHL-SETUP.md).
+  // Until this is set, applications keep going to Rola through the Lovable email, even in "ghl" mode,
+  // so none are ever dropped.
+  GHL_APPLY_WEBHOOK_URL: "",
   // Results email + new-lead alert, sent through the convictioncode.com email system
   // (Lovable Cloud, sender notify.alorsolutions.com). The key below is the public browser key.
   EMAIL_FUNCTION_URL: "https://zyonpiskcpoiwhkgxdjp.supabase.co/functions/v1/send-transactional-email",
