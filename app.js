@@ -1,7 +1,8 @@
 (function () {
   "use strict";
   var Q = window.QUIZ;
-  var STORE_KEY = "cc_quiz_v1";
+  // v2: new item set (2026-11). In-progress v1 answers don't map to v2 questions, so only contact details carry over.
+  var STORE_KEY = "cc_quiz_v2", OLD_STORE_KEY = "cc_quiz_v1";
   var app = document.getElementById("app");
 
   // ---------- Questions ----------
@@ -15,7 +16,15 @@
       QUESTIONS.push({ pillar: pillar, text: reverse ? raw.slice(2) : raw, reverse: reverse });
     });
   }
-  var TOTAL_STEPS = QUESTIONS.length + Q.PROFILE.length;
+  var OUT_START = QUESTIONS.length;                  // first unscored outcome question
+  var PROFILE_START = OUT_START + Q.OUTCOMES.length; // first optional profile question
+  var TOTAL_STEPS = PROFILE_START + Q.PROFILE.length;
+  // Question index of each pillar's reverse item, used to break ties (agreeing with a negative statement is
+  // the signal least inflated by people who agree with everything).
+  var REV_INDEX = Q.PILLARS.map(function (p) {
+    for (var i = 0; i < QUESTIONS.length; i++) if (QUESTIONS[i].pillar === p && QUESTIONS[i].reverse) return i;
+    return -1;
+  });
 
   // ---------- Scoring ----------
   // optionIndex 0 = Strongly Agree. Normal items score 5..1, reverse items 1..5.
@@ -30,21 +39,72 @@
     QUESTIONS.forEach(function (q, i) { pts[q.pillar] += itemPoints(q, answers[i]); });
     return Q.PILLARS.map(function (p) { return pts[p]; });
   }
+  // Points (1-5) on each pillar's reverse item.
+  function reversePoints(answers) {
+    return REV_INDEX.map(function (i) { return itemPoints(QUESTIONS[i], answers[i]); });
+  }
+
+  // Flags answer sets too uniform to read precisely: the same answer 21 times, or agreeing with both
+  // the positive and the negative statement on 4+ pillars.
+  function isUniform(answers) {
+    if (answers.every(function (a) { return a === answers[0]; })) return true;
+    var contradictions = 0;
+    Q.PILLARS.forEach(function (p) {
+      var agreeRev = false, agreeNormal = 0;
+      QUESTIONS.forEach(function (q, i) {
+        if (q.pillar !== p) return;
+        if (answers[i] <= 1) { if (q.reverse) agreeRev = true; else agreeNormal++; }
+      });
+      if (agreeRev && agreeNormal === 2) contradictions++;
+    });
+    return contradictions >= 4;
+  }
 
   // Percentages run 0 to 100: every answer at the low end = 0%, every answer at the high end = 100%.
   var P_MIN = PER_PILLAR, P_MAX = PER_PILLAR * 5;
   function toPct(points, min, max) { return Math.round((points - min) / (max - min) * 100); }
 
-  function summarize(points) {
+  // The pattern two pillars make together (see PATTERNS in content.js).
+  function findPattern(pct) {
+    var best = null, bestGap = 0;
+    Q.PATTERNS.forEach(function (pt) {
+      var hi = pct[Q.PILLARS.indexOf(pt.hi)], lo = pct[Q.PILLARS.indexOf(pt.lo)];
+      var gap = hi - lo;
+      if (gap >= 25 && lo <= 67 && gap > bestGap) { best = pt; bestGap = gap; }
+    });
+    // Braced: alignment and trust both at or under 50 and at least 20 below the other five on average.
+    // It outranks any single pair, because it names both low pillars at once.
+    var a = pct[Q.PILLARS.indexOf("alignment")], t = pct[Q.PILLARS.indexOf("trust")];
+    var others = pct.filter(function (x, i) { return Q.PILLARS[i] !== "alignment" && Q.PILLARS[i] !== "trust"; });
+    var braceGap = others.reduce(function (x, y) { return x + y; }, 0) / others.length - (a + t) / 2;
+    if (a <= 50 && t <= 50 && braceGap >= 20) best = Q.PATTERN_BRACED;
+    if (!best && Math.max.apply(null, pct) - Math.min.apply(null, pct) < 17) best = Q.PATTERN_EVEN;
+    return best;
+  }
+
+  // rev (optional): reverse-item points per pillar. Older result links don't carry it.
+  function summarize(points, rev) {
     var total = points.reduce(function (a, b) { return a + b; }, 0);
     var overall = toPct(total, P_MIN * 7, P_MAX * 7);
     var pct = points.map(function (p) { return toPct(p, P_MIN, P_MAX); });
     var tier = Q.TIERS.filter(function (t) { return overall <= t.max; })[0].name;
-    var order = Q.PILLARS.map(function (p, i) { return i; })
-      .sort(function (a, b) { return points[a] - points[b] || a - b; });
-    return { overall: overall, pct: pct, tier: tier, blocks: order.slice(0, 3) };
+    var r = rev || [0, 0, 0, 0, 0, 0, 0];
+    var idx = Q.PILLARS.map(function (p, i) { return i; });
+    var order = idx.slice().sort(function (a, b) { return points[a] - points[b] || r[a] - r[b] || a - b; });
+    var top = idx.slice().sort(function (a, b) { return points[b] - points[a] || r[b] - r[a] || a - b; });
+    var same = function (a, b) { return points[a] === points[b] && r[a] === r[b]; };
+    // tied[n]: block n can't honestly be ranked above or below a neighbour.
+    var blocks = order.slice(0, 3);
+    var tied = blocks.map(function (b, n) {
+      return (n > 0 && same(b, order[n - 1])) || same(b, order[n + 1]);
+    });
+    // A strength must score above every block, so a tied pillar is never called both.
+    var ceiling = Math.max.apply(null, blocks.map(function (b) { return points[b]; }));
+    var strengths = top.filter(function (i) { return points[i] > ceiling; }).slice(0, 2);
+    return { overall: overall, pct: pct, tier: tier, blocks: blocks, tied: tied, strengths: strengths, pattern: findPattern(pct) };
   }
-  window.__quizInternals = { QUESTIONS: QUESTIONS, itemPoints: itemPoints, pillarPoints: pillarPoints, summarize: summarize };
+  window.__quizInternals = { QUESTIONS: QUESTIONS, itemPoints: itemPoints, pillarPoints: pillarPoints, reversePoints: reversePoints,
+    isUniform: isUniform, findPattern: findPattern, summarize: summarize, REV_INDEX: REV_INDEX };
 
   // ---------- State ----------
   function load() {
@@ -53,7 +113,19 @@
   function save() {
     try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
   }
-  var state = load() || { step: -1, answers: [], profile: {} };
+  // Carry contact details over from the v1 store so returning visitors skip the form; drop v1 answers.
+  function loadOld() {
+    try {
+      var o = JSON.parse(localStorage.getItem(OLD_STORE_KEY));
+      if (!o) return null;
+      return { step: -1, answers: [], outcomes: [], profile: { role: o.profile && o.profile.role }, gate: o.gate, listed: o.listed, src: o.src, ref: o.ref };
+    } catch (e) { return null; }
+  }
+  var state = load() || loadOld() || { step: -1, answers: [], outcomes: [], profile: {} };
+  state.outcomes = state.outcomes || [];
+  // Half of visitors see "Strongly Disagree" first, half "Strongly Agree" first, so answer order can't
+  // tilt the scores in one direction. Fixed per visitor so the screens stay consistent.
+  if (typeof state.flip !== "boolean") { state.flip = Math.random() < 0.5; save(); }
 
   var params = new URLSearchParams(location.search);
   var utm = {
@@ -105,8 +177,11 @@
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
   function paras(list) { return list.map(function (p) { return "<p>" + esc(p) + "</p>"; }).join(""); }
 
-  function encodeResult(name, points) {
-    var json = JSON.stringify({ n: name, p: points });
+  function encodeResult(name, points, rev, uniform) {
+    var data = { n: name, p: points };
+    if (rev) data.r = rev;
+    if (uniform) data.u = 1;
+    var json = JSON.stringify(data);
     return btoa(unescape(encodeURIComponent(json))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
   }
   function decodeResult(code) {
@@ -115,7 +190,9 @@
       var data = JSON.parse(decodeURIComponent(escape(atob(b64))));
       var ok = Array.isArray(data.p) && data.p.length === 7 &&
         data.p.every(function (x) { return Number.isInteger(x) && x >= P_MIN && x <= P_MAX; });
-      return ok ? { name: String(data.n || "").slice(0, 60), points: data.p } : null;
+      var rev = Array.isArray(data.r) && data.r.length === 7 &&
+        data.r.every(function (x) { return Number.isInteger(x) && x >= 1 && x <= 5; }) ? data.r : null;
+      return ok ? { name: String(data.n || "").slice(0, 60), points: data.p, rev: rev, uniform: data.u === 1 } : null;
     } catch (e) { return null; }
   }
   function resultUrl(code) { return location.origin + location.pathname + "#r=" + code; }
@@ -187,6 +264,7 @@
     // Count only the 21 scored questions; the optional profile screens show as "Almost done" / "Last one".
     var Qn = QUESTIONS.length;
     var label = state.step < Qn ? "Question " + (state.step + 1) + " of " + Qn : state.step === TOTAL_STEPS - 1 ? "Last one" : "Almost done";
+    // Outcome and profile screens fill the last stretch of the bar.
     var pct = state.step < Qn ? Math.round(state.step / Qn * 100) : Math.round(state.step / TOTAL_STEPS * 100);
     return '<div class="progress"><div class="progress-meta"><span>' + label + '</span><span>' + pct + '%</span></div>' +
       '<div class="bar"><div class="fill" style="width:' + pct + '%"></div></div></div>';
@@ -197,16 +275,26 @@
     var i = state.step;
     var html = '<section class="flow"><div class="wrap flow-wrap">' + progressBar();
 
-    if (i < QUESTIONS.length) {
+    // Option buttons in this visitor's order. data-k is always the canonical index (0 = Strongly Agree).
+    var scale = function (act, chosen) {
+      var ks = Q.OPTIONS.map(function (o, k) { return k; });
+      if (state.flip) ks.reverse();
+      return '<div class="opts">' + ks.map(function (k) {
+        var sel = chosen === k ? " selected" : "";
+        return '<button class="opt' + sel + '" data-act="' + act + '" data-k="' + k + '">' + esc(Q.OPTIONS[k]) + '</button>';
+      }).join("") + '</div>';
+    };
+
+    if (i < OUT_START) {
       var q = QUESTIONS[i];
       html += '<p class="instruction">Rate how true this has been for you in the last 30 days, not where you aspire to be.</p>' +
-        '<h2 class="q">' + esc(q.text) + '</h2><div class="opts">' +
-        Q.OPTIONS.map(function (o, k) {
-          var sel = state.answers[i] === k ? " selected" : "";
-          return '<button class="opt' + sel + '" data-act="answer" data-k="' + k + '">' + esc(o) + '</button>';
-        }).join("") + '</div>';
+        '<h2 class="q">' + esc(q.text) + '</h2>' + scale("answer", state.answers[i]);
+    } else if (i < PROFILE_START) {
+      var oq = Q.OUTCOMES[i - OUT_START];
+      html += '<p class="instruction">' + esc(Q.OUTCOMES_INTRO) + '</p>' +
+        '<h2 class="q">' + esc(oq.text) + '</h2>' + scale("outcome", state.outcomes[i - OUT_START]);
     } else {
-      var pq = Q.PROFILE[i - QUESTIONS.length];
+      var pq = Q.PROFILE[i - PROFILE_START];
       var val = state.profile[pq.key] || "";
       html += '<p class="instruction">Optional.</p><h2 class="q">' + esc(pq.text) + '</h2>';
       if (pq.options) {
@@ -251,11 +339,11 @@
   }
 
   var justFinished = false;
-  function renderResult(name, points) {
+  function renderResult(name, points, rev, uniform) {
     var fresh = justFinished;
     document.body.className = "is-result";
-    var s = summarize(points);
-    var code = encodeResult(name, points);
+    var s = summarize(points, rev);
+    var code = encodeResult(name, points, rev, uniform);
     var tierBlocks = Q.TIER_COPY[s.tier].map(function (b) {
       return (b.h ? "<h3>" + esc(b.h) + "</h3>" : "") + paras(b.p);
     }).join("");
@@ -266,17 +354,37 @@
     var blocksSub = strong
       ? "Your three lowest pillars. Even here you're strong. This is where mastery deepens next."
       : "Your three lowest pillars. This is where your engine is misfiring. Start with number one.";
+    if (s.tied[0]) blocksSub += " Your top block is tied, so treat the tied pillars as one place to start.";
 
     var blocks = s.blocks.map(function (idx, n) {
       var p = Q.PILLARS[idx], c = Q.PILLAR_COPY[p];
+      // The #1 block gets the full picture: what the pillar is and the research behind it.
+      var deep = n === 0 ? '<p class="deep">' + esc(c.d) + '</p><p class="why"><strong>The research:</strong> ' + esc(c.why) + '</p>' : "";
       return '<div class="block"><span class="block-n">' + (n + 1) + '</span><div>' +
-        '<h4>' + cap(p) + ' <span class="pct">' + s.pct[idx] + '%</span></h4>' +
+        '<h4>' + cap(p) + ' <span class="pct">' + s.pct[idx] + '%</span>' + (s.tied[n] ? ' <span class="tag">Tied</span>' : "") + '</h4>' +
         '<p>' + esc(c.line) + '</p>' +
-        '<p class="lo"><strong>' + (strong ? "Watch for:" : "How it shows up:") + '</strong> ' + esc(c.lo) + '</p></div></div>';
+        '<p class="lo"><strong>' + (strong ? "Watch for:" : "How it shows up:") + '</strong> ' + esc(c.lo) + '</p>' + deep + '</div></div>';
     }).join("");
 
+    // Strengths: the top two. The "hi" copy describes real strength, so it's only used from 60% up.
+    var strengths = s.strengths.map(function (idx) {
+      var p = Q.PILLARS[idx], c = Q.PILLAR_COPY[p];
+      return '<div class="block strength"><div>' +
+        '<h4>' + cap(p) + ' <span class="pct">' + s.pct[idx] + '%</span></h4>' +
+        '<p>' + esc(s.pct[idx] >= 60 ? c.hi : c.line + " This is your strongest area right now. Build from here.") + '</p></div></div>';
+    }).join("");
+
+    var pattern = !s.pattern ? "" :
+      '<section class="band alt"><div class="wrap narrow prose"><p class="eyebrow dark">Your Signature Pattern</p><h2>' + esc(s.pattern.name) + '</h2>' +
+        '<p class="sub">' + esc(Q.PATTERNS_INTRO) + '</p>' + paras(s.pattern.p) + '</div></section>';
+
+    var label = function (idx) {
+      if (s.strengths.indexOf(idx) !== -1) return ' <span class="tag tag-hi">Strength</span>';
+      if (s.blocks.indexOf(idx) !== -1 && !strong) return ' <span class="tag">Block</span>';
+      return "";
+    };
     var pillars = Q.PILLARS.map(function (p, idx) {
-      return '<div class="pillar"><div class="pillar-head"><h4>' + cap(p) + '</h4><span class="pct">' + s.pct[idx] + '%</span></div>' +
+      return '<div class="pillar"><div class="pillar-head"><h4>' + cap(p) + label(idx) + '</h4><span class="pct">' + s.pct[idx] + '%</span></div>' +
         '<div class="bar"><div class="fill" style="width:' + s.pct[idx] + '%"></div></div></div>';
     }).join("");
 
@@ -317,9 +425,12 @@
         '<p class="hero-note">Scored across 7 pillars of performance.</p></div>' +
         '<div class="score-card"><div class="score">' + s.overall + '%</div><div class="bar"><div class="fill" style="width:' + s.overall + '%"></div></div><div class="tier">' + esc(s.tier) + '</div></div>' +
       '</div></section>' +
-      '<section class="band"><div class="wrap narrow prose">' + (fresh ? '<p class="mail-note">A copy of your results is on its way to your inbox. Don\'t see it? Check your Promotions or Spam folder.</p>' : '') + tierBlocks + '</div></section>' +
-      '<section class="band alt"><div class="wrap narrow"><h2>' + blocksTitle + '</h2><p class="sub">' + blocksSub + '</p>' + blocks +
-        cta(s.overall >= 100 ? "Ready to go even further?" : "Ready to get your missing " + (100 - s.overall) + "% back?") + '</div></section>' + offer +
+      '<section class="band"><div class="wrap narrow prose">' + (fresh ? '<p class="mail-note">A copy of your results is on its way to your inbox. Don\'t see it? Check your Promotions or Spam folder.</p>' : '') +
+        (uniform ? '<p class="mail-note">' + esc(Q.UNIFORM_NOTE) + '</p>' : '') + tierBlocks + '</div></section>' +
+      pattern +
+      '<section class="band"><div class="wrap narrow"><h2>' + blocksTitle + '</h2><p class="sub">' + blocksSub + '</p>' + blocks +
+        cta(strong ? "Ready to go even further?" : "Ready to clear your " + cap(Q.PILLARS[s.blocks[0]]) + " block?") + '</div></section>' + offer +
+      (s.strengths.length ? '<section class="band alt"><div class="wrap narrow"><h2>' + (s.strengths.length === 2 ? "Your Top 2 Strengths" : "Your Top Strength") + '</h2><p class="sub">Your highest ' + (s.strengths.length === 2 ? "pillars. These are" : "pillar. This is") + ' what got you here, and what you\'ll build the rest on.</p>' + strengths + '</div></section>' : '') +
       '<section class="band"><div class="wrap narrow"><h2>Your 7 Pillars</h2><p class="sub">' + esc(Q.PILLARS_INTRO) + '</p>' + pillars + '</div></section>' +
       '<section class="band alt"><div class="wrap narrow prose"><h2>What High Conviction Actually Looks Like</h2>' + paras(Q.HIGH_CONVICTION) +
         '<details class="science"><summary>The science behind inevitable success</summary>' + paras(Q.SCIENCE) + '</details></div></section>' +
@@ -349,15 +460,38 @@
   }
 
   // Called when they finish: results email to them, lead alert to Rola.
-  function sendLead(g, points, code) {
-    var s = summarize(points);
+  // Stores the full response (every answer, the outcome questions, answer order) so the assessment can be
+  // checked and normed. The database re-scores the answers itself; the client's scores aren't trusted.
+  function saveResponse(g, points, rev, uniform) {
+    if (!Q.RESPONSES_URL) return Promise.resolve();
+    var s = summarize(points, rev);
+    // Stored as agreement: 5 = Strongly Agree ... 1 = Strongly Disagree, before any reverse scoring.
+    var agree = function (k) { return 5 - k; };
+    var body = {
+      quiz_version: Q.QUIZ_VERSION, first_name: g.first_name, email: g.email, consent: !!g.consent,
+      answers: state.answers.slice(0, QUESTIONS.length).map(agree), outcomes: state.outcomes.slice(0, Q.OUTCOMES.length).map(agree),
+      scale_order: state.flip ? "disagree_first" : "agree_first", uniform_flag: uniform, pattern: s.pattern ? s.pattern.key : null,
+      role: state.profile.role || null, urgency: state.profile.urgency || null, source: sourceLabel().slice(0, 100),
+      utm_source: utm.utm_source || null, utm_medium: utm.utm_medium || null, utm_campaign: utm.utm_campaign || null, session_id: sessionId
+    };
+    return withTimeout(fetch(Q.RESPONSES_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "apikey": Q.EMAIL_PUBLIC_KEY, "Authorization": "Bearer " + Q.EMAIL_PUBLIC_KEY, "Prefer": "return=minimal" },
+      body: JSON.stringify(body),
+      keepalive: true
+    }).catch(function () {}), 4000);
+  }
+
+  function sendLead(g, points, rev, uniform, code) {
+    var s = summarize(points, rev);
     var jobs = [];
 
     var items = function (idxs) { return idxs.map(function (i) { return { name: cap(Q.PILLARS[i]), pct: s.pct[i] }; }); };
     var emailData = {
       firstName: g.first_name, overall: s.overall, tier: s.tier,
       blocks: items(s.blocks), pillars: items(Q.PILLARS.map(function (p, i) { return i; })),
-      strong: s.pct[s.blocks[0]] >= 75, resultUrl: resultUrl(code)
+      strong: s.pct[s.blocks[0]] >= 75, resultUrl: resultUrl(code),
+      pattern: s.pattern ? s.pattern.name : "", uniform: uniform
     };
     var sendEmail = function (templateName, recipientEmail, data) {
       return fetch(Q.EMAIL_FUNCTION_URL, {
@@ -380,6 +514,8 @@
         top_block_1: cap(Q.PILLARS[s.blocks[0]]), top_block_2: cap(Q.PILLARS[s.blocks[1]]), top_block_3: cap(Q.PILLARS[s.blocks[2]]),
         role: state.profile.role || "", urgency: state.profile.urgency || "", referrer: state.ref || "",
         utm_source: utm.utm_source, utm_medium: utm.utm_medium, utm_campaign: utm.utm_campaign,
+        pattern: s.pattern ? s.pattern.name : "", top_block_tied: s.tied[0] ? "yes" : "no", answers_uniform: uniform ? "yes" : "no",
+        outcome_capability: 5 - state.outcomes[0], outcome_enjoy: 5 - state.outcomes[1], outcome_satisfaction: 5 - state.outcomes[2],
         result_url: resultUrl(code), tags: "quiz-completed" + (state.profile.urgency ? ",urgency-" + slug(state.profile.urgency) : "") + ",source-" + slug(utm.utm_source || (state.ref ? refName() : "direct"))
       };
       Q.PILLARS.forEach(function (p, i) { payload[p] = s.pct[i]; });
@@ -398,7 +534,7 @@
     var m = location.hash.match(/^#r=([A-Za-z0-9_-]+)/);
     if (m) {
       var r = decodeResult(m[1]);
-      if (r) { renderResult(r.name, r.points); scrollTop(); return; }
+      if (r) { renderResult(r.name, r.points, r.rev, r.uniform); scrollTop(); return; }
     }
     if (state.step < 0) renderLanding();
     else if (!state.gate || !state.gate.done || !state.gate.last_name) renderGate();
@@ -420,23 +556,24 @@
     var act = el.getAttribute("data-act");
 
     if (act === "start") { if (location.hash) history.replaceState(null, "", location.pathname + location.search); go(Math.max(0, state.step)); }
-    else if (act === "restart") { state = { step: 0, answers: [], profile: state.profile || {}, gate: state.gate }; save(); route(); }
+    else if (act === "restart") { state = { step: 0, answers: [], outcomes: [], profile: state.profile || {}, gate: state.gate, flip: state.flip, listed: state.listed, src: state.src, ref: state.ref }; save(); route(); }
     else if (act === "home") { go(-1); }
     else if (act === "clear") { track("clear_click"); }
     else if (act === "back") {
       if (state.step === 0) { state.gate.done = false; go(0); }
       else go(state.step - 1);
     }
-    else if (act === "answer" || act === "profile") {
+    else if (act === "answer" || act === "outcome" || act === "profile") {
       if (advancing) return;
       advancing = true;
       if (act === "answer") state.answers[state.step] = Number(el.getAttribute("data-k"));
-      else state.profile[Q.PROFILE[state.step - QUESTIONS.length].key] = el.getAttribute("data-v");
+      else if (act === "outcome") state.outcomes[state.step - OUT_START] = Number(el.getAttribute("data-k"));
+      else state.profile[Q.PROFILE[state.step - PROFILE_START].key] = el.getAttribute("data-v");
       el.classList.add("selected");
       setTimeout(function () { advancing = false; go(state.step + 1); }, 220);
     }
     else if (act === "profile-text" || act === "profile-skip") {
-      var pq = Q.PROFILE[state.step - QUESTIONS.length];
+      var pq = Q.PROFILE[state.step - PROFILE_START];
       var v = act === "profile-skip" ? "" : document.getElementById("ptext").value.trim();
       state.profile[pq.key] = v;
       go(state.step + 1);
@@ -493,29 +630,35 @@
     if (state.listed !== g.email) { addToList(g); state.listed = g.email; save(); }
     state.src = sourceLabel(); save();
     track("quiz_start");
-    for (var i = 0; i < QUESTIONS.length; i++) {
-      if (state.answers[i] == null) return go(i);
-    }
-    go(TOTAL_STEPS);
+    var missing = firstMissing();
+    go(missing >= 0 ? missing : TOTAL_STEPS);
   });
 
   // After the last answer: score, send the emails, show results.
   var finishing = false;
+  // First scored or outcome question without an answer, or -1.
+  function firstMissing() {
+    for (var i = 0; i < QUESTIONS.length; i++) if (state.answers[i] == null) return i;
+    for (var j = 0; j < Q.OUTCOMES.length; j++) if (state.outcomes[j] == null) return OUT_START + j;
+    return -1;
+  }
+
   function finish() {
-    for (var i = 0; i < QUESTIONS.length; i++) {
-      if (state.answers[i] == null) return go(i);
-    }
+    var missing = firstMissing();
+    if (missing >= 0) return go(missing);
     if (finishing) return;
     finishing = true;
     document.body.className = "is-flow";
     app.innerHTML = '<section class="flow"><div class="wrap flow-wrap center"><p class="eyebrow dark">Complete</p><h2 class="q">Calculating your results...</h2></div></section>';
     var g = state.gate;
     var points = pillarPoints(state.answers);
-    var code = encodeResult(g.first_name, points);
+    var rev = reversePoints(state.answers);
+    var uniform = isUniform(state.answers);
+    var code = encodeResult(g.first_name, points, rev, uniform);
     track("quiz_complete");
-    sendLead(g, points, code).then(function () {
+    Promise.all([sendLead(g, points, rev, uniform, code), saveResponse(g, points, rev, uniform)]).then(function () {
       finishing = false;
-      state = { step: -1, answers: [], profile: { role: state.profile.role }, gate: { first_name: g.first_name, last_name: g.last_name, email: g.email, consent: g.consent }, listed: state.listed, src: state.src, ref: state.ref };
+      state = { step: -1, answers: [], outcomes: [], profile: { role: state.profile.role }, gate: { first_name: g.first_name, last_name: g.last_name, email: g.email, consent: g.consent }, listed: state.listed, src: state.src, ref: state.ref, flip: state.flip };
       save();
       justFinished = true;
       location.hash = "r=" + code;

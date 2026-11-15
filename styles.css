@@ -322,3 +322,10 @@ h1, h2, .result-hero h1 { letter-spacing: -0.01em; }
 .hero-photo.stage img { border-radius: 18px; box-shadow: 0 24px 60px rgba(0,0,0,.35); }
 @media (max-width: 820px) { .hero-photo.stage { max-width: none; padding-bottom: 40px; } }
 @media (max-width: 420px) { .hero .eyebrow { font-size: .66rem; letter-spacing: .12em; padding: 6px 12px; } }
+
+/* Results v2: tie and strength tags, #1 block detail, strength cards */
+.tag { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 999px; font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; vertical-align: middle; background: rgba(239,194,76,.18); color: var(--gold); }
+.tag-hi { background: rgba(26,158,92,.22); color: #7FE0AE; }
+.block .deep { margin-top: 12px; }
+.block .why { margin-top: 8px; font-size: .92rem; }
+.block.strength { border-left: 3px solid #1a9e5c; }

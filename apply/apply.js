@@ -10,7 +10,7 @@
   function track(event) {
     try {
       var src = "direct";
-      try { var st = JSON.parse(localStorage.getItem("cc_quiz_v1")) || {}; src = st.src || "direct"; } catch (e) {}
+      try { var st = JSON.parse((localStorage.getItem("cc_quiz_v2") || localStorage.getItem("cc_quiz_v1"))) || {}; src = st.src || "direct"; } catch (e) {}
       fetch(Q.EVENTS_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json", "apikey": Q.EMAIL_PUBLIC_KEY, "Authorization": "Bearer " + Q.EMAIL_PUBLIC_KEY, "Prefer": "return=minimal" },
@@ -35,7 +35,7 @@
   // Prefill from the quiz, if they just took it on this device.
   var prefill = {};
   try {
-    var saved = JSON.parse(localStorage.getItem("cc_quiz_v1")) || {};
+    var saved = JSON.parse((localStorage.getItem("cc_quiz_v2") || localStorage.getItem("cc_quiz_v1"))) || {};
     prefill.first_name = (saved.gate && saved.gate.first_name) || "";
     prefill.last_name = (saved.gate && saved.gate.last_name) || "";
     prefill.email = (saved.gate && saved.gate.email) || "";
