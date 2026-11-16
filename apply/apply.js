@@ -75,7 +75,7 @@
         '</form>' +
         (resultCode ? '<a class="btn btn-link back" href="/#r=' + resultCode + '">← Back to my results</a>' : '<a class="btn btn-link back" href="/">Not ready yet? Take the free 4-minute assessment</a>') +
       '</div></section>' +
-      '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
+      '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://roladiab.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
   }
 
   function sendApplication(v, qualified) {
@@ -111,7 +111,7 @@
         '<div class="calendar"><iframe src="' + Q.BOOKING_URL + '" title="Book your strategy call with Rola" loading="lazy"></iframe></div>' +
         '<p class="fine-dark">Calendar not loading? <a href="' + Q.BOOKING_URL + '" target="_blank" rel="noopener">Open it in a new tab</a>.</p>' +
       '</div></section>' +
-      '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
+      '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://roladiab.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
     window.scrollTo(0, 0);
   }
 
@@ -124,7 +124,7 @@
         '<p class="sub">In the meantime, follow along on <a href="https://www.instagram.com/rolaspeaks/" target="_blank" rel="noopener">Instagram</a> and <a href="https://www.youtube.com/@Rolaspeaks" target="_blank" rel="noopener">YouTube</a>.</p>' +
         (resultCode ? '<a class="btn btn-navy" href="/#r=' + resultCode + '">Back to my results</a>' : "") +
       '</div></section>' +
-      '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
+      '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://roladiab.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
     window.scrollTo(0, 0);
   }
 

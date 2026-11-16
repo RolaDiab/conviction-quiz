@@ -180,7 +180,7 @@
   }
 
   function footer() {
-    return '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
+    return '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://roladiab.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
   }
 
   function progressBar() {
@@ -242,7 +242,7 @@
           '<label>First name<input name="first_name" autocomplete="given-name" maxlength="60" required value="' + esc(g.first_name || "") + '"></label>' +
           '<label>Last name<input name="last_name" autocomplete="family-name" maxlength="60" required value="' + esc(g.last_name || "") + '"></label>' +
           '<label>Email<input name="email" type="email" autocomplete="email" maxlength="255" required value="' + esc(g.email || "") + '"></label>' +
-          '<label class="consent"><input name="consent" type="checkbox"' + (g.consent ? " checked" : "") + '> Send me my results and occasional insights from Rola. Unsubscribe anytime. <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy policy</a>.</label>' +
+          '<label class="consent"><input name="consent" type="checkbox"' + (g.consent ? " checked" : "") + '> Send me my results and occasional insights from Rola. Unsubscribe anytime. <a href="https://roladiab.com/privacy" target="_blank" rel="noopener">Privacy policy</a>.</label>' +
           (error ? '<p class="err">' + esc(error) + '</p>' : "") +
           '<button class="btn btn-gold wide" type="submit">Start the Assessment</button>' +
         '</form>' +
