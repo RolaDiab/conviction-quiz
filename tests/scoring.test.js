@@ -6,6 +6,7 @@ const ctx = { document: { getElementById: () => ({ addEventListener() {}, set in
   URLSearchParams, history: {}, addEventListener() {}, scrollTo() {}, setTimeout };
 ctx.window = ctx; vm.createContext(ctx);
 vm.runInContext(fs.readFileSync(dir + '/content.js', 'utf8'), ctx);
+vm.runInContext(fs.readFileSync(dir + '/notes.js', 'utf8'), ctx);
 vm.runInContext(fs.readFileSync(dir + '/app.js', 'utf8'), ctx);
 const { QUESTIONS, pillarPoints, summarize } = ctx.__quizInternals; const P = ctx.QUIZ.PILLARS;
 let fails = 0; const ok = (c, m) => { console.log(c ? 'ok  ' : 'FAIL', m); if (!c) fails++; };
@@ -25,9 +26,20 @@ ok(JSON.stringify(summarize([9, 9, 9, 9, 9, 9, 9]).blocks) === '[0,1,2]', 'ties 
 const seen = new Set(); for (let tot = 21; tot <= 105; tot++) seen.add(t(Math.round((tot - 21) / 84 * 100))); ok(seen.size === 4, 'all 4 tiers reachable');
 ok(Object.keys(ctx.QUIZ.TIER_COPY).length === 4, 'copy for every tier');
 ok(P.every(p => ctx.QUIZ.PILLAR_COPY[p].line && ctx.QUIZ.PILLAR_COPY[p].lo), 'every pillar has a line and a symptom');
-const copy = ['content.js', 'app.js', 'apply/apply.js'].map(f => fs.readFileSync(dir + '/' + f, 'utf8')).join('\n');
+const copy = ['content.js', 'app.js', 'apply/apply.js', 'notes.js'].map(f => fs.readFileSync(dir + '/' + f, 'utf8')).join('\n');
 ok(!/—/.test(copy), 'no em dashes');
 ok(!/(^|[.!?"] +)And [a-z]/m.test(copy), 'no sentences starting with And');
 ok(!/italic/.test(fs.readFileSync(dir + '/styles.css', 'utf8')), 'no italics');
 ok(!/Conviction Index|IMPACT|Performance Operating System/.test(copy) && !/train your brain|inevitable/i.test(copy), 'no retired terms');
+// Call notes for GHL (Discovery Call invites).
+const N = ctx.QUIZ_NOTES;
+const samples = [[12, 12, 12, 9, 10, 13, 12], [3, 3, 3, 3, 3, 3, 3], [15, 15, 15, 15, 15, 15, 15], [7, 14, 9, 11, 5, 13, 10]];
+ok(samples.every(p => JSON.stringify(N.summarize(p)) === JSON.stringify(summarize(p))), 'notes scoring matches the quiz');
+ok(JSON.stringify(N.decode('eyJuIjoiWXZvbm5lIiwicCI6WzEyLDEyLDEyLDksMTAsMTMsMTJdfQ')) === JSON.stringify({ name: 'Yvonne', points: [12, 12, 12, 9, 10, 13, 12] }), 'notes decode a results link');
+ok(N.decode('bad!') === null && N.decode('') === null, 'notes reject a broken results code');
+const qn = N.quiz([12, 12, 12, 9, 10, 13, 12], 'https://quiz.convictioncode.com/#r=x');
+ok(/70% \(The Achiever\)/.test(qn) && /1\. Practice: 50%/.test(qn) && /2\. Alignment: 58%/.test(qn) && /Communication: 83% \(strongest\)/.test(qn) && /How it shows up: You start strong/.test(qn), 'quiz notes: score, blocks, pillars, symptoms');
+ok(/Growth Edges/.test(N.quiz([15, 15, 15, 15, 15, 15, 15])) && /Watch for:/.test(N.quiz([15, 15, 15, 15, 15, 15, 15])), 'quiz notes: strong scorers get growth edges');
+const an = N.application({ company: 'Owner', role: 'Founder or CEO', start: 'Right away', income: '$1M to $5M', invest: 'Yes', energy: 'Open', challenges: ['a', '', 'b'], goal: 'g' });
+ok(/Income or revenue: \$1M to \$5M/.test(an) && /1\. a\n2\. b/.test(an) && !/QUALIFIED/i.test(an), 'application notes: answers only, no internal flags');
 process.exit(fails ? 1 : 0);

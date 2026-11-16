@@ -102,6 +102,32 @@
     }).catch(function () {});
   }
 
+  // Saves the application (and their quiz breakdown, if they came from their results) on the GHL
+  // contact, so the Discovery Call invite shows both. Only the guest's own answers go here,
+  // because the guest sees the invite too.
+  function sendToGhl(v, qualified) {
+    var N = window.QUIZ_NOTES;
+    if (!Q.GHL_APPLY_WEBHOOK_URL || !N) return Promise.resolve();
+    var result = resultCode ? N.decode(resultCode) : null;
+    var resultUrl = result ? "https://quiz.convictioncode.com/#r=" + resultCode : "";
+    var payload = {
+      first_name: v.first_name, last_name: v.last_name, email: v.email, phone: v.phone, company_name: v.company,
+      qualified: qualified ? "yes" : "no",
+      application_summary: N.application({ company: v.company, role: v.revenue, start: v.start, income: v.income,
+        invest: v.invest, energy: v.energy, challenges: v.challenges, goal: v.goal }),
+      result_url: resultUrl,
+      tags: "applied," + (qualified ? "apply-qualified" : "apply-not-yet")
+    };
+    // Only send quiz_summary when we have it, so an apply without a quiz never wipes an earlier one.
+    if (result) payload.quiz_summary = N.quiz(result.points, resultUrl);
+    return fetch(Q.GHL_APPLY_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      keepalive: true
+    }).catch(function () {});
+  }
+
   function renderQualified(v) {
     root.innerHTML =
       '<section class="flow"><div class="wrap flow-wrap">' +
@@ -169,7 +195,7 @@
     var btn = f.querySelector("button[type=submit]");
     btn.disabled = true;
     btn.textContent = "Submitting...";
-    Promise.race([sendApplication(v, qualified), new Promise(function (r) { setTimeout(r, 4000); })]).then(function () {
+    Promise.race([Promise.all([sendApplication(v, qualified), sendToGhl(v, qualified)]), new Promise(function (r) { setTimeout(r, 4000); })]).then(function () {
       if (qualified) renderQualified(v); else renderNotYet(v);
     });
   });

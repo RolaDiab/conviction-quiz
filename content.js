@@ -3,6 +3,12 @@
 window.QUIZ = {
   // GHL workflow "Quiz Leads from quiz.convictioncode.com": creates/updates the contact, tags quiz-completed.
   GHL_WEBHOOK_URL: "https://services.leadconnectorhq.com/hooks/lEqWwjtkibEh35SiVbMP/webhook-trigger/968f8efd-b7b4-4b7d-839c-fac1c3ae215d",
+  // GHL workflow "Coaching Applications" (Inbound Webhook trigger): creates/updates the contact and
+  // saves application_summary and quiz_summary into the contact's "Application Answers" and
+  // "Quiz Results" fields, which the Discovery Call calendar puts in the invite. Must be its own
+  // workflow, never the quiz webhook above (that one tags quiz-completed and starts the quiz emails).
+  // Applications are still emailed to Rola either way.
+  GHL_APPLY_WEBHOOK_URL: "https://services.leadconnectorhq.com/hooks/lEqWwjtkibEh35SiVbMP/webhook-trigger/633d54ae-a15e-4aad-8d4c-8012b2ca2626",
   // Adhara "quiz-gate" form. Its auto-reply ("Send confirmation email") must stay OFF in Adhara,
   // because the quiz sends its own results email. Turned off 2026-10-27.
   ADHARA_FORM_URL: "https://api.adharaweb.com/api/v1/public/forms/rola/quiz-gate",

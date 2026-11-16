@@ -383,6 +383,8 @@
         result_url: resultUrl(code), tags: "quiz-completed" + (state.profile.urgency ? ",urgency-" + slug(state.profile.urgency) : "") + ",source-" + slug(utm.utm_source || (state.ref ? refName() : "direct"))
       };
       Q.PILLARS.forEach(function (p, i) { payload[p] = s.pct[i]; });
+      // Full breakdown for the contact's "Quiz Results" field, shown in Discovery Call invites.
+      if (window.QUIZ_NOTES) payload.quiz_summary = window.QUIZ_NOTES.quiz(points, resultUrl(code));
       jobs.push(fetch(Q.GHL_WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
