@@ -11,14 +11,16 @@
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
   function pct(points, min, max) { return Math.round((points - min) / (max - min) * 100); }
 
-  // Same scoring as app.js summarize(). tests/scoring.test.js checks the two agree.
-  function summarize(points) {
+  // Same scoring as app.js summarize(), including the tie-break on each pillar's reverse item (rev),
+  // so the invite names the same #1 block as the results page. tests/scoring.test.js checks they agree.
+  function summarize(points, rev) {
+    var r = rev || [0, 0, 0, 0, 0, 0, 0];
     var total = points.reduce(function (a, b) { return a + b; }, 0);
     var overall = pct(total, P_MIN * 7, P_MAX * 7);
     var pcts = points.map(function (p) { return pct(p, P_MIN, P_MAX); });
     var tier = Q.TIERS.filter(function (t) { return overall <= t.max; })[0].name;
     var order = Q.PILLARS.map(function (p, i) { return i; })
-      .sort(function (a, b) { return points[a] - points[b] || a - b; });
+      .sort(function (a, b) { return points[a] - points[b] || r[a] - r[b] || a - b; });
     return { overall: overall, pct: pcts, tier: tier, blocks: order.slice(0, 3) };
   }
 
@@ -29,14 +31,18 @@
       var data = JSON.parse(decodeURIComponent(escape(atob(b64))));
       var ok = Array.isArray(data.p) && data.p.length === 7 &&
         data.p.every(function (x) { return Number.isInteger(x) && x >= P_MIN && x <= P_MAX; });
-      return ok ? { name: String(data.n || "").slice(0, 60), points: data.p } : null;
+      var rev = Array.isArray(data.r) && data.r.length === 7 &&
+        data.r.every(function (x) { return Number.isInteger(x) && x >= 1 && x <= 5; }) ? data.r : null;
+      return ok ? { name: String(data.n || "").slice(0, 60), points: data.p, rev: rev } : null;
     } catch (e) { return null; }
   }
 
-  function quiz(points, resultUrl) {
-    var s = summarize(points);
+  function quiz(points, resultUrl, rev) {
+    var s = summarize(points, rev);
     var strong = s.pct[s.blocks[0]] >= 75;
-    var top = s.pct.indexOf(Math.max.apply(null, s.pct));
+    // "Strongest" only when a pillar beats every block, so a tied pillar is never both (same rule as the results page).
+    var best = Math.max.apply(null, s.pct);
+    var top = best > Math.max.apply(null, s.blocks.map(function (b) { return s.pct[b]; })) ? s.pct.indexOf(best) : -1;
     var lines = [
       "PERFORMANCE BLOCKS ASSESSMENT: QUIZ RESULTS",
       "",

@@ -1,6 +1,6 @@
 (function () {
   "use strict";
-  // Qualifying application for a private strategy call with Rola.
+  // Qualifying application for a Discovery Call with Rola.
   // Every application is emailed to Rola. Only qualified applicants see the booking calendar.
   var Q = window.QUIZ;
   var root = document.getElementById("apply");
@@ -10,7 +10,8 @@
   function track(event) {
     try {
       var src = "direct";
-      try { var st = JSON.parse(localStorage.getItem("cc_quiz_v1")) || {}; src = st.src || "direct"; } catch (e) {}
+      try { var st = JSON.parse((localStorage.getItem("cc_quiz_v2") || localStorage.getItem("cc_quiz_v1"))) || {}; src = st.src || "direct"; } catch (e) {}
+      if (!Q.EVENTS_URL) return;
       fetch(Q.EVENTS_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json", "apikey": Q.EMAIL_PUBLIC_KEY, "Authorization": "Bearer " + Q.EMAIL_PUBLIC_KEY, "Prefer": "return=minimal" },
@@ -35,7 +36,7 @@
   // Prefill from the quiz, if they just took it on this device.
   var prefill = {};
   try {
-    var saved = JSON.parse(localStorage.getItem("cc_quiz_v1")) || {};
+    var saved = JSON.parse((localStorage.getItem("cc_quiz_v2") || localStorage.getItem("cc_quiz_v1"))) || {};
     prefill.first_name = (saved.gate && saved.gate.first_name) || "";
     prefill.last_name = (saved.gate && saved.gate.last_name) || "";
     prefill.email = (saved.gate && saved.gate.email) || "";
@@ -54,7 +55,7 @@
       '<section class="flow"><div class="wrap flow-wrap gate">' +
         '<p class="eyebrow dark">Work with Rola</p>' +
         '<h2 class="q">You have big dreams. Let\'s clear the path to accomplishing them.</h2>' +
-        '<p class="sub">A private 45-minute strategy call for leaders and founders ready for their next level. A few questions first, so the call is spent on you.</p>' +
+        '<p class="sub">A private 45-minute Discovery Call for leaders and founders ready for their next level. A few questions first, so the call is spent on you.</p>' +
         '<form id="app-form" novalidate>' +
           '<label>First name<input name="first_name" autocomplete="given-name" maxlength="60" value="' + esc(v.first_name || prefill.first_name || "") + '"></label>' +
           '<label>Last name<input name="last_name" autocomplete="family-name" maxlength="60" value="' + esc(v.last_name || prefill.last_name || "") + '"></label>' +
@@ -91,6 +92,14 @@
       "90-day goal:\n" + v.goal + "\n\n" +
       "Quiz role: " + (prefill.role || "Not answered") + "\n" +
       "Quiz results: " + resultLink;
+    // Rola is emailed every application while the Lovable email exists. sendToGhl() below also saves it
+    // on the GHL contact. Before retiring Lovable, add a notification step to the GHL
+    // "Coaching Applications" workflow (docs/GHL-SETUP.md).
+    if (!Q.EMAIL_FUNCTION_URL) return Promise.resolve();
+    return sendLovableEmail(v, message);
+  }
+
+  function sendLovableEmail(v, message) {
     return fetch(Q.EMAIL_FUNCTION_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": "Bearer " + Q.EMAIL_PUBLIC_KEY, "apikey": Q.EMAIL_PUBLIC_KEY },
@@ -119,7 +128,7 @@
       tags: "applied," + (qualified ? "apply-qualified" : "apply-not-yet")
     };
     // Only send quiz_summary when we have it, so an apply without a quiz never wipes an earlier one.
-    if (result) payload.quiz_summary = N.quiz(result.points, resultUrl);
+    if (result) payload.quiz_summary = N.quiz(result.points, resultUrl, result.rev);
     return fetch(Q.GHL_APPLY_WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -134,7 +143,7 @@
         '<p class="eyebrow dark">Application received</p>' +
         '<h2 class="q">You\'re a fit, ' + esc(v.first_name) + '. Pick a time below.</h2>' +
         '<p class="sub">Choose the slot that works for you. You\'ll get a confirmation by email.</p>' +
-        '<div class="calendar"><iframe src="' + Q.BOOKING_URL + '" title="Book your strategy call with Rola" loading="lazy"></iframe></div>' +
+        '<div class="calendar"><iframe src="' + Q.BOOKING_URL + '" title="Book your Discovery Call with Rola" loading="lazy"></iframe></div>' +
         '<p class="fine-dark">Calendar not loading? <a href="' + Q.BOOKING_URL + '" target="_blank" rel="noopener">Open it in a new tab</a>.</p>' +
       '</div></section>' +
       '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://roladiab.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
@@ -146,7 +155,7 @@
       '<section class="flow"><div class="wrap flow-wrap">' +
         '<p class="eyebrow dark">Application received</p>' +
         '<h2 class="q">Thank you, ' + esc(v.first_name) + '.</h2>' +
-        '<p class="sub">Based on your answers, a strategy call isn\'t the right next step just yet. Rola reads every application, and you\'ll keep getting her insights by email.</p>' +
+        '<p class="sub">Based on your answers, a Discovery Call isn\'t the right next step just yet. Rola reads every application, and you\'ll keep getting her insights by email.</p>' +
         '<p class="sub">In the meantime, follow along on <a href="https://www.instagram.com/rolaspeaks/" target="_blank" rel="noopener">Instagram</a> and <a href="https://www.youtube.com/@Rolaspeaks" target="_blank" rel="noopener">YouTube</a>.</p>' +
         (resultCode ? '<a class="btn btn-navy" href="/#r=' + resultCode + '">Back to my results</a>' : "") +
       '</div></section>' +

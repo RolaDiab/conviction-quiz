@@ -322,3 +322,54 @@ h1, h2, .result-hero h1 { letter-spacing: -0.01em; }
 .hero-photo.stage img { border-radius: 18px; box-shadow: 0 24px 60px rgba(0,0,0,.35); }
 @media (max-width: 820px) { .hero-photo.stage { max-width: none; padding-bottom: 40px; } }
 @media (max-width: 420px) { .hero .eyebrow { font-size: .66rem; letter-spacing: .12em; padding: 6px 12px; } }
+
+/* Results v2: tie and strength tags, #1 block detail, strength cards */
+.tag { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 999px; font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; vertical-align: middle; background: rgba(239,194,76,.18); color: var(--gold); }
+.tag-hi { background: rgba(26,158,92,.22); color: #7FE0AE; }
+.block .deep { margin-top: 12px; }
+.block .why { margin-top: 8px; font-size: .92rem; }
+.block.strength { border-left: 3px solid #1a9e5c; }
+
+/* Radar chart of the 7 pillars */
+.radar { display: block; width: 100%; max-width: 480px; margin: 8px auto 20px; }
+.radar-grid { fill: none; stroke: rgba(255,255,255,.14); stroke-width: 1; }
+.radar-axis { stroke: rgba(255,255,255,.10); stroke-width: 1; }
+.radar-shape { fill: rgba(239,194,76,.22); stroke: #EFC24C; stroke-width: 2.5; stroke-linejoin: round; }
+.radar-dot { fill: #EFC24C; }
+.radar-label { fill: #fff; font-size: 13px; font-weight: 600; letter-spacing: .02em; }
+.radar-pct { fill: #EFC24C; font-weight: 700; }
+
+/* First 7 Days plan */
+.plan { list-style: none; padding: 0; margin: 20px 0 0; counter-reset: none; }
+.plan li { display: grid; grid-template-columns: 112px 1fr; gap: 16px; align-items: start; background: var(--card, #fff); border: 1px solid var(--card-line, var(--line)); border-radius: var(--radius); padding: 18px 20px; margin-top: 12px; }
+.plan-day { color: var(--gold); font-weight: 800; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; padding-top: 3px; }
+.plan li p { margin: 0; color: #fff; font-size: 1.02rem; }
+@media (max-width: 520px) { .plan li { grid-template-columns: 1fr; gap: 6px; } }
+
+/* Unlock list on the results form */
+.checks.unlock { margin: 6px 0 16px; }
+.checks.unlock li { font-size: 1rem; padding-top: 8px; padding-bottom: 8px; }
+
+/* Two report actions side by side, stacked on phones */
+.share { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+
+/* Printed / saved-as-PDF report: white page, dark ink, no sales sections */
+@media print {
+  @page { margin: 14mm; }
+  html, body, body.is-result, .band, .band.alt, .result-hero, .final { background: #fff !important; color: #1F1F24 !important; }
+  * { box-shadow: none !important; text-shadow: none !important; }
+  h1, h2, h3, h4, p, li, span, strong, summary, cite, .sub, .tier, .score { color: #1F1F24 !important; }
+  .eyebrow, .eyebrow.dark, .pct, .plan-day { color: #8A6A1A !important; }
+  .band { padding: 18px 0 !important; }
+  .block, .plan li, .score-card, .mail-note { background: #fff !important; border: 1px solid #D9D3C7 !important; break-inside: avoid; }
+  .block-n { background: #0F2544 !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .bar { background: #EEE9DF !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .fill { background: #AB8221 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .tag { border: 1px solid #AB8221; background: none !important; color: #8A6A1A !important; }
+  .radar-grid { stroke: #D9D3C7; } .radar-axis { stroke: #EEE9DF; }
+  .radar-shape { fill: rgba(171,130,33,.18); stroke: #AB8221; } .radar-dot { fill: #AB8221; }
+  .radar-label { fill: #1F1F24; } .radar-pct { fill: #8A6A1A; }
+  .radar, .pillar, .plan-band { break-inside: avoid; }
+  .cta-box, .final, .offer-band, .share, .btn, .foot, .mail-note, .self-paced, .contact { display: none !important; }
+  .result-hero { padding: 0 0 10px !important; }
+}
