@@ -1,6 +1,6 @@
 (function () {
   "use strict";
-  // Qualifying application for a private strategy call with Rola.
+  // Qualifying application for a Discovery Call with Rola.
   // Every application is emailed to Rola. Only qualified applicants see the booking calendar.
   var Q = window.QUIZ;
   var root = document.getElementById("apply");
@@ -55,7 +55,7 @@
       '<section class="flow"><div class="wrap flow-wrap gate">' +
         '<p class="eyebrow dark">Work with Rola</p>' +
         '<h2 class="q">You have big dreams. Let\'s clear the path to accomplishing them.</h2>' +
-        '<p class="sub">A private 45-minute strategy call for leaders and founders ready for their next level. A few questions first, so the call is spent on you.</p>' +
+        '<p class="sub">A private 45-minute Discovery Call for leaders and founders ready for their next level. A few questions first, so the call is spent on you.</p>' +
         '<form id="app-form" novalidate>' +
           '<label>First name<input name="first_name" autocomplete="given-name" maxlength="60" value="' + esc(v.first_name || prefill.first_name || "") + '"></label>' +
           '<label>Last name<input name="last_name" autocomplete="family-name" maxlength="60" value="' + esc(v.last_name || prefill.last_name || "") + '"></label>' +
@@ -143,7 +143,7 @@
         '<p class="eyebrow dark">Application received</p>' +
         '<h2 class="q">You\'re a fit, ' + esc(v.first_name) + '. Pick a time below.</h2>' +
         '<p class="sub">Choose the slot that works for you. You\'ll get a confirmation by email.</p>' +
-        '<div class="calendar"><iframe src="' + Q.BOOKING_URL + '" title="Book your strategy call with Rola" loading="lazy"></iframe></div>' +
+        '<div class="calendar"><iframe src="' + Q.BOOKING_URL + '" title="Book your Discovery Call with Rola" loading="lazy"></iframe></div>' +
         '<p class="fine-dark">Calendar not loading? <a href="' + Q.BOOKING_URL + '" target="_blank" rel="noopener">Open it in a new tab</a>.</p>' +
       '</div></section>' +
       '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://roladiab.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
@@ -155,7 +155,7 @@
       '<section class="flow"><div class="wrap flow-wrap">' +
         '<p class="eyebrow dark">Application received</p>' +
         '<h2 class="q">Thank you, ' + esc(v.first_name) + '.</h2>' +
-        '<p class="sub">Based on your answers, a strategy call isn\'t the right next step just yet. Rola reads every application, and you\'ll keep getting her insights by email.</p>' +
+        '<p class="sub">Based on your answers, a Discovery Call isn\'t the right next step just yet. Rola reads every application, and you\'ll keep getting her insights by email.</p>' +
         '<p class="sub">In the meantime, follow along on <a href="https://www.instagram.com/rolaspeaks/" target="_blank" rel="noopener">Instagram</a> and <a href="https://www.youtube.com/@Rolaspeaks" target="_blank" rel="noopener">YouTube</a>.</p>' +
         (resultCode ? '<a class="btn btn-navy" href="/#r=' + resultCode + '">Back to my results</a>' : "") +
       '</div></section>' +

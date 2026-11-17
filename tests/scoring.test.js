@@ -55,6 +55,9 @@ const copy = ['content.js', 'app.js', 'apply/apply.js', 'notes.js'].map(f => fs.
 ok(!/—/.test(copy), 'no em dashes');
 ok(!/(^|[.!?"] +)And [a-z]/m.test(copy), 'no sentences starting with And');
 ok(!/italic/.test(fs.readFileSync(dir + '/styles.css', 'utf8')), 'no italics');
+// One name for the call everywhere: Discovery Call (Rola's choice, 2026-11-17).
+const allCopy = copy + ['email/quiz-results-ghl.html', ...[1, 2, 3, 4, 5, 6].map(i => `email/quiz-sequence/email-${i}.html`)].map(f => fs.readFileSync(dir + '/' + f, 'utf8')).join('\n');
+ok(!/strategy (call|session)/i.test(allCopy), 'the call is only ever called a Discovery Call');
 // "inevitable" is back in use by choice (commit 81de5ae, "Quiz copy: inevitable, not predictable").
 ok(!/Conviction Index|IMPACT|Performance Operating System/.test(copy) && !/train your brain/i.test(copy), 'no retired terms');
 // Call notes for GHL (Discovery Call invites).

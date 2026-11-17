@@ -19,6 +19,7 @@ Use these exact field keys. The results email and the sequence use them as `{{co
 | `quiz_pattern_line` | Multi line | `pattern_line` |
 | `quiz_strength_line` | Multi line | `strength_line` |
 | `quiz_day1_action` | Multi line | `day1_action` |
+| `quiz_first_move_line` | Multi line | `first_move_line` (used in sequence email 4) |
 | `quiz_result_url` | Single line | `result_url` |
 | `quiz_apply_url` | Single line | `apply_url` |
 | `quiz_intention` ... `quiz_trust` (7 fields) | Number | `intention`, `identity`, `meaning`, `practice`, `alignment`, `communication`, `trust` |
@@ -45,19 +46,17 @@ spreadsheet for analysis (reliability, norms, tier cut-offs) once ~300 responses
    - No → nothing (Lovable is still sending both).
 5. Continue into the existing 6-email follow-up sequence, unchanged.
 
-## 3. Create an applications workflow
+## 3. Applications workflow ("Coaching Applications", already built)
 
-1. New workflow, trigger: **Inbound Webhook**. Copy its URL.
-2. Create/Update Contact (first/last name, email, phone). Add tags from `tags`
-   (`application-submitted`, plus `application-qualified` or `application-not-yet`).
-3. Internal Notification to Rola. Use the webhook value `summary` as the body (it holds every answer,
-   the qualification result and the quiz result link).
+Set up in `docs/discovery-call-notes.md` (webhook `GHL_APPLY_WEBHOOK_URL`, fields Application
+Answers and Quiz Results). One step to add before Lovable is retired: an **Internal Notification**
+to Rola with `{{contact.application_answers}}`, because today the email to Rola still comes from Lovable.
 
 ## 4. Switch over (in this order)
 
 1. Do steps 1 to 3 and publish both workflows.
 2. Take the quiz yourself. Check the contact has every field filled. (Lovable still sends the emails.)
-3. In `content.js`: set `GHL_APPLY_WEBHOOK_URL` to the step 3 URL and `EMAILS_SENT_BY: "ghl"`.
+3. In `content.js`: set `EMAILS_SENT_BY: "ghl"`.
 4. Take the quiz and submit an application with your own email. You should get exactly one results
    email and one lead alert from GHL, and one application alert. If anything is missing, set
    `EMAILS_SENT_BY` back to `"lovable"`.
@@ -67,3 +66,23 @@ spreadsheet for analysis (reliability, norms, tier cut-offs) once ~300 responses
 Note: the funnel counter (landing views, starts, completions) lives in Lovable Cloud. When it's
 retired, GHL still counts completions (contacts tagged `quiz-completed`), but not page views or starts.
 Add a simple privacy-friendly analytics tool to the quiz page if you want those numbers.
+
+## 5. Follow-up sequence checklist (do these now, they matter today)
+
+The 6 quiz emails (days 1, 3, 5, 8, 11, 15) live in the quiz workflow. Check each item in GHL:
+
+- [ ] **Stop the sequence when someone applies or books.** Add a Goal (or an If/Else before each
+      email) so contacts tagged `applied` or with a booked Discovery Call leave the sequence.
+      Otherwise someone who booked on day 2 still gets "apply for your Discovery Call" on days 8 and 15.
+- [ ] **Unsubscribe link.** The 6 email HTML files contain none. Turn on GHL's automatic unsubscribe
+      footer for these emails (Settings > Email Services, or the email's footer setting), then send
+      yourself a test and confirm the link is there. This is a legal requirement.
+- [ ] **"Reply DEEPER" (day 11).** Add a trigger: Customer Replied, reply contains "deeper" → internal
+      notification to Rola + tag `replied-deeper`, so no warm lead waits. Or decide Rola watches the inbox.
+- [ ] **"My weekly emails" (day 15).** Confirm a weekly email exists and that quiz contacts are on it.
+      Contacts are also added to the Adhara "quiz-gate" list: decide which system sends the weekly
+      email, so people aren't emailed twice and an unsubscribe in one also stops the other.
+- [ ] **Re-paste all 6 emails** from `email/quiz-sequence/` (the call is now called a Discovery Call
+      everywhere, and emails 1 and 4 use `quiz_pattern_line` and `quiz_first_move_line`).
+      Create those two fields first (table above) or those two lines stay blank.
+- [ ] **Send yourself the whole sequence** (GHL "test" on each email) and check the merge fields fill in.
