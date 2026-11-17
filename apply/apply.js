@@ -76,7 +76,7 @@
         '</form>' +
         (resultCode ? '<a class="btn btn-link back" href="/#r=' + resultCode + '">← Back to my results</a>' : '<a class="btn btn-link back" href="/">Not ready yet? Take the free 4-minute assessment</a>') +
       '</div></section>' +
-      '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
+      '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://roladiab.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
   }
 
   function sendApplication(v, qualified) {
@@ -92,24 +92,11 @@
       "90-day goal:\n" + v.goal + "\n\n" +
       "Quiz role: " + (prefill.role || "Not answered") + "\n" +
       "Quiz results: " + resultLink;
-    var jobs = [];
-    if (Q.GHL_APPLY_WEBHOOK_URL) {
-      jobs.push(fetch(Q.GHL_APPLY_WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          first_name: v.first_name, last_name: v.last_name, email: v.email, phone: v.phone, company: v.company,
-          qualified: qualified ? "yes" : "no", role: v.revenue, start: v.start, income: v.income, invest: v.invest,
-          energy: v.energy, challenges: v.challenges.filter(Boolean).join(" | "), goal: v.goal,
-          result_url: resultCode ? "https://quiz.convictioncode.com/#r=" + resultCode : "",
-          tags: "application-submitted," + (qualified ? "application-qualified" : "application-not-yet"), summary: message
-        }),
-        keepalive: true
-      }).catch(function () {}));
-    }
-    // The Lovable email stays on until GHL handles applications, so none are ever dropped.
-    if ((Q.EMAILS_SENT_BY !== "ghl" || !Q.GHL_APPLY_WEBHOOK_URL) && Q.EMAIL_FUNCTION_URL) jobs.push(sendLovableEmail(v, message));
-    return Promise.all(jobs);
+    // Rola is emailed every application while the Lovable email exists. sendToGhl() below also saves it
+    // on the GHL contact. Before retiring Lovable, add a notification step to the GHL
+    // "Coaching Applications" workflow (docs/GHL-SETUP.md).
+    if (!Q.EMAIL_FUNCTION_URL) return Promise.resolve();
+    return sendLovableEmail(v, message);
   }
 
   function sendLovableEmail(v, message) {
@@ -124,6 +111,32 @@
     }).catch(function () {});
   }
 
+  // Saves the application (and their quiz breakdown, if they came from their results) on the GHL
+  // contact, so the Discovery Call invite shows both. Only the guest's own answers go here,
+  // because the guest sees the invite too.
+  function sendToGhl(v, qualified) {
+    var N = window.QUIZ_NOTES;
+    if (!Q.GHL_APPLY_WEBHOOK_URL || !N) return Promise.resolve();
+    var result = resultCode ? N.decode(resultCode) : null;
+    var resultUrl = result ? "https://quiz.convictioncode.com/#r=" + resultCode : "";
+    var payload = {
+      first_name: v.first_name, last_name: v.last_name, email: v.email, phone: v.phone, company_name: v.company,
+      qualified: qualified ? "yes" : "no",
+      application_summary: N.application({ company: v.company, role: v.revenue, start: v.start, income: v.income,
+        invest: v.invest, energy: v.energy, challenges: v.challenges, goal: v.goal }),
+      result_url: resultUrl,
+      tags: "applied," + (qualified ? "apply-qualified" : "apply-not-yet")
+    };
+    // Only send quiz_summary when we have it, so an apply without a quiz never wipes an earlier one.
+    if (result) payload.quiz_summary = N.quiz(result.points, resultUrl, result.rev);
+    return fetch(Q.GHL_APPLY_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      keepalive: true
+    }).catch(function () {});
+  }
+
   function renderQualified(v) {
     root.innerHTML =
       '<section class="flow"><div class="wrap flow-wrap">' +
@@ -133,7 +146,7 @@
         '<div class="calendar"><iframe src="' + Q.BOOKING_URL + '" title="Book your strategy call with Rola" loading="lazy"></iframe></div>' +
         '<p class="fine-dark">Calendar not loading? <a href="' + Q.BOOKING_URL + '" target="_blank" rel="noopener">Open it in a new tab</a>.</p>' +
       '</div></section>' +
-      '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
+      '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://roladiab.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
     window.scrollTo(0, 0);
   }
 
@@ -146,7 +159,7 @@
         '<p class="sub">In the meantime, follow along on <a href="https://www.instagram.com/rolaspeaks/" target="_blank" rel="noopener">Instagram</a> and <a href="https://www.youtube.com/@Rolaspeaks" target="_blank" rel="noopener">YouTube</a>.</p>' +
         (resultCode ? '<a class="btn btn-navy" href="/#r=' + resultCode + '">Back to my results</a>' : "") +
       '</div></section>' +
-      '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
+      '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://roladiab.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
     window.scrollTo(0, 0);
   }
 
@@ -191,7 +204,7 @@
     var btn = f.querySelector("button[type=submit]");
     btn.disabled = true;
     btn.textContent = "Submitting...";
-    Promise.race([sendApplication(v, qualified), new Promise(function (r) { setTimeout(r, 4000); })]).then(function () {
+    Promise.race([Promise.all([sendApplication(v, qualified), sendToGhl(v, qualified)]), new Promise(function (r) { setTimeout(r, 4000); })]).then(function () {
       if (qualified) renderQualified(v); else renderNotYet(v);
     });
   });

@@ -259,7 +259,7 @@
   }
 
   function footer() {
-    return '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
+    return '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://roladiab.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
   }
 
   function progressBar() {
@@ -338,7 +338,7 @@
           '<label>First name<input name="first_name" autocomplete="given-name" maxlength="60" required value="' + esc(g.first_name || "") + '"></label>' +
           '<label>Last name<input name="last_name" autocomplete="family-name" maxlength="60" required value="' + esc(g.last_name || "") + '"></label>' +
           '<label>Email<input name="email" type="email" autocomplete="email" maxlength="255" required value="' + esc(g.email || "") + '"></label>' +
-          '<label class="consent"><input name="consent" type="checkbox"' + (g.consent ? " checked" : "") + '> Send me my results and occasional insights from Rola. Unsubscribe anytime. <a href="https://convictioncode.com/privacy" target="_blank" rel="noopener">Privacy policy</a>.</label>' +
+          '<label class="consent"><input name="consent" type="checkbox"' + (g.consent ? " checked" : "") + '> Send me my results and occasional insights from Rola. Unsubscribe anytime. <a href="https://roladiab.com/privacy" target="_blank" rel="noopener">Privacy policy</a>.</label>' +
           (error ? '<p class="err">' + esc(error) + '</p>' : "") +
           '<button class="btn btn-gold wide" type="submit">See My Results</button>' +
         '</form>' +
@@ -582,6 +582,8 @@
         result_url: resultUrl(code), tags: "quiz-completed" + (state.profile.urgency ? ",urgency-" + slug(state.profile.urgency) : "") + ",source-" + slug(utm.utm_source || (state.ref ? refName() : "direct"))
       };
       Q.PILLARS.forEach(function (p, i) { payload[p] = s.pct[i]; });
+      // Full breakdown for the contact's "Quiz Results" field, shown in Discovery Call invites.
+      if (window.QUIZ_NOTES) payload.quiz_summary = window.QUIZ_NOTES.quiz(points, resultUrl(code), rev);
       jobs.push(fetch(Q.GHL_WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
