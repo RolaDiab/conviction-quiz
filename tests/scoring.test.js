@@ -68,6 +68,7 @@ ok(JSON.stringify(N.decode('eyJuIjoiWXZvbm5lIiwicCI6WzEyLDEyLDEyLDksMTAsMTMsMTJd
 ok(N.decode('bad!') === null && N.decode('') === null, 'notes reject a broken results code');
 const qn = N.quiz([12, 12, 12, 9, 10, 13, 12], 'https://quiz.convictioncode.com/#r=x');
 ok(/70% \(The Achiever\)/.test(qn) && /1\. Practice: 50%/.test(qn) && /2\. Alignment: 58%/.test(qn) && /Communication: 83% \(strongest\)/.test(qn) && /How it shows up: You start strong/.test(qn), 'quiz notes: score, blocks, pillars, symptoms');
+ok(!/strongest/.test(N.quiz([10, 10, 10, 10, 10, 10, 10])), 'quiz notes: an all-tied profile names no strongest pillar');
 ok(/Growth Edges/.test(N.quiz([15, 15, 15, 15, 15, 15, 15])) && /Watch for:/.test(N.quiz([15, 15, 15, 15, 15, 15, 15])), 'quiz notes: strong scorers get growth edges');
 const an = N.application({ company: 'Owner', role: 'Founder or CEO', start: 'Right away', income: '$1M to $5M', invest: 'Yes', energy: 'Open', challenges: ['a', '', 'b'], goal: 'g' });
 ok(/Income or revenue: \$1M to \$5M/.test(an) && /1\. a\n2\. b/.test(an) && !/QUALIFIED/i.test(an), 'application notes: answers only, no internal flags');

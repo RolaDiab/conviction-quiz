@@ -40,7 +40,9 @@
   function quiz(points, resultUrl, rev) {
     var s = summarize(points, rev);
     var strong = s.pct[s.blocks[0]] >= 75;
-    var top = s.pct.indexOf(Math.max.apply(null, s.pct));
+    // "Strongest" only when a pillar beats every block, so a tied pillar is never both (same rule as the results page).
+    var best = Math.max.apply(null, s.pct);
+    var top = best > Math.max.apply(null, s.blocks.map(function (b) { return s.pct[b]; })) ? s.pct.indexOf(best) : -1;
     var lines = [
       "PERFORMANCE BLOCKS ASSESSMENT: QUIZ RESULTS",
       "",
