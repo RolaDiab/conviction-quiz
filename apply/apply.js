@@ -42,6 +42,26 @@
     prefill.role = (saved.profile && saved.profile.role) || "";
   } catch (e) {}
 
+  // Bot filter. Flagged applications still see the thank-you screen, but nothing is sent.
+  // Bots fill the hidden "website" field, submit within seconds, and use random-letter text
+  // like "aRnNXxTxwNRjLaOjAxFZ" and dotted Gmail addresses like "m.ariq.4.e.rvenko.v.a@gmail.com".
+  var formShownAt = 0;
+  function gibberish(text) {
+    return String(text).split(/[^A-Za-z]+/).some(function (w) {
+      // Random case mix only: ALL-CAPS names like "ANGELICA" are real people.
+      return (w.slice(1).match(/[A-Z]/g) || []).length >= 3 && (w.match(/[a-z]/g) || []).length >= 3;
+    });
+  }
+  function looksLikeBot(v, f) {
+    if (f.website && f.website.value) return true;
+    if (Date.now() - formShownAt < 8000) return true;
+    if (gibberish(v.first_name + " " + v.last_name)) return true;
+    if ([v.goal].concat(v.challenges).filter(gibberish).length >= 2) return true;
+    var parts = v.email.split("@");
+    if (/^(gmail|googlemail)\.com$/.test(parts[1] || "") && (parts[0].match(/\./g) || []).length >= 3) return true;
+    return false;
+  }
+
   function radios(name, options, value) {
     return '<div class="opts">' + options.map(function (o) {
       return '<label class="opt radio"><input type="radio" name="' + name + '" value="' + esc(o) + '"' + (o === value ? " checked" : "") + '> ' + esc(o) + '</label>';
@@ -71,11 +91,13 @@
           '<fieldset><legend>What is your annual income, or your business revenue if you own one (USD)?</legend>' + radios("income", INCOME, v.income) + '</fieldset>' +
           '<fieldset><legend>Working with Rola is a private, premium engagement. If it\'s the right fit, are you ready to invest now?</legend>' + radios("invest", INVEST, v.invest) + '</fieldset>' +
           (error ? '<p class="err">' + esc(error) + '</p>' : "") +
+          '<div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"><label>Website<input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>' +
           '<button class="btn btn-gold wide" type="submit">Submit My Application</button>' +
         '</form>' +
         (resultCode ? '<a class="btn btn-link back" href="/#r=' + resultCode + '">← Back to my results</a>' : '<a class="btn btn-link back" href="/">Not ready yet? Take the free 4-minute assessment</a>') +
       '</div></section>' +
       '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://roladiab.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
+    if (!formShownAt) formShownAt = Date.now();
   }
 
   function sendApplication(v, qualified) {
@@ -191,6 +213,7 @@
     // Only $150K+ in personal income or business revenue sees the calendar.
     var earnsEnough = INCOME.indexOf(v.income) >= 1;
     var qualified = earnsEnough && v.start !== START[3] && v.invest !== INVEST[2];
+    if (looksLikeBot(v, f)) { track("apply_blocked"); renderNotYet(v); return; }
     track("apply_submit");
     if (qualified) track("apply_qualified");
     var btn = f.querySelector("button[type=submit]");
