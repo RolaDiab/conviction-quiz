@@ -168,9 +168,9 @@
       '<section class="flow"><div class="wrap flow-wrap">' +
         '<p class="eyebrow dark">Application received</p>' +
         '<h2 class="q">Thank you, ' + esc(v.first_name) + '.</h2>' +
-        '<p class="sub">Based on your answers, a strategy call isn\'t the right next step just yet. Rola reads every application, and you\'ll keep getting her insights by email.</p>' +
-        '<p class="sub">Group coaching with Rola opens soon: virtual, alongside other founders and leaders. Join the waitlist to hear first.</p>' +
-        '<a class="btn btn-gold" href="https://businessmanifesting.com/coaching/group/?utm_source=quiz-apply">Join the group coaching waitlist</a>' +
+        '<p class="sub">Based on your answers, a private strategy call isn\'t the right next step just yet. I read every application, and the door stays open.</p>' +
+        '<p class="sub">Until then, start with a guided practice you can use today. Think of it as grounding yourself before you build.</p>' +
+        '<a class="btn btn-gold" href="https://businessmanifesting.com/products/?utm_source=apply-next-step">Explore the digital products</a>' +
         (resultCode ? '<a class="btn btn-link back" href="/#r=' + resultCode + '">Back to my results</a>' : "") +
       '</div></section>' +
       '<footer class="foot">Conviction Code™ by Rola Diab © 2026 · <a href="https://roladiab.com/privacy" target="_blank" rel="noopener">Privacy</a></footer>';
