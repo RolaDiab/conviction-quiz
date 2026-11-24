@@ -286,8 +286,8 @@
       : "";
     var cta = function (headline) {
       return '<div class="cta-box"><h3>' + headline + '</h3>' +
-        '<p>Apply for a private 45-minute strategy call with Rola. Together we find what\'s holding back your results and clear the path to your next level.</p>' +
-        '<a class="btn btn-gold" href="' + applyUrl + '">Apply for a Strategy Call</a></div>';
+        '<p>Apply for a private 45-minute Discovery Call with Rola. Together we find what\'s holding back your results and clear the path to your next level.</p>' +
+        '<a class="btn btn-gold" href="' + applyUrl + '">Apply for a Discovery Call</a></div>';
     };
 
     // The self-paced sale. Only shows once CLEAR_URL is set (Whop product visible).
@@ -325,8 +325,9 @@
         '<details class="science"><summary>The science behind inevitable success</summary>' + paras(Q.SCIENCE) + '</details></div></section>' +
       '<section class="final"><div class="wrap narrow center">' +
         '<h2>Your results won\'t change themselves.</h2>' +
-        '<p>Apply for a private strategy call and leave with a clear first move.</p>' +
-        '<a class="btn btn-gold" href="' + applyUrl + '">Apply for a Strategy Call</a>' + clearLink +
+        '<p>Apply for a private Discovery Call and leave with a clear first move.</p>' +
+        '<a class="btn btn-gold" href="' + applyUrl + '">Apply for a Discovery Call</a>' + clearLink +
+        '<p class="self-paced">Not ready for one-to-one yet? Start with <a href="https://businessmanifesting.com/products/ground-and-clear/?utm_source=quiz-results" target="_blank" rel="noopener">Ground &amp; Clear</a> ($25), or <a href="https://businessmanifesting.com/live/?utm_source=quiz-results" target="_blank" rel="noopener">join my free monthly live session</a>.</p>' +
         '<div class="share"><button class="btn btn-ghost" data-act="copy" data-url="' + esc(resultUrl(code)) + '">Copy link to my results</button></div>' +
         '<p class="contact">Follow Rola: <a href="https://www.instagram.com/rolaspeaks/" target="_blank" rel="noopener">Instagram @rolaspeaks</a> · <a href="https://www.youtube.com/@Rolaspeaks" target="_blank" rel="noopener">YouTube @Rolaspeaks</a></p>' +
       '</div></section>' + footer();
